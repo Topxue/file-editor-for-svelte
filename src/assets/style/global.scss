@@ -1,0 +1,230 @@
+@import "reset";
+@import "mixin";
+@import "library";
+
+$bord-color: #e5e7ea;
+$primary: #1e87f0;
+
+.pg-container {
+  height: 100vh;
+  font-size: 14px;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: #f7f8f8;
+  font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC, sans-serif;
+
+  .pg-mk-header-wrapper {
+    @include MHeader;
+
+    .pg-return-back {
+      width: 45px;
+      color: $primary;
+      cursor: pointer;
+
+      .fa {
+        font-size: 22px;
+        padding-right: 5px;
+      }
+    }
+  }
+
+  .pg-editor-container {
+    width: 818px;
+    margin: 20px auto;
+    height: 810px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    overflow-y: auto;
+    border-radius: 0 !important;
+  }
+}
+
+
+::-webkit-scrollbar {
+  width: 3px;
+  height: 5px;
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, .3);
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/*去除版权提示*/
+.fr-wrapper > div[style*='z-index: 9999'] {
+  position: absolute;
+  top: -10000px;
+  opacity: 0;
+  display: none;
+}
+
+:focus:not([tabindex^='-']) {
+  outline: none;
+}
+
+.fr-box.fr-basic .fr-element:focus-visible {
+  outline: none;
+}
+
+a[href='https://www.froala.com/wysiwyg-editor?k=u'] {
+  font-size: 0 !important;
+  padding: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+
+.fr-second-toolbar {
+  display: none;
+}
+
+.fr-toolbar.fr-top {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 0;
+  text-align: center;
+  box-shadow: 0 3px 8px #00000026;
+  background-color: transparent;
+}
+
+.fr-wrapper {
+  border: none !important;
+}
+
+
+.pg-flex {
+  display: flex;
+  align-items: center;
+}
+
+.pg-button {
+  color: #ffffff;
+  border: 1px solid $primary;
+  background: #ffffff;
+  overflow: visible;
+  text-transform: none;
+  display: inline-block;
+  box-sizing: border-box;
+  vertical-align: middle;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: .1s ease-in-out;
+  transition-property: color, background-color, border-color;
+  cursor: pointer;
+
+  &:hover {
+    color: #fff;
+    background-color: $primary;
+  }
+}
+
+
+.pg-editor-body-container {
+  display: flex;
+  justify-content: space-between;
+
+  .pg-html-panel-params {
+    @include htmlPanel;
+  }
+
+  /*parameter-样式*/
+  .pg-parameter-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    background: #fff;
+    padding: 8px;
+    box-sizing: border-box;
+    border-radius: 3px;
+    flex-direction: row;
+
+    .pg-param-item {
+      width: 25%;
+      height: 54px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      font-size: 13px;
+      color: #4c596e;
+      cursor: pointer;
+      user-select: none;
+      line-height: 28px;
+
+      &:hover {
+        background: #e5e7ea;
+      }
+    }
+  }
+}
+
+.pg-accordion-wrapper {
+  .pg-accordion-title {
+    color: #333;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    border-bottom: 1px solid #ebeef5;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 10px;
+    user-select: none;
+
+    i {
+      font-size: 20px;
+    }
+  }
+
+  .pg-accordion-content {
+    height: 100%;
+    margin-top: 10px;
+    overflow-y: auto;
+    padding-right: 8px;
+    box-sizing: border-box;
+  }
+
+  .disabled {
+    color: #bbb;
+    cursor: not-allowed;
+  }
+}
+
+.document-update-time {
+  font-size: 12px;
+}
+
+.pg-edit-item-wrapper {
+  text-align: left;
+  padding-bottom: 60px;
+  overflow-y: auto;
+}
+
+.uk-flex-align-items {
+  align-items: center;
+}
+
+.bottom {
+  border-bottom: 1px solid;
+}
+
+.borderAll {
+  padding: 0 8px;
+  border: 1px solid;
+}
+
+.cursor {
+  cursor: pointer;
+  user-select: none;
+}
