@@ -81,3 +81,12 @@ export const insertParameterVerify = () => {
     return true;
   }
 }
+
+/**
+ * 当前时间
+ * @param froala
+ */
+export const getCurrentTime = (time = +new Date()) => {
+  const date = new Date(time + 8 * 3600 * 1000);
+  return date.toJSON().substr(0, 19).replace('T', ' ').replace(/-/g, '-');
+}

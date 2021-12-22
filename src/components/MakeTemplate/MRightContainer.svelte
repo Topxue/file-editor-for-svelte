@@ -463,7 +463,7 @@
                 type="text"
                 name="columnKeys"
                 bind:value={column}
-                on:input={handleUpdateColumnKey}
+                on:input={handleUpdateColumnKey.bind(null, index)}
                 placeholder="请输入">
             </div>
           </div>
@@ -738,8 +738,14 @@
   }
 
   // 更新 column keys
-  const handleUpdateColumnKey = () => {
+  const handleUpdateColumnKey = (index) => {
     db.setItem(data.id, {columnKeys: data.columnKeys});
+
+    const froalaContainer = froala.$el[0];
+    const table = froalaContainer.querySelector(`[id=${data.id}]`);
+    const ths = [...table.querySelectorAll('th')];
+
+    ths[index].setAttribute('data-pg-th', data.columnKeys[index]);
   }
 
   // 添加选项设置

@@ -1,6 +1,5 @@
 /** Created by xwp on 2021-12-16 **/
 
-// TODO target 目标元素未确定-需处理。
 export const currentActiveParameter = (target) => {
   const froalaContainer = document.querySelector('#pg-editor-container');
   const parameters = froalaContainer.querySelectorAll('[data-param-type]');

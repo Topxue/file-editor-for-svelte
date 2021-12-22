@@ -3,12 +3,12 @@
 
 ### 下载
 ```markdown
-yarn add pg-file-editor
+yarn add pg-file-template-editor
 ```
 
 ### 引入
 ```markdown
-import FileTemplateEditor from 'pg-file-editor'
+import FileTemplateEditor from 'pg-file-template-editor'
 ```
 
 ### 使用

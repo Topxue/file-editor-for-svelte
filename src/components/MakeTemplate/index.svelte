@@ -15,9 +15,11 @@
 
 
 <script>
+  // TODO 更新窗格参数-回滚、撤销、删除操作 实时更新数据;
   import {onMount} from 'svelte';
 
   import db from "@/utils/db";
+  import {getCurrentTime} from '@/utils/index';
 
   import {froalaStore} from "@/store/froala";
   import {editorConfig} from '@/config/froala';
@@ -34,7 +36,15 @@
 
   // 编辑器实例
   let froala = null;
+
   onMount(() => {
+    // 初始化froala
+    initFroala();
+    // 实时更新保存
+    realTimeUpdateAndSave();
+  })
+
+  const initFroala = () => {
     froala = new FroalaEditor('#pg-editor-container', {
       ...editorConfig,
       events: {
@@ -43,9 +53,16 @@
         }
       }
     });
-
     froalaStore.set(froala);
-  })
+  }
+
+  const realTimeUpdateAndSave = () => {
+    setInterval(() => {
+      const template = froala.html.get();
+      db.setItemTmp({template: template.replace('is-active', '')});
+      console.log(`%c 模板保存成功✔ 更新时间: ${getCurrentTime()}`, 'color:#0f0');
+    }, 60000)
+  }
 
   // 添加参数
   const handleAddParameter = async (event) => {
