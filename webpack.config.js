@@ -119,15 +119,15 @@ module.exports = {
 	plugins: [
 	 new MiniCssExtractPlugin({
    			filename: 'build/file-template-editor.css'
-   		}),
-   		new Purgecss({
-   		    paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
-          variables: true,
-          fontFace: true,
-          keyframes: true,
-          rejected: true,
-          safelist: ['body','svg', /^\[data/, /^fr-/]
-       }),
+   }),
+   new Purgecss({
+      paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
+      variables: true,
+      fontFace: true,
+      keyframes: true,
+      rejected: true,
+      safelist: ['body','svg', /^\[data/,/^uk-open/, /^fr-/]
+   })
 	],
 	devtool: prod ? false : 'source-map',
 	devServer: {

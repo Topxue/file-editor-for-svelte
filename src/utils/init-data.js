@@ -101,8 +101,8 @@ export default {
     options: [],
     description: '',
     fontConfig: {
-      fontFamily: '',
-      fontSize: null,
+      fontFamily: 'none',
+      fontSize: 'none',
       fontWeight: 'inherit',
       justifyContent: 'flex-start',
       size: ['fixed', {
@@ -124,8 +124,8 @@ export default {
     options: [],
     description: '',
     fontConfig: {
-      fontFamily: '',
-      fontSize: null,
+      fontFamily: 'none',
+      fontSize: 'none',
       fontWeight: 'inherit',
       justifyContent: 'flex-start',
       size: ['fixed', {

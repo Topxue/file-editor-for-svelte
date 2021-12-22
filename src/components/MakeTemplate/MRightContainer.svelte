@@ -2,13 +2,77 @@
   <Accordion title="参数库">
     <div class="pg-parameter-container">
       {#each PARAMETERS as params}
-        <div
-          class="pg-param-item"
-          on:click={() => handleInsertParameter(params.type)}
-        >
-          <i class="{params.icon}"></i>
-          <span>{params.label}</span>
-        </div>
+        {#if params.type === 'table'}
+          <div class="pg-param-item" data-param-type={params.type}>
+            <i class="fa {params.icon}"></i>
+            <span>{params.label}</span>
+          </div>
+          <div class="select-table-container" uk-drop="mode: click;pos: bottom-center">
+            <div class="select-table">
+              <div class="uk-text-muted pg-text-panel">{tableTitle}</div>
+              <div class="pg-table-selector-wrapper" id="pg-table-selector-wrapper" on:mouseleave={handleMouseLeave}>
+                {#each [...Array(10).keys()] as r}
+                  {#each [...Array(10).keys()] as c}
+                    <span
+                      data-row="{r}"
+                      data-col="{c}"
+                      class="pg-row-col-item uk-drop-close"
+                      on:mouseover={() => handleMouseover(r, c)}
+                      on:click={() => handleInsertTable(r, c)}
+                    >
+                    </span>
+                  {/each}
+                {/each}
+              </div>
+              <hr class="uk-column-divider uk-margin-small"/>
+              <button class="uk-button uk-button-link custom-row-col" uk-toggle="target: #modal-custom-col">
+                自定义行列数
+              </button>
+              <div id="modal-custom-col" class="pg-modal-custom-col" uk-modal>
+                <div class="uk-modal-dialog uk-modal-body">
+                  <div class="uk-text-emphasis uk-drop-close" id="custom-col-trigger-wrapper">自定义列数</div>
+                  <form class="uk-form uk-flex uk-margin-small-top" id="from-custom-col">
+                    <div class="uk-flex uk-flex-align-items">
+                      <label class="uk-form-label uk-margin-small-right" for="">行数</label>
+                      <div class="uk-form-controls">
+                        <input
+                          class="uk-input uk-form-small"
+                          type="text"
+                          bind:value={tableRow}
+                          placeholder="请输入行数">
+                      </div>
+                    </div>
+                    <div class="uk-flex uk-flex-align-items uk-margin-small-left">
+                      <label class="uk-form-label uk-margin-small-right" for="">列数</label>
+                      <div class="uk-form-controls">
+                        <input
+                          class="uk-input uk-form-small"
+                          type="text"
+                          bind:value={tableCol}
+                          placeholder="请输入列数">
+                      </div>
+                    </div>
+                  </form>
+                  <p class="uk-text-right uk-margin-small-top">
+                    <button class="uk-button uk-button-default uk-button-small uk-modal-close" type="button">取消</button>
+                    <button class="uk-button uk-button-primary uk-button-small uk-modal-close" type="button"
+                            on:click={handleCustomTableRowCol}>确定
+                    </button>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        {:else }
+          <div
+            class="pg-param-item"
+            on:click={() => handleInsertParameter(params.type)}
+          >
+            <i class="{params.icon}"></i>
+            <span>{params.label}</span>
+          </div>
+        {/if}
+
       {/each}
     </div>
   </Accordion>
@@ -45,10 +109,27 @@
             >
           </div>
         </div>
+
       {/if}
 
       <!--日期默认值-->
       {#if isDateFormat}
+        <div class="uk-margin-small-top">
+          <label class="uk-form-label" for="">默认值</label>
+          <div class="uk-form-controls uk-margin-small-top">
+            <DateInput
+              format={format}
+              value={date}
+              placeholder="选择日期"
+              on:select={handleChangeDate}
+              locale={localeFromDateFnsLocale(zhCN)}
+            />
+          </div>
+        </div>
+      {/if}
+
+      <!--身份证默认值-->
+      {#if idCardDefault}
         <div class="uk-margin-small-top">
           <label class="uk-form-label" for="">默认值</label>
           <div class="uk-form-controls uk-margin-small-top">
@@ -57,9 +138,20 @@
               type="text"
               bind:value={data.defaultValue}
               name="defaultValue"
-              placeholder="选择日期"
-              readonly
+              placeholder="请输入默认值"
+              maxlength="18"
+              on:keyup={handleEditIdCardInputEvent}
             >
+          </div>
+        </div>
+      {/if}
+
+      <!--table默认值-->
+      {#if tableDefault}
+        <div class="uk-margin-small-top">
+          <label class="uk-form-label" for="">默认值</label>
+          <div class="uk-form-controls uk-margin-small-top">
+            <div class="uk-text-muted">请直接在表格中编辑表头及初始值</div>
           </div>
         </div>
       {/if}
@@ -328,32 +420,71 @@
       </div>
 
       <!--是否必填-->
-      <div class="uk-margin">
-        <div class="uk-form-controls uk-margin-small-top">
-          <label>
-            <input
-              class="uk-checkbox"
-              type="checkbox"
-              name="isRequired"
-              bind:checked={data.isRequired}
-              on:change={() => handleEditChangeEvent('isRequired')}>
-            必填
-          </label>
+      {#if !tableDefault}
+        <div class="uk-margin">
+          <div class="uk-form-controls uk-margin-small-top">
+            <label>
+              <input
+                class="uk-checkbox"
+                type="checkbox"
+                name="isRequired"
+                bind:checked={data.isRequired}
+                on:change={() => handleEditChangeEvent('isRequired')}>
+              必填
+            </label>
+          </div>
         </div>
-      </div>
+      {/if}
 
+      <!--隐藏表头-->
+      {#if tableDefault}
+        <div class="uk-margin-small-top">
+          <div class="uk-form-controls uk-margin-small-top">
+            <label>
+              <input
+                class="uk-checkbox"
+                type="checkbox"
+                name="hideThead"
+                bind:checked={data.hideThead}
+                on:change={() => handleEditChangeEvent('hideThead')}>
+              隐藏表头
+            </label>
+          </div>
+        </div>
+      {/if}
+      <!--表头Key设置-->
+      {#if tableDefault && data.columnKeys?.length}
+        {#each data.columnKeys as column, index}
+          <div class="uk-margin-small-top">
+            <label class="uk-form-label" for="">第{index + 1}列Key：</label>
+            <div class="uk-form-controls uk-margin-small-top">
+              <input
+                class="uk-input uk-form-small uk-text-emphasis"
+                type="text"
+                name="columnKeys"
+                bind:value={column}
+                on:input={handleUpdateColumnKey}
+                placeholder="请输入">
+            </div>
+          </div>
+        {/each}
+      {/if}
     </div>
   </Accordion>
 </div>
 
 <script>
-  import {onDestroy} from 'svelte';
+  import {onDestroy, createEventDispatcher} from 'svelte';
+  import zhCN from 'date-fns/locale/zh-CN';
+
+  import {DateInput, localeFromDateFnsLocale} from '@/components/Base/date-picker-svelte';
 
   import db from "@/utils/db";
   import {colorHex} from '@/utils';
   import {froalaStore} from "@/store/froala";
   import * as parameters from '@/parameters';
   import {PARAMETERS} from '@/config/parameter';
+  import {tableRender} from '@/event/tableRender';
   import {
     FONT_LISTS,
     GET_BORDERS,
@@ -367,6 +498,9 @@
 
   import Accordion from '@/components/Base/Accordion/index.svelte';
 
+  // 事件派发
+  const dispatch = createEventDispatcher();
+
   // 获取froala实例
   let froala = null;
   const unsubscribe = froalaStore.subscribe(value => {
@@ -376,6 +510,8 @@
   // props
   export let paramId = null;
   $:isVisible = !!paramId;
+  // 当前参数
+  $:currentParameter = document.querySelector("[data-param-type][id=" + paramId + "]");
   // 参数类型
   let paramType = '';
 
@@ -383,7 +519,7 @@
    * 参数编辑显示状态
    */
   // 默认值
-  $:isDefaultValue = ['text', 'idcard'].includes(paramType);
+  $:isDefaultValue = ['text'].includes(paramType);
   // 外观
   $:isStyle = ['text', 'radio', 'checkbox', 'date'].includes(paramType);
   // 控件大小
@@ -398,6 +534,10 @@
   $:optionSet = ['radio', 'checkbox'].includes(paramType);
   // 日期格式
   $:isDateFormat = paramType === 'date';
+  // 身份证默认值
+  $:idCardDefault = paramType === 'idcard';
+  // table默认值
+  $: tableDefault = paramType === 'table';
 
   // 参数数据
   let data = {};
@@ -416,9 +556,15 @@
   let fontColor = '';
   // 选项设置-选项
   let options = [];
+  // 日期
+  let date = new Date();
+  let format = 'yyyy-MM-dd';
 
-  // 当前参数
-  $:currentParameter = document.querySelector("[data-param-type][id=" + paramId + "]");
+  // 表格标题
+  let tableTitle = '插入表格';
+  let tableRow = null;
+  let tableCol = null;
+
 
   $: if (paramId) {
     db.getItem(paramId).then((res) => {
@@ -454,6 +600,12 @@
     if (['name', 'defaultValue'].includes(attrName)) {
       if (attrName === 'name') {
         updateParameterAttr('data-param-name', data[attrName]);
+
+        dispatch('update', {
+          name: data.name,
+          id: data.id,
+          isRequired: data.isRequired
+        });
       }
 
       if (attrName === 'defaultValue') {
@@ -489,10 +641,47 @@
     }
   }
 
+  // 设置身份证默认值
+  const handleEditIdCardInputEvent = (event) => {
+    const key = event.key;
+    if (key !== 'Backspace' && key !== 'x' && key !== 'X' && !/^[0-9]*$/.test(key)) return;
+    const idCards = [...currentParameter.children];
+    const values = event.target.value.split('');
+
+    if (values.length > 18) return;
+
+    // 更新数据
+    const id = currentParameter.getAttribute('id');
+    db.setItem(id, {
+      defaultValue: values.join('')
+    })
+
+    if (key === 'Backspace') {
+      idCards.forEach((element, index) => {
+        const value = values[index] ? values[index] : '';
+        element.innerHTML = !isNaN(value) ? value : '';
+        element.setAttribute('data-shadow-value', !isNaN(value) ? value : '');
+      })
+      return;
+    }
+
+    values.forEach((value, index) => {
+      idCards[index].innerHTML = value;
+      idCards[index].setAttribute('data-shadow-value', value);
+    })
+  }
+
+
+  // 选择日期
+  const handleChangeDate = (date) => {
+    currentParameter.innerHTML = date.detail;
+    updateParameterAttr('data-shadow-value', date.detail);
+  }
+
   // 切换日期格式
   const handleChangeDateFormat = (event) => {
     const dateFormat = event.target.value;
-    console.log(dateFormat, 'dateFormat...')
+    format = dateFormat;
   }
 
   // 选择切换布局
@@ -504,6 +693,53 @@
         return prev + `<label><input type="radio" value="${value}" placeholder="请输入选项名称" onclick="return false;"><span class="pg-radio-label">${value}</span></label>`
       }, '');
     }
+  }
+
+  // 选择表格行列
+  const handleMouseover = (row, col) => {
+    tableTitle = `${row + 1} x ${col + 1}`;
+
+    const tds = [...document.querySelector('#pg-table-selector-wrapper').children];
+
+    tds.forEach(node => {
+      const curRow = node.getAttribute('data-row'),
+        curCol = node.getAttribute('data-col');
+
+      if (curRow <= row && curCol <= col) {
+        node.classList.add('is-active-col');
+      } else {
+        node.classList.remove('is-active-col');
+      }
+    })
+  }
+
+  const handleMouseLeave = () => {
+    tableTitle = '插入表格';
+    const tds = [...document.querySelector('#pg-table-selector-wrapper').children];
+    tds.forEach((element) => element.classList.contains('is-active-col') && element.classList.remove('is-active-col'));
+  }
+
+  // 插入表格行列
+  const handleInsertTable = async (row, col) => {
+    tableRow = row + 1;
+    tableCol = col + 1;
+
+    froala.html.insert(await tableRender(tableRow, tableCol));
+  }
+
+  // 自定义行列
+  const handleCustomTableRowCol = async () => {
+    froala.html.insert(await tableRender(tableRow, tableCol));
+
+    setTimeout(() => {
+      tableRow = null;
+      tableCol = null;
+    }, 0)
+  }
+
+  // 更新 column keys
+  const handleUpdateColumnKey = () => {
+    db.setItem(data.id, {columnKeys: data.columnKeys});
   }
 
   // 添加选项设置
@@ -613,6 +849,22 @@
         db.setItem(data.id, {
           isRequired: data.isRequired
         })
+
+        dispatch('update', {
+          name: data.name,
+          id: data.id,
+          isRequired: data.isRequired
+        });
+      },
+      // 隐藏表头
+      'hideThead': () => {
+        db.setItem(data.id, {
+          hideThead: data.hideThead
+        })
+        const ths = document.querySelectorAll('[data-pg-th]');
+        if (ths?.length) {
+          ths.forEach(node => node.style.display = data.hideThead ? 'none' : '');
+        }
       }
     }
 
@@ -634,8 +886,14 @@
 
   // 插入参数库模板
   const handleInsertParameter = async (paramType) => {
+    if (paramType === 'table') return;
+
     const res = await db.addItem({paramType});
-    froala.html.insert(await parameters[paramType](res?.target.result));
+    const id = res?.target.result;
+
+    dispatch('add', id);
+
+    froala.html.insert(await parameters[paramType](id));
   }
 
   onDestroy(unsubscribe);

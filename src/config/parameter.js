@@ -170,3 +170,16 @@ export const DATE_FORMAT_OPTIONS = [
   {value: 'yyyy/MM/dd', label: 'yyyy/MM/dd'},
   {value: 'yyyy年MM月dd日', label: 'yyyy年MM月dd日'}
 ]
+
+/**
+ * icon-enum
+ */
+export const ICON_ENUM = {
+  'text': 'fa fa-text-width',
+  'table': 'fa fa-table',
+  'image': 'fa fa-image',
+  'radio': 'fa fa-check-circle',
+  'checkbox': 'fa fa-check-square',
+  'date': 'fa fa-calendar',
+  'idcard': 'fa fa-id-card'
+}

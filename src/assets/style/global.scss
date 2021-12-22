@@ -207,7 +207,7 @@ a[href='https://www.froala.com/wysiwyg-editor?k=u'] {
 
 .pg-edit-item-wrapper {
   text-align: left;
-  padding-bottom: 60px;
+  padding-bottom: 40px;
   overflow-y: auto;
 }
 
@@ -228,3 +228,127 @@ a[href='https://www.froala.com/wysiwyg-editor?k=u'] {
   cursor: pointer;
   user-select: none;
 }
+
+
+.select-table-container {
+  width: 180px !important;
+  font-size: 12px;
+
+  &[class*=uk-drop-bottom] {
+    margin-top: 0 !important;
+  }
+
+  .select-table {
+    min-width: 196px;
+    padding: 10px 18px;
+    box-sizing: border-box;
+    background: #ffffff;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    user-select: none;
+    border: 1px solid #ebeef5;
+    border-radius: 4px;
+    text-align: justify;
+
+    .pg-text-panel {
+      padding-bottom: 5px;
+    }
+  }
+
+  .pg-table-selector-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    width: 160px;
+
+    .pg-row-col-item {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      margin: 1px;
+      background-color: rgba(0, 0, 0, .04);
+      border: 1px solid rgba(0, 0, 0, .06);
+      border-radius: 1px;
+      transition: all ease-in-circ .3s;
+      cursor: pointer;
+
+      &.is-active-col {
+        background-color: #ffffff;
+        border-color: #2489f2;
+      }
+    }
+  }
+}
+
+.pg-modal-custom-col {
+  font-size: 14px;
+}
+
+.custom-row-col {
+  font-size: 12px;
+}
+
+.pane-params-container {
+  width: 98%;
+
+  &[class*=uk-list] > ::before {
+    width: 0 !important;
+  }
+
+
+  .panel-param-item {
+    position: relative;
+    padding: 7px 8px;
+    margin-top: 16px;
+    color: #7f8997;
+    background-color: #f2f3f4;
+    border: 1px dashed #c1c6cd;
+    border-radius: 4px;
+    transition: all .2s ease-out;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &.is-active {
+      border-color: #2489f2;
+    }
+
+    &:hover {
+      cursor: pointer;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+      transition: all .2s ease-in;
+
+      .pane-params-close {
+        opacity: 1;
+      }
+    }
+
+    .pane-params-name {
+      text-align: left;
+      flex: 1;
+      word-break: break-all;
+    }
+
+    .pane-params-close {
+      color: #c1c6cd;
+      position: absolute;
+      top: -9px;
+      right: -3px;
+      width: 18px;
+      font-weight: bold;
+      opacity: 0;
+
+      &:hover {
+        color: #ed521f;
+      }
+    }
+
+    .required {
+      &:before {
+        color: #f0a128;
+        content: "*";
+        padding-right: 4px;
+      }
+    }
+  }
+}
+

@@ -4,7 +4,7 @@ import db from "@/utils/db";
 const template = () => {
   let htmlTpl = '';
   for (let i = 0; i < 18; i++) {
-    htmlTpl += `<span class="pg-param-card-item" data-shadow-value="" data-param-type="table" name="person" contenteditable="false"></span>`
+    htmlTpl += `<span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span>`
   }
   return htmlTpl
 }
