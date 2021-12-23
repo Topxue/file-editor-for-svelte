@@ -126,7 +126,7 @@ module.exports = {
       fontFace: true,
       keyframes: true,
       rejected: true,
-      safelist: ['body','svg', /^\[data/,/^uk-open/, /^fr-/]
+      safelist: ['body','svg', /^\[data/,/^uk-open/,/^uk-notification/, /^fr-/]
    })
 	],
 	devtool: prod ? false : 'source-map',

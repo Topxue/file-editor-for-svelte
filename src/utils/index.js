@@ -74,7 +74,7 @@ export const insertParameterVerify = () => {
   const anchorNode = window?.getSelection()?.anchorNode;
   if (anchorNode?.tagName) {
     const isExistTable = ['td', 'th'].includes(anchorNode?.tagName.toLowerCase()),
-      isParameter = anchorNode?.getAttribute('data-param-type');
+      isParameter = anchorNode?.getAttribute('data-param-type') || anchorNode.closest('[data-param-type]');
 
     return isParameter || isExistTable ? false : true;
   } else {
@@ -89,4 +89,30 @@ export const insertParameterVerify = () => {
 export const getCurrentTime = (time = +new Date()) => {
   const date = new Date(time + 8 * 3600 * 1000);
   return date.toJSON().substr(0, 19).replace('T', ' ').replace(/-/g, '-');
+}
+
+/**
+ * sleep 函数
+ * @param time
+ * @returns {Promise<unknown>}
+ */
+export const sleep = time => {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
+
+/**
+ * 替换table插入内容
+ * @param table
+ */
+export const replaceTableContent = (table) => {
+  const cloneTable = table.cloneNode(true);
+  table.remove();
+
+  const fragment = document.createElement('div');
+  const tableWrapper = document.createElement('div');
+  tableWrapper.className = 'fr-deletable';
+  tableWrapper.innerHTML = `<table class="" style="width: 100%">${cloneTable.innerHTML}</table>`;
+  fragment.append(tableWrapper);
+
+  return fragment.innerHTML;
 }

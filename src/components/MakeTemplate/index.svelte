@@ -10,16 +10,19 @@
   <!-- 编辑容器 -->
   <div id="pg-editor-container" class="pg-editor-container"></div>
   <!-- 参数设置 -->
-  <MRightContainer paramId={paramId} on:add={handleAddParameter} on:update={handleUpdateParameterName}/>
+  <MRightContainer
+    paramId={paramId}
+    on:add={handleAddParameter}
+    on:update={handleUpdateParameterName}/>
 </div>
 
 
 <script>
-  // TODO 更新窗格参数-回滚、撤销、删除操作 实时更新数据;
   import {onMount} from 'svelte';
 
   import db from "@/utils/db";
-  import {getCurrentTime} from '@/utils/index';
+  import {getCurrentTime, sleep, replaceTableContent} from '@/utils';
+  import {observeDocument} from '@/utils/observe-dom';
 
   import {froalaStore} from "@/store/froala";
   import {editorConfig} from '@/config/froala';
@@ -33,7 +36,6 @@
   let paramId = null;
   // 窗格参数集合
   let parameters = [];
-
   // 编辑器实例
   let froala = null;
 
@@ -41,7 +43,7 @@
     // 初始化froala
     initFroala();
     // 实时更新保存
-    realTimeUpdateAndSave();
+    // realTimeUpdateAndSave();
   })
 
   const initFroala = () => {
@@ -50,19 +52,57 @@
       events: {
         'click': (clickEvent) => {
           handleClickEditor(clickEvent);
+        },
+        'table.inserted': function (table) {
+          this.html.insert(replaceTableContent(table));
+        },
+        'commands.redo': () => {
+          commandsRedoAndUndo();
+        },
+        'commands.undo': () => {
+          commandsRedoAndUndo();
         }
       }
     });
     froalaStore.set(froala);
+    observeDocument(froala, commandsRedoAndUndo);
   }
 
   const realTimeUpdateAndSave = () => {
     setInterval(() => {
       const template = froala.html.get();
       db.setItemTmp({template: template.replace('is-active', '')});
+      // 定时清理更新数据
+      getUpdateParametersData();
       console.log(`%c 模板保存成功✔ 更新时间: ${getCurrentTime()}`, 'color:#0f0');
     }, 60000)
   }
+
+  // 获取编辑区域所存在的参数
+  const getFroalaContentParams = () => {
+    const froalaContainer = froala.$el[0];
+    const parameters = [...froalaContainer.querySelectorAll('[data-param-type]')];
+
+    return parameters;
+  }
+
+  // 获取并且更新参数库数据
+  const getUpdateParametersData = async () => {
+    const parameters = await getFroalaContentParams();
+
+    const dbDataAll = await db.getAll();
+    const data = dbDataAll.map(item => {
+      const isExist = parameters.find(element => element.getAttribute('id') === item.id);
+      if (isExist) {
+        return item
+      } else {
+        db.removeItem(item.id);
+      }
+    }).filter(item => item);
+
+    return data;
+  }
+
 
   // 添加参数
   const handleAddParameter = async (event) => {
@@ -71,7 +111,6 @@
 
     parameters = [...parameters, data];
   }
-
   const handleClickEditor = (event) => {
     const target = event.target.closest('[data-param-type]');
     paramId = target?.getAttribute('id');
@@ -99,5 +138,22 @@
     parameters = parameters.filter(item => item.id !== deleteId);
     parameter.remove();
     db.removeItem(deleteId);
+  }
+
+  // 操作回滚
+  const commandsRedoAndUndo = () => {
+    const froalaContainer = froala.$el[0];
+    const parameterArray = [...froalaContainer.querySelectorAll('[data-param-type]')] || [];
+
+    const newParameters = [];
+    parameterArray.forEach(async node => {
+      const id = node.getAttribute('id');
+      const res = await db.getItem(id);
+      newParameters.push(res);
+    })
+
+    sleep(300).then(() => {
+      parameters = newParameters;
+    })
   }
 </script>

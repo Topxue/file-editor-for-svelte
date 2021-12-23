@@ -474,13 +474,13 @@
 </div>
 
 <script>
-  import {onDestroy, createEventDispatcher} from 'svelte';
+  import {onMount,onDestroy, createEventDispatcher} from 'svelte';
   import zhCN from 'date-fns/locale/zh-CN';
 
   import {DateInput, localeFromDateFnsLocale} from '@/components/Base/date-picker-svelte';
 
   import db from "@/utils/db";
-  import {colorHex} from '@/utils';
+  import {colorHex, insertParameterVerify} from '@/utils';
   import {froalaStore} from "@/store/froala";
   import * as parameters from '@/parameters';
   import {PARAMETERS} from '@/config/parameter';
@@ -724,6 +724,15 @@
     tableRow = row + 1;
     tableCol = col + 1;
 
+    const verify = insertParameterVerify();
+    if (!verify) {
+      return UIkit?.notification({
+        message: '参数内不允许插入参数',
+        status: 'danger',
+        timeout: 2500,
+      })
+    }
+
     froala.html.insert(await tableRender(tableRow, tableCol));
   }
 
@@ -767,7 +776,6 @@
     db.setItem(data.id, {options});
     changeLayout();
   }
-
 
   // 参数编辑-change-event;
   const handleEditChangeEvent = (attrName) => {
@@ -893,6 +901,15 @@
   // 插入参数库模板
   const handleInsertParameter = async (paramType) => {
     if (paramType === 'table') return;
+
+    const verify = insertParameterVerify();
+    if (!verify) {
+      return UIkit?.notification({
+        message: '参数内不允许插入参数',
+        status: 'danger',
+        timeout: 2500,
+      })
+    }
 
     const res = await db.addItem({paramType});
     const id = res?.target.result;
