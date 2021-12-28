@@ -1,4 +1,4 @@
-<MHeader/>
+<MHeader on:save={handleSaveData}/>
 <div id="pg-toolbar-container"></div>
 <div class="pg-editor-body-container">
   <!--  窗格参数-->
@@ -25,7 +25,7 @@
   import {observeDocument} from '@/utils/observe-dom';
 
   import {froalaStore} from "@/store/froala";
-  import {editorConfig} from '@/config/froala';
+  import {editorConfig, PG_EDITOR_CONTAINER} from '@/config/froala';
   import {currentActiveParameter} from '@/event/viewEvent';
 
   import MHeader from './MHeader.svelte';
@@ -43,13 +43,17 @@
     // 初始化froala
     initFroala();
     // 实时更新保存
-    // realTimeUpdateAndSave();
+    realTimeUpdateAndSave();
   })
 
   const initFroala = () => {
-    froala = new FroalaEditor('#pg-editor-container', {
+    froala = new FroalaEditor(PG_EDITOR_CONTAINER, {
       ...editorConfig,
       events: {
+        'initialized': () => {
+          // 获取store数据
+          getInitStoreData()
+        },
         'click': (clickEvent) => {
           handleClickEditor(clickEvent);
         },
@@ -74,8 +78,18 @@
       db.setItemTmp({template: template.replace('is-active', '')});
       // 定时清理更新数据
       getUpdateParametersData();
+      // 保持更新模板
+      handleSaveData();
       console.log(`%c 模板保存成功✔ 更新时间: ${getCurrentTime()}`, 'color:#0f0');
     }, 60000)
+  }
+
+  const getInitStoreData = async () => {
+    const {template} = await db.getItemTmp();
+    const dbDataAll = await db.getAll();
+
+    parameters = dbDataAll;
+    froala.html.set(template);
   }
 
   // 获取编辑区域所存在的参数
@@ -156,4 +170,16 @@
       parameters = newParameters;
     })
   }
+
+  // 数据保存
+  const handleSaveData = () => {
+    getUpdateParametersData();
+
+    const template = froala.html.get();
+    db.setItemTmp({template: template.replace('is-active', '')});
+  }
 </script>
+
+<style>
+
+</style>

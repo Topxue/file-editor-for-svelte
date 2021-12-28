@@ -57,14 +57,6 @@ $primary: #1e87f0;
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-/*去除版权提示*/
-.fr-wrapper > div[style*='z-index: 9999'] {
-  position: absolute;
-  top: -10000px;
-  opacity: 0;
-  display: none;
-}
-
 :focus:not([tabindex^='-']) {
   outline: none;
 }
@@ -98,6 +90,13 @@ a[href='https://www.froala.com/wysiwyg-editor?k=u'] {
 
 .fr-wrapper {
   border: none !important;
+
+  > div[style*='z-index: 9999'] {
+    position: absolute !important;
+    top: -10000px !important;
+    opacity: 0 !important;
+    display: none !important;
+  }
 }
 
 
@@ -366,4 +365,68 @@ a[href='https://www.froala.com/wysiwyg-editor?k=u'] {
   .uk-notification-close {
     top: 13px;
   }
+}
+
+.pg-header-center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 21px;
+
+  .title {
+    font-size: 16px;
+  }
+
+  .description {
+    font-size: 12px;
+  }
+}
+
+.fill-in-container {
+  user-select: none;
+  width: 320px;
+  max-width: 320px;
+  position: absolute;
+  right: 0;
+  top: 48px;
+  bottom: 0;
+  padding: 10px 24px 0 16px;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+  border-left: 1px solid #e5e7ea;
+  background-color: #F7F8F8;
+  font-size: 12px;
+  overflow-y: auto;
+
+  div > * {
+    cursor: pointer;
+  }
+
+  .uk-form-icon {
+    &:before {
+      display: inline-block;
+      padding: 9px 15px;
+    }
+  }
+
+  .is-active {
+    color: #2489f2;
+  }
+}
+
+.is-required {
+  &:before {
+    color: #ed521f;
+    content: "*";
+    padding-right: 4px;
+  }
+}
+
+.trip-text {
+  font-size: 18px;
+  user-select: none;
+}
+
+.fr-view img.fr-dii {
+  object-fit: scale-down;
 }

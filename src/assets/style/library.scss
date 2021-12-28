@@ -51,6 +51,14 @@ $box-shadow: inset 0 0 0 1px #2489f3;
     content: "?";
     visibility: hidden;
   }
+
+  &[data-param-type=radio], &[data-param-type=checkbox]{
+    label {
+      input:checked + span:before {
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg class='icon' viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg' width='190' height='190'%3E%3Cpath d='M740 290.016L421.984 608.032l-138.016-156c-24-24-60-24-84 0s-24 60 0 84l174.016 198.016c12 12 30.016 18.016 42.016 18.016 18.016 0 30.016-6.016 42.016-18.016l360-360c24-24 24-60 0-84-18.016-24-60-24-78.016 0zM872 32H152A120.352 120.352 0 0032 152v720a120.352 120.352 0 00120 120h720a120.352 120.352 0 00120-120V152A120.352 120.352 0 00872 32zm60 840c0 36-24 60-60 60H152c-36 0-60-24-60-60V152c0-36 24-60 60-60h720c36 0 60 24 60 60v720z'/%3E%3C/svg%3E");
+      }
+    }
+  }
 }
 
 [data-param-type=text].is-active, [data-param-type=date].is-active {

@@ -4,7 +4,7 @@ import db from "@/utils/db";
 
 export const date = async (key) => {
   const data = await db.getItem(key) || {};
-  const {id, defaultValue, style, name} = data;
+  const {id, defaultValue, style, name, format} = data;
 
   return `&nbsp;<span
     contenteditable="false"
@@ -14,6 +14,7 @@ export const date = async (key) => {
     data-shadow-value="${defaultValue}"
     data-param-type="date"
     data-param-name="${name}"
+    format-type="${format}"
     data-border-type="${style}"></span>&nbsp;`
 }
 

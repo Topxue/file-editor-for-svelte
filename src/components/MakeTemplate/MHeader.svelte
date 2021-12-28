@@ -16,11 +16,16 @@
   <div class="pg-mk-header-right-wrapper">
     <button class="uk-button uk-button-link uk-text-primary"><i class="uk-icon" uk-icon="icon:download"></i>下载</button>
     <button class="uk-button uk-button-default uk-button-small">预览</button>
-    <button class="uk-button uk-button-primary uk-button-small" id="pg-save-editor-content">保存</button>
+    <button class="uk-button uk-button-primary uk-button-small" on:click={ () => dispatch('save')}>保存</button>
   </div>
 </header>
 <script>
+  import {createEventDispatcher} from 'svelte';
+
   let titleValue = '无标题文档';
   let updateTime = '2021-12-06 17:05:50';
+
+  // 事件派发
+  const dispatch = createEventDispatcher();
 
 </script>

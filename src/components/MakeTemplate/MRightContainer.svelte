@@ -118,8 +118,8 @@
           <label class="uk-form-label" for="">默认值</label>
           <div class="uk-form-controls uk-margin-small-top">
             <DateInput
-              format={format}
-              value={date}
+              format={data.format}
+              bind:value={date}
               placeholder="选择日期"
               on:select={handleChangeDate}
               locale={localeFromDateFnsLocale(zhCN)}
@@ -164,6 +164,7 @@
             <select
               class="uk-select uk-form-small uk-text-emphasis"
               name="format"
+              bind:value={data.format}
               on:change={handleChangeDateFormat}
             >
               {#each DATE_FORMAT_OPTIONS as date}
@@ -452,6 +453,7 @@
           </div>
         </div>
       {/if}
+
       <!--表头Key设置-->
       {#if tableDefault && data.columnKeys?.length}
         {#each data.columnKeys as column, index}
@@ -474,9 +476,8 @@
 </div>
 
 <script>
-  import {onMount,onDestroy, createEventDispatcher} from 'svelte';
+  import {onDestroy, createEventDispatcher} from 'svelte';
   import zhCN from 'date-fns/locale/zh-CN';
-
   import {DateInput, localeFromDateFnsLocale} from '@/components/Base/date-picker-svelte';
 
   import db from "@/utils/db";
@@ -557,14 +558,13 @@
   // 选项设置-选项
   let options = [];
   // 日期
+  // $:date = data.defaultValue ? data.defaultValue : new Date();
   let date = new Date();
-  let format = 'yyyy-MM-dd';
 
   // 表格标题
   let tableTitle = '插入表格';
   let tableRow = null;
   let tableCol = null;
-
 
   $: if (paramId) {
     db.getItem(paramId).then((res) => {
@@ -585,6 +585,7 @@
       }
     })
   }
+
 
   // 更新参数样式
   const updateParameterStyle = (styleName, value) => {
@@ -673,15 +674,16 @@
 
 
   // 选择日期
-  const handleChangeDate = (date) => {
-    currentParameter.innerHTML = date.detail;
-    updateParameterAttr('data-shadow-value', date.detail);
+  const handleChangeDate = ({detail}) => {
+    currentParameter.innerHTML = detail;
+    updateParameterAttr('data-shadow-value', detail);
+
+    db.setItem(data.id, {defaultValue: detail});
   }
 
   // 切换日期格式
-  const handleChangeDateFormat = (event) => {
-    const dateFormat = event.target.value;
-    format = dateFormat;
+  const handleChangeDateFormat = () => {
+    db.setItem(data.id, {format: data.format})
   }
 
   // 选择切换布局
@@ -690,7 +692,7 @@
       currentParameter.innerHTML = '';
     } else {
       currentParameter.innerHTML = options.reduce((prev, value) => {
-        return prev + `<label><input type="radio" value="${value}" placeholder="请输入选项名称" onclick="return false;"><span class="pg-radio-label">${value}</span></label>`
+        return prev + `<label><input type=${paramType} value="${value}" placeholder="请输入选项名称" onclick="return false;"><span class="pg-radio-label">${value}</span></label>`
       }, '');
     }
   }

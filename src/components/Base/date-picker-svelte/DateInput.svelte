@@ -142,7 +142,7 @@
 .picker {
     display: none;
     position: absolute;
-    margin-top: 1px;
+    margin-top: 10px;
     z-index: 10;
 }
 
