@@ -455,8 +455,8 @@
       {/if}
 
       <!--表头Key设置-->
-      {#if tableDefault && data.columnKeys?.length}
-        {#each data.columnKeys as column, index}
+      {#if tableDefault && columnKeys?.length}
+        {#each columnKeys as column, index}
           <div class="uk-margin-small-top">
             <label class="uk-form-label" for="">第{index + 1}列Key：</label>
             <div class="uk-form-controls uk-margin-small-top">
@@ -546,6 +546,8 @@
   let fontConfig = {};
   // 控件大小
   let size = {};
+  // table column keys
+  export let columnKeys = [];
 
   // 控件大小-显示状态
   let sizeChecked = 'fixed';
@@ -568,9 +570,10 @@
 
   $: if (paramId) {
     db.getItem(paramId).then((res) => {
+      console.log(res, 'res...')
       data = res;
-      options = res.options;
-      paramType = res.paramType;
+      options = res?.options;
+      paramType = res?.paramType;
 
       if (JSON.stringify(res?.fontConfig) !== '{}') {
         fontConfig = res?.fontConfig;
@@ -750,13 +753,13 @@
 
   // 更新 column keys
   const handleUpdateColumnKey = (index) => {
-    db.setItem(data.id, {columnKeys: data.columnKeys});
+    db.setItem(data.id, {columnKeys});
 
     const froalaContainer = froala.$el[0];
     const table = froalaContainer.querySelector(`[id=${data.id}]`);
     const ths = [...table.querySelectorAll('th')];
 
-    ths[index].setAttribute('data-pg-th', data.columnKeys[index]);
+    ths[index].setAttribute('data-pg-th', columnKeys[index]);
   }
 
   // 添加选项设置

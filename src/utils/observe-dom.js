@@ -14,12 +14,11 @@ export const observeDocument = (froala, callback) => {
   }
 
   const observer = new MutationObserver((mutationList) => {
-
     for (let mutationRecord of mutationList) {
       if (mutationRecord.removedNodes) {
         for (let removedNode of mutationRecord.removedNodes) {
           // 查询为参数的节点-找到 不再遍历节点;
-          if (removedNode?.tagName && removedNode?.hasAttribute('data-param-name')) {
+          if (removedNode?.tagName && removedNode?.hasAttribute('data-param-type')) {
             callback && callback();
             return;
           }

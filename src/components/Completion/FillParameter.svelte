@@ -4,8 +4,10 @@
   </ul>
   <form class="uk-form-stacked uk-margin">
     <div class="uk-form-controls uk-flex uk-flex-right">
-      <label class="uk-margin-small-right"><input class="uk-checkbox" type="checkbox"> 仅看必填</label>
-      <label><input class="uk-checkbox" type="checkbox" bind:checked={isRequired}> 仅看待我填写</label>
+      <label class="uk-margin-small-right"><input class="uk-checkbox" type="checkbox" bind:checked={isRequired}
+                                                  on:change={handleIsRequired}>
+        仅看必填</label>
+      <label><input class="uk-checkbox" type="checkbox" bind:checked={isOnlyWrite}> 仅看待我填写</label>
     </div>
     {#each data as param, index}
       <!--文本-->
@@ -217,10 +219,11 @@
   // 参数数据
   export let data = [];
   export let paramId = null;
-  let imageUrl = '';
 
   // 仅看必填
-  let isRequired = true;
+  let isRequired = false;
+  // 仅看待我填写
+  let isOnlyWrite = true;
   // 当前活动参数类型
   let froalaContainer = null;
   // 事件派发
@@ -243,6 +246,11 @@
     if (['radio', 'checkbox'].includes(param.paramType) && param.layout === 'dropdown') {
       dispatch('check', {id: param.id, node: event.target.closest('input')});
     }
+  }
+
+  // 仅看必填
+  const handleIsRequired = () => {
+    console.log(isRequired)
   }
 
   // 参数填充-input-event;

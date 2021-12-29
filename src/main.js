@@ -16,7 +16,7 @@ const FileTemplateEditor = (options) => {
 
 FileTemplateEditor({
 	target: '#root',
-	isOff: true
+	isOff: false
 })
 
 export default FileTemplateEditor;

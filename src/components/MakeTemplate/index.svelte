@@ -12,6 +12,7 @@
   <!-- 参数设置 -->
   <MRightContainer
     paramId={paramId}
+    columnKeys={columnKeys}
     on:add={handleAddParameter}
     on:update={handleUpdateParameterName}/>
 </div>
@@ -38,6 +39,8 @@
   let parameters = [];
   // 编辑器实例
   let froala = null;
+  // table column keys
+  let columnKeys = [];
 
   onMount(() => {
     // 初始化froala
@@ -65,7 +68,31 @@
         },
         'commands.undo': () => {
           commandsRedoAndUndo();
+        },
+        'commands.after': function (cmd, param1, param2) {
+          const copyData = [...parameters];
+          if (cmd === 'tableRemove') {
+            document.getElementById(paramId).remove();
+            commandsRedoAndUndo();
+          }
+          // 插入列
+          if (cmd === 'tableColumns') {
+            const res = copyData.find(item => item.id === paramId);
+            // 左右侧插入列
+            if (param1 === 'after' || param1 === 'before') {
+              res.columnKeys.push(`column${res.columnKeys.length}`);
+            }
+            // 删除
+            if (param1 === 'delete') {
+              res.columnKeys.pop();
+            }
+
+            columnKeys = res.columnKeys;
+          }
         }
+        // 'contentChanged': function () {
+        //   console.log(this);
+        // }
       }
     });
     froalaStore.set(froala);
@@ -87,9 +114,17 @@
   const getInitStoreData = async () => {
     const {template} = await db.getItemTmp();
     const dbDataAll = await db.getAll();
-
-    parameters = dbDataAll;
     froala.html.set(template);
+
+    const parameterNodes = getFroalaContentParams();
+    if (parameterNodes?.length) {
+      const ids = parameterNodes.map(node => node.getAttribute('id'));
+      parameters = dbDataAll.map(item => {
+        if (ids.includes(item.id)) return item;
+      }).filter(item => item);
+    } else {
+      parameters = [];
+    }
   }
 
   // 获取编辑区域所存在的参数
@@ -125,9 +160,17 @@
 
     parameters = [...parameters, data];
   }
+
   const handleClickEditor = (event) => {
     const target = event.target.closest('[data-param-type]');
     paramId = target?.getAttribute('id');
+
+    if (paramId) {
+      columnKeys = parameters.find(item => item.id === paramId).columnKeys;
+    } else {
+      columnKeys = [];
+    }
+
     // 当前活动参数
     currentActiveParameter(target);
   }
@@ -163,7 +206,7 @@
     parameterArray.forEach(async node => {
       const id = node.getAttribute('id');
       const res = await db.getItem(id);
-      newParameters.push(res);
+      res && newParameters.push(res);
     })
 
     sleep(300).then(() => {
