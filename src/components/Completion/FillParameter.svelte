@@ -4,15 +4,20 @@
   </ul>
   <form class="uk-form-stacked uk-margin">
     <div class="uk-form-controls uk-flex uk-flex-right">
-      <label class="uk-margin-small-right"><input class="uk-checkbox" type="checkbox" bind:checked={isRequired}
-                                                  on:change={handleIsRequired}>
-        仅看必填</label>
+      <label class="uk-margin-small-right">
+        <input
+          class="uk-checkbox"
+          type="checkbox"
+          bind:checked={isRequired}
+          on:change={handleIsRequired}>
+        仅看必填
+      </label>
       <label><input class="uk-checkbox" type="checkbox" bind:checked={isOnlyWrite}> 仅看待我填写</label>
     </div>
     {#each data as param, index}
       <!--文本-->
       {#if param.paramType === 'text'}
-        <div class="uk-margin" on:click={() => handleClickFillIn(param)}>
+        <a class="uk-margin uk-scroll-a" uk-scroll href="#{param.id}" on:click={() => handleClickFillIn(param)}>
           <label
             class="uk-form-label"
             class:is-required={param.isRequired}
@@ -29,13 +34,13 @@
               on:input={() => handleEditInputEvent(param.paramType, index)}
             >
           </div>
-        </div>
+        </a>
       {/if}
 
       <!-- 表格-->
       {#if param.paramType === 'table'}
-        <div
-          class="uk-margin"
+        <a
+          class="uk-margin uk-scroll-a" uk-scroll href="#{param.id}"
           on:click={() => handleClickFillIn(param)}
         >
           <label
@@ -46,7 +51,7 @@
           <div class="uk-form-controls uk-inline uk-width-1-1">
             <div class="uk-text-muted trip-text">请在正文中填写</div>
           </div>
-        </div>
+        </a>
       {/if}
 
       <!--图片-->
@@ -359,60 +364,4 @@
   }
 
 </script>
-<style>
-    .margin-btm {
-        line-height: 23px;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .upload-wrapper {
-        position: relative;
-    }
-
-    .image-upload-container {
-        text-align: center;
-    }
-
-    .image-container {
-        height: 180px;
-        border: 1px solid #e5e7ea;
-        border-radius: 4px;
-        padding: 3px;
-        box-sizing: border-box;
-    }
-
-    .button-container {
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    .button-container button {
-        width: 121px;
-        margin-right: 18px;
-    }
-
-    .remove-image-btn, .reset-upload-btn {
-        width: 121px;
-    }
-
-    .remove-image-btn {
-        position: absolute;
-        left: 18px;
-        bottom: 0;
-        z-index: 99;
-    }
-
-    .reset-upload-btn {
-        margin-top: 10px;
-    }
-
-    .image-container img {
-        object-fit: cover;
-        max-width: 100%;
-        height: 100%;
-        vertical-align: middle;
-        border: 0;
-    }
-</style>
 

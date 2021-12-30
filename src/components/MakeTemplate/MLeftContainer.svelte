@@ -1,21 +1,24 @@
 <div class="pg-html-panel-params">
   <ul uk-tab uk-sticky>
-    <li class="uk-active"><a href={"javascript:void(0)"}>参数 <sup class="uk-badge">{parameters?.length || 0}</sup></a></li>
+    <li class="uk-active"><a href={"javascript:void(0)"}>参数 <sup class="uk-badge">{parameters?.length || 0}</sup></a>
+    </li>
   </ul>
   <ul class="uk-list pane-params-container">
     {#each parameters as param}
-      <li
-        class="panel-param-item"
-        class:is-active={param.id === checkedId}
-        on:click={handleCheckCurrentParameter.bind(null, param.id)}>
-        <span class="pane-params-name" class:required={param.isRequired}>{param.name}</span>
-        <span class="pane-params-icon {ICON_ENUM[param?.paramType]}"></span>
-        <span
-          class="pane-params-close uk-icon"
-          uk-icon="close"
-          on:click|stopPropagation={dispatch('delete', param.id)}>
+      <a href="#{param.id}" uk-scroll class="uk-scroll-a">
+        <li
+          class="panel-param-item"
+          class:is-active={param.id === checkedId}
+          on:click={handleCheckCurrentParameter.bind(null, param.id)}>
+          <span class="pane-params-name" class:required={param.isRequired}>{param.name}</span>
+          <span class="pane-params-icon {ICON_ENUM[param?.paramType]}"></span>
+          <span
+            class="pane-params-close uk-icon"
+            uk-icon="close"
+            on:click|stopPropagation={dispatch('delete', param.id)}>
         </span>
-      </li>
+        </li>
+      </a>
     {/each}
   </ul>
 </div>
@@ -52,3 +55,4 @@
   }
 
 </script>
+

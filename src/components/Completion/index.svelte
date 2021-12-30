@@ -1,4 +1,4 @@
-<CHeader/>
+<CHeader parameters={parametersData}/>
 <!-- 编辑容器 -->
 <div id="pg-editor-container" class="pg-editor-container"></div>
 <!--参数填写-->
@@ -22,7 +22,7 @@
 <!--图片上传-->
 <ImagePopup visible={imageVisible} target={target} on:upload={handleImageUpload}/>
 <script>
-  import {onDestroy, onMount} from "svelte";
+  import {onDestroy, onMount, getContext} from "svelte";
 
   import CHeader from './CHeader.svelte';
   import Select from '@/components/Base/select';
@@ -34,6 +34,9 @@
   import {froalaStore} from "@/store/froala";
   import {fillingConfig, PG_EDITOR_CONTAINER} from '@/config/froala';
   import {currentActiveParameter} from '@/event/viewEvent';
+
+  // 获取外部传入的参数
+  const params = getContext('optionsInfo');
 
   // 参数数据
   let parametersData = [];
@@ -385,3 +388,8 @@
   }
 
 </script>
+<style>
+  .pg-editor-container {
+      margin-top: 66px;
+  }
+</style>

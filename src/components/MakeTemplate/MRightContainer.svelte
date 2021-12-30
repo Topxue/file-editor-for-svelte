@@ -570,7 +570,6 @@
 
   $: if (paramId) {
     db.getItem(paramId).then((res) => {
-      console.log(res, 'res...')
       data = res;
       options = res?.options;
       paramType = res?.paramType;

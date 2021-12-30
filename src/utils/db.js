@@ -157,6 +157,11 @@ class DB {
     const request = objectStore.delete(key);
     return promisify(request);
   }
+
+  async removeAll() {
+    const data = await this.getAll();
+    data.forEach(item => this.removeItem(item.id));
+  }
 }
 
 export default new DB({storeName: 'parameters'});

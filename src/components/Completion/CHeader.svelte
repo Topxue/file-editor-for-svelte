@@ -12,12 +12,20 @@
   </div>
 
   <div class="pg-mk-header-right-wrapper">
-    <button class="uk-button uk-button-link uk-text-primary">保存草稿</button>
-    <button class="uk-button uk-button-default uk-button-small">指定签署位置</button>
+    <!--    <button class="uk-button uk-button-link uk-text-primary">保存草稿</button>-->
+    <!--    <button class="uk-button uk-button-default uk-button-small">指定签署位置</button>-->
     <button class="uk-button uk-button-primary uk-button-small">发起</button>
   </div>
 </header>
 
 <script>
+  //  是否可以发起
+  let isInitiate = false;
+  // 参数
+  export let parameters = [];
+  //
+  // $:if(parameters?.length) {
+  //   console.log(parameters)
+  // }
 
 </script>

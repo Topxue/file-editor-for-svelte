@@ -19,10 +19,16 @@
 
 
 <script>
-  import {onMount} from 'svelte';
+  import {onMount, getContext} from 'svelte';
 
   import db from "@/utils/db";
-  import {getCurrentTime, sleep, replaceTableContent} from '@/utils';
+  import {
+    getCurrentTime,
+    sleep,
+    replaceTableContent,
+    getFroalaContentParams,
+    getUpdateParametersData
+  } from '@/utils';
   import {observeDocument} from '@/utils/observe-dom';
 
   import {froalaStore} from "@/store/froala";
@@ -42,6 +48,8 @@
   // table column keys
   let columnKeys = [];
 
+  const params = getContext('optionsInfo');
+
   onMount(() => {
     // 初始化froala
     initFroala();
@@ -55,7 +63,7 @@
       events: {
         'initialized': () => {
           // 获取store数据
-          getInitStoreData()
+          getInitStoreData();
         },
         'click': (clickEvent) => {
           handleClickEditor(clickEvent);
@@ -69,7 +77,7 @@
         'commands.undo': () => {
           commandsRedoAndUndo();
         },
-        'commands.after': function (cmd, param1, param2) {
+        'commands.after': function (cmd, param) {
           const copyData = [...parameters];
           if (cmd === 'tableRemove') {
             document.getElementById(paramId).remove();
@@ -79,11 +87,11 @@
           if (cmd === 'tableColumns') {
             const res = copyData.find(item => item.id === paramId);
             // 左右侧插入列
-            if (param1 === 'after' || param1 === 'before') {
+            if (param === 'after' || param === 'before') {
               res.columnKeys.push(`column${res.columnKeys.length}`);
             }
             // 删除
-            if (param1 === 'delete') {
+            if (param === 'delete') {
               res.columnKeys.pop();
             }
 
@@ -104,7 +112,7 @@
       const template = froala.html.get();
       db.setItemTmp({template: template.replace('is-active', '')});
       // 定时清理更新数据
-      getUpdateParametersData();
+      getUpdateParametersData(froala);
       // 保持更新模板
       handleSaveData();
       console.log(`%c 模板保存成功✔ 更新时间: ${getCurrentTime()}`, 'color:#0f0');
@@ -112,11 +120,11 @@
   }
 
   const getInitStoreData = async () => {
-    const {template} = await db.getItemTmp();
+    const res = await db.getItemTmp();
     const dbDataAll = await db.getAll();
-    froala.html.set(template);
+    froala.html.set(res?.template);
 
-    const parameterNodes = getFroalaContentParams();
+    const parameterNodes = getFroalaContentParams(froala);
     if (parameterNodes?.length) {
       const ids = parameterNodes.map(node => node.getAttribute('id'));
       parameters = dbDataAll.map(item => {
@@ -126,32 +134,6 @@
       parameters = [];
     }
   }
-
-  // 获取编辑区域所存在的参数
-  const getFroalaContentParams = () => {
-    const froalaContainer = froala.$el[0];
-    const parameters = [...froalaContainer.querySelectorAll('[data-param-type]')];
-
-    return parameters;
-  }
-
-  // 获取并且更新参数库数据
-  const getUpdateParametersData = async () => {
-    const parameters = await getFroalaContentParams();
-
-    const dbDataAll = await db.getAll();
-    const data = dbDataAll.map(item => {
-      const isExist = parameters.find(element => element.getAttribute('id') === item.id);
-      if (isExist) {
-        return item
-      } else {
-        db.removeItem(item.id);
-      }
-    }).filter(item => item);
-
-    return data;
-  }
-
 
   // 添加参数
   const handleAddParameter = async (event) => {
@@ -215,14 +197,16 @@
   }
 
   // 数据保存
-  const handleSaveData = () => {
-    getUpdateParametersData();
+  const handleSaveData = async () => {
+    const parameters = await getUpdateParametersData(froala);
+    const template = froala.html.get().replace('is-active', '');
 
-    const template = froala.html.get();
-    db.setItemTmp({template: template.replace('is-active', '')});
+    await db.setItemTmp({template});
+
+    // 执行参数回调
+    params.getData && params.getData({
+      template,
+      parameters
+    })
   }
 </script>
-
-<style>
-
-</style>

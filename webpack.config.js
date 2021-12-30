@@ -16,6 +16,7 @@ module.exports = {
 		'build/bundle': ['./src/main.js']
 	},
 //   optimization: {
+//       usedExports: true,
 // 	    minimize: true,
 // 	    minimizer: [new TerserPlugin({
 // 	    	test: /\.js(\?.*)?$/i,    //匹配参与压缩的文件
@@ -67,13 +68,14 @@ module.exports = {
 				}
 			},
 			{
-				test: /\.(sc|sa|c)ss$/,
+				test: /\.(sc|c)ss$/,
 				use: [
 					MiniCssExtractPlugin.loader,
 					{
 						loader: 'css-loader',
 						options: {
-							sourceMap: true
+							sourceMap: !prod,
+							importLoaders:2
 						}
 					},
 					{
@@ -91,7 +93,7 @@ module.exports = {
 					{
 						loader: 'sass-loader',
 						options: {
-							sourceMap: true
+							sourceMap: !prod
 						}
 					}
 				]
@@ -126,7 +128,7 @@ module.exports = {
       fontFace: true,
       keyframes: true,
       rejected: true,
-      safelist: ['body','svg', /^\[data/,/^uk-open/,/^uk-notification/, /^fr-/]
+      safelist: ['body','svg', /^\[data/,/^uk-open/,/^uk-notification/, /^fr-/, /^:root/]
    })
 	],
 	devtool: prod ? false : 'source-map',

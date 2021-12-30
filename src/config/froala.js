@@ -15,10 +15,16 @@ export const editorConfig = {
   disabled: true,
   toolbarContainer: '#pg-toolbar-container',
   toolbarButtons: [
-    'undo', 'redo', '|',
-    'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
-    'insertTable', 'insertImage', 'insertHR'
-  ],
+    'undo', 'redo', 'clearFormatting', '|',
+    'paragraphFormat', 'fontFamily', 'fontSize', '|',
+    'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'textColor', '|',
+    'alignJustify', 'alignLeft', 'alignCenter', 'alignRight', 'lineHeight', 'outdent', 'indent', '|',
+    'insertImage', 'insertHR', 'insertTable', 'selectAll'],
+  // toolbarButtons: [
+  //   'undo', 'redo', '|',
+  //   'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
+  //   'insertTable', 'insertImage', 'insertHR'
+  // ],
   tableEditButtons: ['tableRemove', '|', 'tableRows', 'tableColumns', 'tableStyle', '-', 'tableCells', 'tableCellBackground', 'tableCellVerticalAlign', 'tableCellHorizontalAlign'],
   // 删除时保留所选文本格式
   // keepFormatOnDelete: true,

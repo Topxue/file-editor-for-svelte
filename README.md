@@ -13,12 +13,21 @@ import FileTemplateEditor from 'pg-file-template-editor'
 
 ### 使用
 ```markdown
-FileTemplateEditor({
-    target: '#ID', // 必填
+new FileTemplateEditor({
+    target: '#ID',  // 必填 
+    isOff: Boolean, // 默认为false
 })
 ```
 
 ### 参数事件
 ```markdown
-// TODO...
+ target: 根节点 -> '#ID'
+ isOff: 是否关闭编辑 -> Boolean
+ getData: () => {} // 获取数据
+```
+
+### 样式覆盖
+```css
+/* toolbar 宽度 */
+--toolbar-width: 100%
 ```
