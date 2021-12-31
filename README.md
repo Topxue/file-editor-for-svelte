@@ -24,6 +24,7 @@ new FileTemplateEditor({
  target: 根节点 -> '#ID'
  isOff: 是否关闭编辑 -> Boolean
  getData: () => {} // 获取数据
+ getInitiate: () => {} // 获取发起数据
 ```
 
 ### 样式覆盖

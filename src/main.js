@@ -55,7 +55,7 @@ class FileTemplateEditor {
     })
 
     const froala = this.froala;
-    const template = froala?.html.get() || '';
+    const template = froala.html?.get().replace('is-active', '') || '';
     const parameters = await getUpdateParametersData(froala);
 
     return {
@@ -77,10 +77,13 @@ class FileTemplateEditor {
 // 测试代码
 const editor = new FileTemplateEditor({
   target: '#root',
-  isOff: true,
+  isOff: false,
   data: {
-    html: '',
+    template: '',
     parameters: []
+  },
+  getInitiate(data) {
+    console.log(data, 'data')
   }
 })
 

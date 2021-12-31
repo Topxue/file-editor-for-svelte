@@ -40,6 +40,8 @@ module.exports = {
 		filename: 'build/file-template-editor.js',
 		library: 'FileTemplateEditor',
 		libraryTarget: 'umd',
+		libraryExport: "default",
+    globalObject: "this",
 	},
 	module: {
 		rules: [

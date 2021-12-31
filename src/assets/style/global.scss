@@ -9,14 +9,16 @@ $primary: #1e87f0;
   --mk-header: 100%;
   --toolbar-top: 0;
   --toolbar-width: 100%;
+  --pg-container-witdh: 100vh;
 }
 
 #pg-toolbar-container {
-  position: fixed;
-  z-index: 999;
-  right: 0;
-  background: #fff;
-  background-color: transparent;
+  //position: fixed;
+  //z-index: 999;
+  //right: 0;
+  //background: #fff;
+  //background-color: transparent;
+  //margin-top: 48px;
   top: var(--toolbar-top);
   width: var(--toolbar-width);
 }
@@ -24,13 +26,13 @@ $primary: #1e87f0;
 .pg-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: var(--pg-container-witdh);
   font-size: 14px;
   overflow-x: auto;
   overflow-y: hidden;
   box-sizing: border-box;
   background-color: #f7f8f8;
-  font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC, sans-serif !important;
 
   .pg-mk-header-wrapper {
     @include MHeader;
@@ -51,7 +53,8 @@ $primary: #1e87f0;
   }
 
   .pg-editor-container {
-    min-width: 818px;
+    min-width: 810px;
+    max-width: 810px;
     margin: 20px auto;
     height: 810px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -170,7 +173,6 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
   display: flex;
   justify-content: space-between;
   height: calc(100% - 42px);
-  margin-top: 40px;
 
   .pg-html-panel-params {
     @include htmlPanel;
@@ -295,7 +297,8 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
   .pg-table-selector-wrapper {
     display: flex;
     flex-wrap: wrap;
-    width: 160px;
+    min-width: 160px;
+    max-width: 160px;
 
     .pg-row-col-item {
       display: inline-block;
@@ -528,5 +531,4 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
 .uk-scroll-a {
   outline: none;
   text-decoration: none !important;
-  display: inherit;
 }

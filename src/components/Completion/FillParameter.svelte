@@ -98,7 +98,8 @@
 
       <!--单选-->
       {#if param.paramType === 'radio'}
-        <div class="uk-margin" on:click={(event) => handleClickFillIn(param, event)}>
+        <a class="uk-margin uk-scroll-a" uk-scroll href="#{param.id}"
+           on:click={(event) => handleClickFillIn(param, event)}>
           <label
             class="uk-form-label"
             class:is-required={param.isRequired}
@@ -130,12 +131,13 @@
               {/each}
             {/if}
           </div>
-        </div>
+        </a>
       {/if}
 
       <!--多选-->
       {#if param.paramType === 'checkbox'}
-        <div class="uk-margin" on:click={(event) => handleClickFillIn(param, event)}>
+        <a class="uk-margin uk-scroll-a" uk-scroll href="#{param.id}"
+           on:click={(event) => handleClickFillIn(param, event)}>
           <label
             class="uk-form-label"
             class:is-required={param.isRequired}
@@ -166,12 +168,12 @@
               {/each}
             {/if}
           </div>
-        </div>
+        </a>
       {/if}
 
       <!--日期-->
       {#if param.paramType === 'date'}
-        <div class="uk-margin" on:click={() => handleClickFillIn(param)}>
+        <a class="uk-margin uk-scroll-a" uk-scroll href="#{param.id}" on:click={() => handleClickFillIn(param)}>
           <label
             class="uk-form-label"
             class:is-required={param.isRequired}
@@ -187,12 +189,12 @@
               locale={localeFromDateFnsLocale(zhCN)}
             />
           </div>
-        </div>
+        </a>
       {/if}
 
       <!--身份证-->
       {#if param.paramType === 'idcard'}
-        <div class="uk-margin" on:click={() => handleClickFillIn(param)}>
+        <a class="uk-margin uk-scroll-a" uk-scroll href="#{param.id}" on:click={() => handleClickFillIn(param)}>
           <label
             class="uk-form-label"
             class:is-required={param.isRequired}
@@ -209,7 +211,7 @@
               on:keyup={fillInIdCardKeyupEvent.bind(null,param.paramType, index) }
               placeholder="请输入"/>
           </div>
-        </div>
+        </a>
       {/if}
     {/each}
   </form>
@@ -267,6 +269,7 @@
     if (paramType === 'text') {
       updateParameter(parameter, value);
     }
+    dispatch('required', data);
   }
   // 身份证填充
   const fillInIdCardKeyupEvent = (paramType, index, event) => {
@@ -280,6 +283,7 @@
     const valArr = value.split('');
 
     childArr.forEach((node, index) => node.innerHTML = valArr[index] || '');
+    dispatch('required', data);
   }
 
   // 日期选择
@@ -297,7 +301,7 @@
     reader.onload = (result) => {
       const url = result.target.result;
 
-      updateImageData(url)
+      updateImageData(url);
     };
   }
 
@@ -349,6 +353,8 @@
     // 更新参数
     const parameter = froalaContainer.querySelector(`[data-param-type=image][id=${paramId}]`);
     parameter.setAttribute('src', url);
+
+    dispatch('required', data);
   }
 
   const handleRemoveImage = (id) => {
@@ -361,7 +367,14 @@
     parameter.setAttribute('src', defaultImageBg);
 
     data = copyData;
+
+    dispatch('required', data);
   }
 
 </script>
+<style>
+    .uk-scroll-a {
+        display: inherit;
+    }
+</style>
 

@@ -13,4 +13,36 @@ function createFroalaStore() {
 
 export const froalaStore = createFroalaStore();
 
-export const parameters = writable({});
+// 参数store
+// export const parametersStore = writable({
+//   template: '',
+//   parameters: []
+// });
+
+// export const parametersStore = writable({
+//   template: '',
+//   parameters: []
+// });
+
+function createParametersStore(defaultVal) {
+  const {subscribe, set, update} = writable(defaultVal);
+
+  return {
+    subscribe,
+    // 添加参数数据
+    addData: (item) => {
+      update(param => param.parameters = param.parameters.push(item));
+    },
+    reset: () => {
+      set({
+        template: '',
+        parameters: []
+      })
+    }
+  }
+}
+
+export const parametersStore = createParametersStore({
+  template: '',
+  parameters: []
+});
