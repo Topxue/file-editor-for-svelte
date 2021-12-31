@@ -4,6 +4,7 @@ import db from './utils/db';
 import App from './App.svelte';
 import {froalaStore} from "./store/froala";
 import {getUpdateParametersData} from './utils';
+import testData from './config/test';
 
 class FileTemplateEditor {
   constructor(options) {
@@ -75,22 +76,19 @@ class FileTemplateEditor {
 }
 
 // 测试代码
+const data = testData.data;
 const editor = new FileTemplateEditor({
   target: '#root',
   isOff: false,
   data: {
-    template: '',
-    parameters: []
+    // template: '',
+    // parameters: []
+    template: data.templateContent,
+    parameters: data.params
   },
   getInitiate(data) {
     console.log(data, 'data')
   }
 })
-
-// setTimeout(async () => {
-//   console.log(editor)
-//   console.log(await editor.getData(), 'editor...')
-// }, 1000)
-
 
 export default FileTemplateEditor;

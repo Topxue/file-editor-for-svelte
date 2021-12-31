@@ -62,7 +62,7 @@ export const tableRender = async (row, col) => {
 
   await generateColumnsKey(id, col);
 
-  return `
+  const template = `
    <div class="fr-deletable pg-table-container" data-param-name="表格1" data-param-type="table" id="${id}">
       <table class="" style="width: 100%;">
         <thead data-pg-table="thead">
@@ -76,4 +76,9 @@ export const tableRender = async (row, col) => {
       </table>
    </div>
   `
+
+  return {
+    template,
+    id
+  }
 }

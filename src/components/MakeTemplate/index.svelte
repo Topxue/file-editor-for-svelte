@@ -48,6 +48,8 @@
   // table column keys
   let columnKeys = [];
 
+  let frPopup = null;
+
   const params = getContext('optionsInfo');
 
   onMount(() => {
@@ -64,9 +66,6 @@
         'initialized': () => {
           // 获取store数据
           getInitStoreData();
-          // parametersStore.set()
-          // console.log(parametersStore.addData(['joker']), 'parametersStore..')
-          // parametersStore.subscribe(value => console.log(value))
         },
         'click': (clickEvent) => {
           handleClickEditor(clickEvent);
@@ -104,9 +103,6 @@
             columnKeys = res.columnKeys;
           }
         }
-        // 'contentChanged': function () {
-        //   console.log(this);
-        // }
       }
     });
     froalaStore.set(froala);
@@ -130,24 +126,10 @@
     if (data) {
       froala.html.set(params?.data?.template);
       parameters = data?.parameters || [];
-
-      parameters.forEach(item => {
+      data?.parameters.forEach(item => {
         db.setItem(item.id, item);
       })
     }
-
-    // const res = await db.getItemTmp();
-    // const dbDataAll = await db.getAll();
-    //
-    // const parameterNodes = getFroalaContentParams(froala);
-    // if (parameterNodes?.length) {
-    //   const ids = parameterNodes.map(node => node.getAttribute('id'));
-    //   parameters = dbDataAll.map(item => {
-    //     if (ids.includes(item.id)) return item;
-    //   }).filter(item => item);
-    // } else {
-    //   parameters = [];
-    // }
   }
 
   // 添加参数
@@ -163,14 +145,30 @@
     paramId = target?.getAttribute('id');
 
     if (paramId) {
+      console.log(parameters, 'parameters..')
       const res = parameters.find(item => item.id === paramId);
       columnKeys = res?.columnKeys || [];
     } else {
       columnKeys = [];
     }
 
+    //重置 img popup位置
+    if (target && target.tagName === 'IMG') {
+      setImagePopupPosition(target)
+    }
+
     // 当前活动参数
     currentActiveParameter(target);
+  }
+
+  const setImagePopupPosition = async (target) => {
+    const {top} = target.getBoundingClientRect();
+    const imgHeight = +window.getComputedStyle(target).width.split('px')[0];
+
+    setTimeout(() => {
+      frPopup = document.querySelector('.fr-popup');
+      frPopup.style.top = top + imgHeight + 42 + 'px';
+    })
   }
 
   // 参数编辑-name

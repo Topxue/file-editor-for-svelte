@@ -1,4 +1,4 @@
-<header class="pg-mk-header-wrapper uk-flex uk-flex-between">
+<header class="pg-mk-header-wrapper initiate-header-wrapper uk-flex uk-flex-between">
   <div class="pg-mk-header-left-wrapper uk-flex">
     <div class="pg-header-return-back uk-margin-right">
       <i class="uk-icon uk-text-primary" uk-icon="icon: chevron-left"></i>
@@ -47,13 +47,19 @@
 
 <script>
   import {createEventDispatcher, getContext} from 'svelte';
+  import {froalaStore} from '@/store/froala';
 
   // 事件派发
   const dispatch = createEventDispatcher();
   const params = getContext('optionsInfo');
 
   //  是否可以发起
-  let isInitiate = false;
+  let isInitiate = true;
+  let froala = null;
+  froalaStore.subscribe(value => {
+    froala = value;
+  })
+
   // 参数
   export let parametersData = [];
   let requireData = [];
@@ -74,54 +80,59 @@
 
   // 发起数据
   const handleInitiate = () => {
-    params.getInitiate && params.getInitiate([]);
+    const template = froala.html?.get().replace('is-active', '') || '';
+
+    params.getInitiate && params.getInitiate({
+      template,
+      parameters: parametersData
+    });
   }
 
 </script>
 <style>
-    .dropdown-container {
-        width: 320px;
-        line-height: 20px;
-        padding: 10px;
-        box-sizing: border-box;
-        font-size: 13px;
-    }
+    /*.dropdown-container {*/
+    /*    width: 320px;*/
+    /*    line-height: 20px;*/
+    /*    padding: 10px;*/
+    /*    box-sizing: border-box;*/
+    /*    font-size: 13px;*/
+    /*}*/
 
-    .dropdown-header {
-        width: 170px;
-        font-weight: 600;
-        text-align: center;
-        margin: 0 auto;
-    }
+    /*.dropdown-header {*/
+    /*    width: 170px;*/
+    /*    font-weight: 600;*/
+    /*    text-align: center;*/
+    /*    margin: 0 auto;*/
+    /*}*/
 
-    .uk-divider-small::after {
-        width: 100%;
-    }
+    /*.uk-divider-small::after {*/
+    /*    width: 100%;*/
+    /*}*/
 
-    .param-list {
-        margin-top: 5px;
-        display: flex;
-        flex-direction: column;
-    }
+    /*.param-list {*/
+    /*    margin-top: 5px;*/
+    /*    display: flex;*/
+    /*    flex-direction: column;*/
+    /*}*/
 
-    .param-list span {
-        color: #4c596e;
-        position: relative;
-        cursor: pointer;
-    }
+    /*.param-list span {*/
+    /*    color: #4c596e;*/
+    /*    position: relative;*/
+    /*    cursor: pointer;*/
+    /*}*/
 
-    .param-list span:hover {
-        color: #2489f2;
-    }
+    /*.param-list span:hover {*/
+    /*    color: #2489f2;*/
+    /*}*/
 
-    .param-list span .is-required {
-        padding-left: -8px;
-        content: "*";
-        color: #ed521f;
-        position: absolute;
-    }
+    /*.param-list span .is-required {*/
+    /*    padding-left: -8px;*/
+    /*    content: "*";*/
+    /*    color: #ed521f;*/
+    /*    position: absolute;*/
+    /*}*/
 
-    .send-disabled {
-        cursor: not-allowed;
-    }
+    /*.send-disabled {*/
+    /*    cursor: not-allowed;*/
+    /*}*/
 </style>

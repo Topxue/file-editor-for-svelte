@@ -481,7 +481,7 @@
   import {DateInput, localeFromDateFnsLocale} from '@/components/Base/date-picker-svelte';
 
   import db from "@/utils/db";
-  import {colorHex, insertParameterVerify} from '@/utils';
+  import {colorHex, debounce, insertParameterVerify} from '@/utils';
   import {froalaStore} from "@/store/froala";
   import * as parameters from '@/parameters';
   import {PARAMETERS} from '@/config/parameter';
@@ -737,17 +737,23 @@
       })
     }
 
-    froala.html.insert(await tableRender(tableRow, tableCol));
+    const {template, id} = await tableRender(tableRow, tableCol);
+
+    froala.html.insert(template);
+    dispatch('add', id);
   }
 
   // 自定义行列
   const handleCustomTableRowCol = async () => {
-    froala.html.insert(await tableRender(tableRow, tableCol));
+    const {template, id} = await tableRender(tableRow, tableCol);
+
+    froala.html.insert(template);
+    dispatch('add', id);
 
     setTimeout(() => {
       tableRow = null;
       tableCol = null;
-    }, 0)
+    }, 300)
   }
 
   // 更新 column keys
@@ -903,9 +909,7 @@
   }
 
   // 插入参数库模板
-  const handleInsertParameter = async (paramType) => {
-    if (paramType === 'table') return;
-
+  const handleInsertParameter = debounce(async (paramType) => {
     const verify = insertParameterVerify();
     if (!verify) {
       return UIkit?.notification({
@@ -921,7 +925,8 @@
     dispatch('add', id);
 
     froala.html.insert(await parameters[paramType](id));
-  }
+  }, 300);
+
 
   onDestroy(unsubscribe);
 </script>

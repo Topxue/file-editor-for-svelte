@@ -23,6 +23,59 @@ $primary: #1e87f0;
   width: var(--toolbar-width);
 }
 
+
+.fr-toolbar .fr-btn-grp {
+  display: flex !important;
+}
+
+.initiate-header-wrapper {
+  .dropdown-container {
+    width: 320px;
+    line-height: 20px;
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 13px;
+  }
+
+  .dropdown-header {
+    width: 170px;
+    font-weight: 600;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .uk-divider-small::after {
+    width: 100%;
+  }
+
+  .param-list {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .param-list span {
+    color: #4c596e;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .param-list span:hover {
+    color: #2489f2;
+  }
+
+  .param-list span .is-required {
+    padding-left: -8px;
+    content: "*";
+    color: #ed521f;
+    position: absolute;
+  }
+
+  .send-disabled {
+    cursor: not-allowed;
+  }
+}
+
 .pg-container {
   display: flex;
   flex-direction: column;
@@ -60,6 +113,10 @@ $primary: #1e87f0;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     overflow-y: auto;
     border-radius: 0 !important;
+  }
+
+  .initiate-container {
+    margin-top: 66px;
   }
 }
 
@@ -121,7 +178,9 @@ a[href='https://www.froala.com/wysiwyg-editor?k=u'] {
   text-align: center;
   box-shadow: 0 3px 8px #00000026;
   background-color: transparent;
+  padding-left: calc(100% - 99%);
 }
+
 
 .fr-wrapper {
   border: none !important;
@@ -429,7 +488,8 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
   user-select: none;
   width: 320px;
   max-width: 320px;
-  position: absolute;
+  //height: 100vh;
+  position: relative;
   right: 0;
   top: 48px;
   bottom: 0;
@@ -453,6 +513,10 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
 
   .is-active {
     color: #2489f2;
+  }
+
+  .uk-scroll-a {
+    display: inherit;
   }
 }
 
@@ -531,4 +595,67 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
 .uk-scroll-a {
   outline: none;
   text-decoration: none !important;
+}
+
+.fr-popup {
+  transition: all .3s;
+}
+
+.is-visible {
+  display: inline-block !important;
+}
+
+.pg-image-popup-container {
+  display: none;
+
+  .image-popup-container {
+    width: 320px;
+    max-width: 320px;
+    height: 120px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 1px 1px rgba(0, 0, 0, 0.16);
+    border-radius: 2px;
+    box-sizing: border-box;
+    user-select: none;
+    margin-top: 10px;
+    border-top: 5px solid #222;
+    position: fixed;
+    z-index: 999;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .fr-arrow {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid #222;
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    margin-left: -5px;
+    display: inline-block;
+  }
+
+  .upload-wrapper {
+    cursor: pointer;
+    width: 100%;
+    position: relative;
+  }
+
+  .upload-wrapper input {
+    cursor: pointer;
+  }
+
+  .uk-form-custom {
+    width: 320px;
+    height: 95px;
+    cursor: pointer;
+    line-height: 100px;
+    border: 2px dashed #e5e5e5;
+    position: relative;
+  }
 }

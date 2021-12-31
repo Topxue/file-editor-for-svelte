@@ -148,3 +148,23 @@ export const getUpdateParametersData = async (froala) => {
 
   return data;
 }
+
+/**
+ * 防抖函数 非立即执行（延迟执行）
+ * @param func
+ * @param wait
+ * @returns {(function(): void)|*}
+ */
+export const debounce = (func, wait = 1000) => {
+  let timer;
+  return function () {
+    const context = this; // 注意 this 指向
+    const args = arguments; // arguments中存着event
+
+    if (timer) clearTimeout(timer);
+
+    timer = setTimeout(function () {
+      func.apply(this, args)
+    }, wait)
+  }
+}

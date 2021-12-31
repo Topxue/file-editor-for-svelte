@@ -227,6 +227,8 @@
   export let data = [];
   export let paramId = null;
 
+  // export let freezeData = [];
+
   // 仅看必填
   let isRequired = false;
   // 仅看待我填写
@@ -257,7 +259,12 @@
 
   // 仅看必填
   const handleIsRequired = () => {
-    console.log(isRequired)
+    console.log(isRequired, 'isRequired...')
+    // if (isRequired) {
+    //   data = freezeData.filter(item => item.isRequired)
+    // } else {
+    //   data = freezeData;
+    // }
   }
 
   // 参数填充-input-event;
@@ -372,9 +379,4 @@
   }
 
 </script>
-<style>
-    .uk-scroll-a {
-        display: inherit;
-    }
-</style>
 

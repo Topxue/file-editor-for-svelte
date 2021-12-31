@@ -1,14 +1,17 @@
 <CHeader parametersData={parametersData} on:scroll={handleScroll}/>
-<!-- 编辑容器 -->
-<div id="pg-editor-container" class="pg-editor-container"></div>
-<!--参数填写-->
-<FillParameter
-  data={parametersData}
-  paramId={paramId}
-  on:check={handleClickFillIn}
-  on:update={handleUpdateClick}
-  on:required={getRequiredData}
-/>
+<div class="pg-editor-body-container">
+  <div style="width: 340px"></div>
+  <!-- 编辑容器 -->
+  <div id="pg-editor-container" class="pg-editor-container initiate-container"></div>
+  <!--参数填写-->
+  <FillParameter
+    data={parametersData}
+    paramId={paramId}
+    on:check={handleClickFillIn}
+    on:update={handleUpdateClick}
+    on:required={getRequiredData}
+  />
+</div>
 
 <!--下拉选择-->
 <Select
@@ -30,7 +33,7 @@
   import FillParameter from './FillParameter.svelte';
   import ImagePopup from '@/components/Base/image-popup';
 
-  import db from '@/utils/db';
+  // import db from '@/utils/db';
 
   import {froalaStore} from "@/store/froala";
   import {fillingConfig, PG_EDITOR_CONTAINER} from '@/config/froala';
@@ -38,6 +41,8 @@
 
   // 获取外部传入的参数
   const params = getContext('optionsInfo');
+
+  // let freezeData = [];
 
   // 参数数据
   let parametersData = [];
@@ -57,9 +62,7 @@
 
   onMount(async () => {
     await initFroala();
-    await getParameterData();
     initGlobeClickEvent();
-    controlParameterIsEdit();
   })
 
   // 初始化froala
@@ -70,6 +73,7 @@
       events: {
         'initialized': () => {
           froala.edit.off();
+          getParameterData();
         }
       }
     });
@@ -161,7 +165,6 @@
   // 控制参数编辑是否可编辑并注册编辑事件
   const controlParameterIsEdit = () => {
     const parameters = froalaContainer.querySelectorAll('[data-param-type]');
-
     parameters.forEach(node => {
       const paramType = node.getAttribute('data-param-type');
       if (paramType === 'text') {
@@ -197,9 +200,7 @@
 
   // 单选-no-dropdown
   const handleChangeRadio = (inputs, event) => {
-
     const value = event.target.value;
-
     inputs.forEach(node => {
       if (node.value === value) {
         node.checked = true
@@ -299,19 +300,15 @@
   })
 
   // 获取参数数据
-  const getParameterData = async () => {
-    const data = await db.getAll();
+  const getParameterData = () => {
+    const data = params?.data;
+    if (data) {
+      parametersData = data.parameters;
+      // freezeData = data.parameters;
+      froala.html.set(data.template || '');
+    }
 
-    parametersData = data.map(item => {
-      if (item.paramType === 'date') {
-        item.defaultValue = new Date(item.defaultValue);
-      }
-      return item
-    })
-
-    // 获取模板
-    const res = await db.getItemTmp();
-    froala.html.set(res.template || '')
+    controlParameterIsEdit();
   }
 
   // 编辑器点击事件
@@ -403,8 +400,3 @@
   }
 
 </script>
-<style>
-    .pg-editor-container {
-        margin-top: 66px;
-    }
-</style>
