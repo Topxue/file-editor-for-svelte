@@ -1,4 +1,4 @@
-<MHeader on:save={handleSaveData}/>
+<!--<MHeader on:save={handleSaveData}/>-->
 <div id="pg-toolbar-container"></div>
 <div class="pg-editor-body-container">
   <!--  窗格参数-->
@@ -23,19 +23,19 @@
 
   import db from "@/utils/db";
   import {
-    getCurrentTime,
     sleep,
+    getCurrentTime,
     replaceTableContent,
     getFroalaContentParams,
     getUpdateParametersData
   } from '@/utils';
   import {observeDocument} from '@/utils/observe-dom';
 
-  import {froalaStore} from "@/store/froala";
+  import {froalaStore, parametersStore} from "@/store/froala";
   import {editorConfig, PG_EDITOR_CONTAINER} from '@/config/froala';
   import {currentActiveParameter} from '@/event/viewEvent';
 
-  import MHeader from './MHeader.svelte';
+  // import MHeader from './MHeader.svelte';
   import MLeftContainer from './MLeftContainer.svelte';
   import MRightContainer from './MRightContainer.svelte';
 
@@ -54,7 +54,7 @@
     // 初始化froala
     initFroala();
     // 实时更新保存
-    realTimeUpdateAndSave();
+    // realTimeUpdateAndSave();
   })
 
   const initFroala = () => {
@@ -64,6 +64,9 @@
         'initialized': () => {
           // 获取store数据
           getInitStoreData();
+          // parametersStore.set()
+          // console.log(parametersStore.addData(['joker']), 'parametersStore..')
+          // parametersStore.subscribe(value => console.log(value))
         },
         'click': (clickEvent) => {
           handleClickEditor(clickEvent);
@@ -80,7 +83,10 @@
         'commands.after': function (cmd, param) {
           const copyData = [...parameters];
           if (cmd === 'tableRemove') {
-            document.getElementById(paramId).remove();
+            const tableContainer = document.getElementById(paramId);
+            if (tableContainer) {
+              tableContainer.remove();
+            }
             commandsRedoAndUndo();
           }
           // 插入列
@@ -119,20 +125,29 @@
     }, 60000)
   }
 
-  const getInitStoreData = async () => {
-    const res = await db.getItemTmp();
-    const dbDataAll = await db.getAll();
-    froala.html.set(res?.template);
+  const getInitStoreData = () => {
+    const data = params?.data;
+    if (data) {
+      froala.html.set(params?.data?.template);
+      parameters = data?.parameters || [];
 
-    const parameterNodes = getFroalaContentParams(froala);
-    if (parameterNodes?.length) {
-      const ids = parameterNodes.map(node => node.getAttribute('id'));
-      parameters = dbDataAll.map(item => {
-        if (ids.includes(item.id)) return item;
-      }).filter(item => item);
-    } else {
-      parameters = [];
+      parameters.forEach(item => {
+        db.setItem(item.id, item);
+      })
     }
+
+    // const res = await db.getItemTmp();
+    // const dbDataAll = await db.getAll();
+    //
+    // const parameterNodes = getFroalaContentParams(froala);
+    // if (parameterNodes?.length) {
+    //   const ids = parameterNodes.map(node => node.getAttribute('id'));
+    //   parameters = dbDataAll.map(item => {
+    //     if (ids.includes(item.id)) return item;
+    //   }).filter(item => item);
+    // } else {
+    //   parameters = [];
+    // }
   }
 
   // 添加参数
@@ -148,7 +163,8 @@
     paramId = target?.getAttribute('id');
 
     if (paramId) {
-      columnKeys = parameters.find(item => item.id === paramId).columnKeys;
+      const res = parameters.find(item => item.id === paramId);
+      columnKeys = res?.columnKeys || [];
     } else {
       columnKeys = [];
     }
@@ -191,7 +207,7 @@
       res && newParameters.push(res);
     })
 
-    sleep(300).then(() => {
+    sleep(500).then(() => {
       parameters = newParameters;
     })
   }

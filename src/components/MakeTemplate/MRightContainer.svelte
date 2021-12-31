@@ -623,8 +623,8 @@
 
     // 控件大小-自定义
     if (['width', 'height'].includes(attrName)) {
-      currentParameter.style.width = size.width + 'px';
-      currentParameter.style.height = size.height + 'px';
+      currentParameter.style.minwidth = size.width + 'px';
+      currentParameter.style.minHeight = size.height + 'px';
 
       db.setItem(data.id, {
         fontConfig: {
@@ -797,11 +797,11 @@
           currentParameter.style.display = 'inline';
         } else if (sizeChecked === 'fixed') {
           currentParameter.style.display = 'inline-flex';
-          currentParameter.style.width = '148px';
-          currentParameter.style.height = '17px';
+          currentParameter.style.minwidth = '148px';
+          currentParameter.style.minHeight = '17px';
         } else {
-          currentParameter.style.width = size.width + 'px';
-          currentParameter.style.height = size.height + 'px';
+          currentParameter.style.minwidth = size.width + 'px';
+          currentParameter.style.minHeight = size.height + 'px';
         }
         db.setItem(data.id, {
           fontConfig: {

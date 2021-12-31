@@ -98,6 +98,8 @@ $box-shadow: inset 0 0 0 1px #2489f3;
 }
 
 [data-param-type=radio][data-layout=horizontal], [data-param-type=checkbox][data-layout=horizontal] {
+  display: flex;
+  flex-wrap: wrap;
   > label {
     position: relative;
     padding-left: 0.5em;
@@ -147,7 +149,7 @@ $box-shadow: inset 0 0 0 1px #2489f3;
 
 [data-param-type=radio][data-layout=vertical], [data-param-type=checkbox][data-layout=vertical] {
   margin: 0 1px;
-  vertical-align: top;
+  //vertical-align: top;
   display: inline-block;
   min-width: auto;
 

@@ -1,4 +1,4 @@
-<CHeader parameters={parametersData}/>
+<CHeader parametersData={parametersData} on:scroll={handleScroll}/>
 <!-- 编辑容器 -->
 <div id="pg-editor-container" class="pg-editor-container"></div>
 <!--参数填写-->
@@ -7,6 +7,7 @@
   paramId={paramId}
   on:check={handleClickFillIn}
   on:update={handleUpdateClick}
+  on:required={getRequiredData}
 />
 
 <!--下拉选择-->
@@ -360,6 +361,20 @@
     currentActiveParameter(target);
   }
 
+  // 获取必填数据校验
+  const getRequiredData = (event) => {
+    parametersData = event.detail || [];
+  }
+
+  // 滚动到指定参数
+  const handleScroll = (event) => {
+    const id = event.detail;
+    const target = froalaContainer.querySelector(`[id=${id}]`);
+
+    paramId = id;
+    currentActiveParameter(target);
+  }
+
   // 更新参数
   const updateParameter = (parameter, value) => {
     if (!parameter) return;
@@ -389,7 +404,7 @@
 
 </script>
 <style>
-  .pg-editor-container {
-      margin-top: 66px;
-  }
+    .pg-editor-container {
+        margin-top: 66px;
+    }
 </style>
