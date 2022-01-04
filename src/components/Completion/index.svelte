@@ -60,6 +60,8 @@
   let optionData = [];
   let target = null;
 
+  // $:if (parametersData?.length) params?.getInitiate && params?.getInitiate(parametersData);
+
   onMount(async () => {
     await initFroala();
     initGlobeClickEvent();

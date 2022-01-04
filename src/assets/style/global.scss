@@ -29,6 +29,14 @@ $primary: #1e87f0;
 }
 
 .initiate-header-wrapper {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  box-sizing: border-box;
+  height: 50px;
+  border-bottom: 1px solid $bord-color;
+
   .dropdown-container {
     width: 320px;
     line-height: 20px;
@@ -116,7 +124,7 @@ $primary: #1e87f0;
   }
 
   .initiate-container {
-    margin-top: 66px;
+    //margin-top: 66px;
   }
 }
 
@@ -491,7 +499,7 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
   //height: 100vh;
   position: relative;
   right: 0;
-  top: 48px;
+  //top: 48px;
   bottom: 0;
   padding: 10px 24px 0 16px;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);

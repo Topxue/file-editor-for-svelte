@@ -31,7 +31,7 @@
   } from '@/utils';
   import {observeDocument} from '@/utils/observe-dom';
 
-  import {froalaStore, parametersStore} from "@/store/froala";
+  import {froalaStore} from "@/store/froala";
   import {editorConfig, PG_EDITOR_CONTAINER} from '@/config/froala';
   import {currentActiveParameter} from '@/event/viewEvent';
 
@@ -145,7 +145,6 @@
     paramId = target?.getAttribute('id');
 
     if (paramId) {
-      console.log(parameters, 'parameters..')
       const res = parameters.find(item => item.id === paramId);
       columnKeys = res?.columnKeys || [];
     } else {

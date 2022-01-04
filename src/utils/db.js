@@ -159,8 +159,11 @@ class DB {
   }
 
   async removeAll() {
-    const data = await this.getAll();
-    data.forEach(item => this.removeItem(item.id));
+    const db = await this.initDB();
+    const transaction = db.transaction([this.storeName], 'readwrite');
+    const objectStore = transaction.objectStore(this.storeName);
+
+    objectStore.clear();
   }
 }
 

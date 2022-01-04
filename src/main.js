@@ -38,10 +38,11 @@ class FileTemplateEditor {
    * 动态加载 font-awesome.css
    */
   static _createIconLink() {
+    const HREF_URL = 'https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css';
     let link = document.createElement('link');
     link.type = 'text/css';
     link.rel = 'stylesheet';
-    link.href = 'https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css';
+    link.href = HREF_URL;
     const head = document.getElementsByTagName('head')[0];
     head.appendChild(link);
   }
@@ -69,11 +70,16 @@ class FileTemplateEditor {
    * 清空数据库数据
    * @returns {Promise<void>}
    */
-  async clearData() {
+  static async clearData() {
     await db.setItemTmp('');
     await db.removeAll();
   }
 }
+
+window.onbeforeunload = async () => {
+  await FileTemplateEditor.clearData();
+}
+
 
 // 测试代码
 const data = testData.data;
@@ -83,6 +89,7 @@ const editor = new FileTemplateEditor({
   data: {
     // template: '',
     // parameters: []
+    fileName: 'joker',
     template: data.templateContent,
     parameters: data.params
   },
@@ -90,5 +97,7 @@ const editor = new FileTemplateEditor({
     console.log(data, 'data')
   }
 })
+
+console.log(editor, 'editor...')
 
 export default FileTemplateEditor;

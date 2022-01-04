@@ -1,4 +1,4 @@
-<header class="pg-mk-header-wrapper initiate-header-wrapper uk-flex uk-flex-between">
+<header class="initiate-header-wrapper uk-flex uk-flex-between">
   <div class="pg-mk-header-left-wrapper uk-flex">
     <div class="pg-header-return-back uk-margin-right">
       <i class="uk-icon uk-text-primary" uk-icon="icon: chevron-left"></i>
@@ -27,7 +27,7 @@
           <div class="dropdown-header uk-text-emphasis">尚有未填写完成的必填内容 需要全部填写完成后才可发起</div>
           <hr class="uk-divider-small">
           <div class="uk-text-emphasis">未填写的必填参数：（点击参数名称可定位）</div>
-          <div class="uk-text-muted">文件：测试</div>
+          <div class="uk-text-muted">文件：{params.data?.fileName || ''}</div>
           <div class="param-list">
             {#each requireData as item}
               <a
@@ -89,50 +89,3 @@
   }
 
 </script>
-<style>
-    /*.dropdown-container {*/
-    /*    width: 320px;*/
-    /*    line-height: 20px;*/
-    /*    padding: 10px;*/
-    /*    box-sizing: border-box;*/
-    /*    font-size: 13px;*/
-    /*}*/
-
-    /*.dropdown-header {*/
-    /*    width: 170px;*/
-    /*    font-weight: 600;*/
-    /*    text-align: center;*/
-    /*    margin: 0 auto;*/
-    /*}*/
-
-    /*.uk-divider-small::after {*/
-    /*    width: 100%;*/
-    /*}*/
-
-    /*.param-list {*/
-    /*    margin-top: 5px;*/
-    /*    display: flex;*/
-    /*    flex-direction: column;*/
-    /*}*/
-
-    /*.param-list span {*/
-    /*    color: #4c596e;*/
-    /*    position: relative;*/
-    /*    cursor: pointer;*/
-    /*}*/
-
-    /*.param-list span:hover {*/
-    /*    color: #2489f2;*/
-    /*}*/
-
-    /*.param-list span .is-required {*/
-    /*    padding-left: -8px;*/
-    /*    content: "*";*/
-    /*    color: #ed521f;*/
-    /*    position: absolute;*/
-    /*}*/
-
-    /*.send-disabled {*/
-    /*    cursor: not-allowed;*/
-    /*}*/
-</style>
