@@ -33,8 +33,6 @@
   import FillParameter from './FillParameter.svelte';
   import ImagePopup from '@/components/Base/image-popup';
 
-  // import db from '@/utils/db';
-
   import {froalaStore} from "@/store/froala";
   import {fillingConfig, PG_EDITOR_CONTAINER} from '@/config/froala';
   import {currentActiveParameter} from '@/event/viewEvent';

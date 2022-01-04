@@ -171,27 +171,6 @@
         </a>
       {/if}
 
-      <!--日期-->
-      {#if param.paramType === 'date'}
-        <a class="uk-margin uk-scroll-a" uk-scroll href="#{param.id}" on:click={() => handleClickFillIn(param)}>
-          <label
-            class="uk-form-label"
-            class:is-required={param.isRequired}
-            class:is-active={param.id === paramId}
-            for="">{param.name}</label>
-          <div class="uk-form-controls uk-inline uk-width-1-1">
-            <i class="uk-form-icon {ICON_ENUM[param.paramType]}"></i>
-            <DateInput
-              format={param.format}
-              placeholder="选择日期"
-              bind:value={param.defaultValue}
-              on:select={handleChangeDate.bind(null, param.paramType, index)}
-              locale={localeFromDateFnsLocale(zhCN)}
-            />
-          </div>
-        </a>
-      {/if}
-
       <!--身份证-->
       {#if param.paramType === 'idcard'}
         <a class="uk-margin uk-scroll-a" uk-scroll href="#{param.id}" on:click={() => handleClickFillIn(param)}>
@@ -218,16 +197,11 @@
 </div>
 <script>
   import {onMount, createEventDispatcher} from "svelte";
-
-  import zhCN from 'date-fns/locale/zh-CN';
   import {ICON_ENUM, defaultImageBg} from '@/config/parameter';
-  import {DateInput, localeFromDateFnsLocale} from '@/components/Base/date-picker-svelte';
 
   // 参数数据
   export let data = [];
   export let paramId = null;
-
-  // export let freezeData = [];
 
   // 仅看必填
   let isRequired = false;
@@ -293,11 +267,6 @@
     dispatch('required', data);
   }
 
-  // 日期选择
-  const handleChangeDate = (paramType, index, event) => {
-    const parameter = froalaContainer.querySelector(`[data-param-type=${paramType}][id=${paramId}]`);
-    updateParameter(parameter, event.detail);
-  }
 
   //  图片上传
   const handleUploadImage = (event) => {

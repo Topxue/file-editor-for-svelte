@@ -1,10 +1,10 @@
 import './config/plugin';
 import './assets/style/global.scss';
-import db from './utils/db';
+
 import App from './App.svelte';
-import {froalaStore} from "./store/froala";
-import {getUpdateParametersData} from './utils';
+import {froalaStore, parametersStore} from "./store/froala";
 import testData from './config/test';
+
 
 class FileTemplateEditor {
   constructor(options) {
@@ -16,6 +16,7 @@ class FileTemplateEditor {
 
   _init() {
     this.initApp();
+    this._initFroalaInstance();
     FileTemplateEditor._createIconLink();
   }
 
@@ -31,6 +32,14 @@ class FileTemplateEditor {
       props: {
         options: props,
       },
+    })
+
+    parametersStore.setData(props)
+  }
+
+  _initFroalaInstance() {
+    froalaStore.subscribe(froala => {
+      this.froala = froala;
     })
   }
 
@@ -51,34 +60,26 @@ class FileTemplateEditor {
    * 获取模板&参数数据
    * @returns {{html: (*|string), parameters: *[]}}
    */
-  async getData() {
-    froalaStore.subscribe(froala => {
-      this.froala = froala;
-    })
-
+  getData() {
     const froala = this.froala;
     const template = froala.html?.get().replace('is-active', '') || '';
-    const parameters = await getUpdateParametersData(froala);
+    let parameters = [];
+
+    parametersStore.subscribe(store => {
+      parameters = store.data.parameters;
+    })
 
     return {
       template,
       parameters
     }
   }
-
-  /**
-   * 清空数据库数据
-   * @returns {Promise<void>}
-   */
-  static async clearData() {
-    await db.setItemTmp('');
-    await db.removeAll();
-  }
 }
 
-window.onbeforeunload = async () => {
-  await FileTemplateEditor.clearData();
-}
+//
+// window.onbeforeunload = async () => {
+//   await FileTemplateEditor.clearData();
+// }
 
 
 // 测试代码
@@ -88,7 +89,7 @@ const editor = new FileTemplateEditor({
   isOff: false,
   data: {
     // template: '',
-    // parameters: []
+    // parameters: [],
     fileName: 'joker',
     template: data.templateContent,
     parameters: data.params
@@ -98,6 +99,5 @@ const editor = new FileTemplateEditor({
   }
 })
 
-console.log(editor, 'editor...')
 
 export default FileTemplateEditor;

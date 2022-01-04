@@ -1,7 +1,5 @@
 /** Created by xwp on 2021-12-16 **/
 
-import db from "./db";
-
 /**
  * 生成随机 ID
  * @type {function(): string}
@@ -130,24 +128,6 @@ export const getFroalaContentParams = (froala) => {
   return parameters;
 }
 
-/**
- * 获取并且更新参数库数据
- */
-export const getUpdateParametersData = async (froala) => {
-  const parameters = await getFroalaContentParams(froala);
-
-  const dbDataAll = await db.getAll();
-  const data = dbDataAll.map(item => {
-    const isExist = parameters.find(element => element.getAttribute('id') === item.id);
-    if (isExist) {
-      return item
-    } else {
-      db.removeItem(item.id);
-    }
-  }).filter(item => item);
-
-  return data;
-}
 
 /**
  * 防抖函数 非立即执行（延迟执行）

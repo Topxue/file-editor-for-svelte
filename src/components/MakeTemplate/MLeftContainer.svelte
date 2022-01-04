@@ -15,7 +15,7 @@
           <span
             class="pane-params-close uk-icon"
             uk-icon="close"
-            on:click|stopPropagation={dispatch('delete', param.id)}>
+            on:click|stopPropagation|preventDefault={dispatch('delete', param.id)}>
         </span>
         </li>
       </a>
@@ -25,16 +25,18 @@
 
 <script>
   import {createEventDispatcher} from 'svelte';
-  import {froalaStore} from "@/store/froala";
+  import {froalaStore, parametersStore} from "@/store/froala";
   import {ICON_ENUM} from '@/config/parameter';
 
   // 事件派发
   const dispatch = createEventDispatcher();
 
   // 参数集合
-  export let parameters = [];
+  $:parameters = $parametersStore.data?.parameters || [];
+
   // 当前选择参数id
   export let checkedId = null;
+
   // 获取froala实例
   let froala = null;
   froalaStore.subscribe(value => {
