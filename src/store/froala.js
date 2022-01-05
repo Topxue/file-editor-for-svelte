@@ -34,13 +34,18 @@ function createParametersStore(defaultVal) {
     },
     // 添加参数数据
     addData: (item) => update(param => {
-      freezeData = [...param.data.parameters, item];
+      freezeData?.push(item);
+
+      const parameters = [...param.data.parameters];
+
+      const isExist = parameters.find(res => res.id === item.id);
+      if (!isExist) parameters.push(item);
 
       return {
         ...param,
         data: {
           ...param.data,
-          parameters: [...param.data.parameters, item]
+          parameters
         }
       }
     }),

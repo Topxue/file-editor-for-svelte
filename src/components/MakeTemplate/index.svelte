@@ -147,6 +147,7 @@
   // 操作回滚
   const commandsRedoAndUndo = debounce(() => {
     const freezeData = parametersStore.getFreezeData();
+
     const froalaContainer = froala.$el[0];
     const parameterArray = [...froalaContainer.querySelectorAll('[data-param-type]')] || [];
 

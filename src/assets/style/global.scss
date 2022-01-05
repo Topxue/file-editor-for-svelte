@@ -10,6 +10,7 @@ $primary: #1e87f0;
   --toolbar-top: 0;
   --toolbar-width: 100%;
   --pg-container-witdh: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC, sans-serif !important;
 }
 
 #pg-toolbar-container {
@@ -36,6 +37,19 @@ $primary: #1e87f0;
   box-sizing: border-box;
   height: 50px;
   border-bottom: 1px solid $bord-color;
+
+  .pg-header-return-back {
+    display: flex;
+    align-items: center;
+
+    .fa-angle-left {
+      font-size: 22px;
+      margin-right: 5px;
+      margin-top: -2px;
+      color: #1e87f0;
+    }
+  }
+
 
   .dropdown-container {
     width: 320px;
@@ -93,7 +107,6 @@ $primary: #1e87f0;
   overflow-y: hidden;
   box-sizing: border-box;
   background-color: #f7f8f8;
-  font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC, sans-serif !important;
 
   .pg-mk-header-wrapper {
     @include MHeader;
@@ -441,12 +454,16 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
       position: absolute;
       top: -9px;
       right: -7px;
-      width: 18px;
+      width: 20px;
       font-weight: bold;
       opacity: 0;
 
       &:hover {
         color: #ed521f;
+      }
+
+      .fa-times-circle {
+        font-size: 18px;
       }
     }
 
@@ -667,3 +684,79 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
     position: relative;
   }
 }
+
+.pg-dialog-container {
+  font-size: 14px;
+
+  .uk-modal-dialog {
+    width: 370px !important;
+    top: 32% !important;
+    padding: 0 15px 15px 15px;
+  }
+
+  .uk-modal-title {
+    font-size: 20px;
+    line-height: 2.3;
+  }
+
+  .dialog-button-container {
+    margin-top: 10px;
+  }
+}
+
+.pg-custom-select-container {
+  position: fixed;
+  z-index: 999;
+}
+
+.pg-select-container {
+  position: relative;
+  background: #FFFFFF;
+  box-sizing: border-box;
+  display: none;
+  font-size: 13px;
+  padding: 4px 0;
+  border-radius: 3px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.10);
+  border: 1px solid #e4e7ed;
+  max-height: 215px;
+  overflow: auto;
+}
+
+.pg-select-container::after {
+  content: '';
+  border-width: 9px;
+  border-style: solid;
+  border-color: transparent transparent #fff transparent;
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: -18px;
+  left: 52px;
+}
+
+.pg-select-container .option-item {
+  padding: 8px 10px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.pg-select-container > .is-active {
+  color: #2489f2;
+}
+
+.option-item.is-active::after {
+  content: "✔";
+  position: absolute;
+  right: 10px;
+}
+
+.pg-select-container li:hover {
+  background-color: #f5f7fa;
+}
+
+.visible {
+  display: block;
+}
+

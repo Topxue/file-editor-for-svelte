@@ -12,7 +12,7 @@
           on:change={handleIsRequired}>
         仅看必填
       </label>
-      <label><input class="uk-checkbox" type="checkbox" bind:checked={isOnlyWrite}> 仅看待我填写</label>
+      <!--      <label><input class="uk-checkbox" type="checkbox" bind:checked={isOnlyWrite}> 仅看待我填写</label>-->
     </div>
     {#each data as param, index}
       <!--文本-->
@@ -30,6 +30,7 @@
               type="text"
               name="{param.paramType}"
               bind:value="{param.defaultValue}"
+              maxlength={param.maxLength}
               placeholder="请输入"
               on:input={() => handleEditInputEvent(param.paramType, index)}
             >
@@ -202,6 +203,7 @@
   // 参数数据
   export let data = [];
   export let paramId = null;
+  export let freezeData = [];
 
   // 仅看必填
   let isRequired = false;
@@ -233,12 +235,13 @@
 
   // 仅看必填
   const handleIsRequired = () => {
-    console.log(isRequired, 'isRequired...')
-    // if (isRequired) {
-    //   data = freezeData.filter(item => item.isRequired)
-    // } else {
-    //   data = freezeData;
-    // }
+    if (isRequired) {
+      data = freezeData.filter(item => item.isRequired)
+    } else {
+      data = freezeData;
+    }
+
+    console.log(freezeData, 'freezeData...')
   }
 
   // 参数填充-input-event;

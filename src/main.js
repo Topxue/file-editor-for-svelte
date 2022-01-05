@@ -76,11 +76,9 @@ class FileTemplateEditor {
   }
 }
 
-//
 // window.onbeforeunload = async () => {
 //   await FileTemplateEditor.clearData();
 // }
-
 
 // 测试代码
 const data = testData.data;
@@ -88,11 +86,19 @@ const editor = new FileTemplateEditor({
   target: '#root',
   isOff: false,
   data: {
-    // template: '',
-    // parameters: [],
-    fileName: 'joker',
-    template: data.templateContent,
-    parameters: data.params
+    template: '',
+    parameters: [],
+    // fileName: 'joker',
+    // template: data.templateContent,
+    // parameters: data.params
+  },
+  // 返回
+  back() {
+    console.log('back...')
+  },
+  // 实时保存
+  realSave(data) {
+    console.log(data, 'data...')
   },
   getInitiate(data) {
     console.log(data, 'data')

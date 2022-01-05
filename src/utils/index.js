@@ -83,12 +83,21 @@ export const insertParameterVerify = () => {
 }
 
 /**
- * 当前时间
+ * 当前日期
  * @param froala
  */
-export const getCurrentTime = (time = +new Date()) => {
+export const getCurrentDate = (time = +new Date()) => {
   const date = new Date(time + 8 * 3600 * 1000);
   return date.toJSON().substr(0, 19).replace('T', ' ').replace(/-/g, '-');
+}
+
+/**
+ * 获取当前时间
+ * @param time
+ * @returns {string}
+ */
+export const getCurrentTime = (time = new Date()) => {
+  return `${time.getHours()}:${String(time.getMinutes()).padStart(2, '0')}:${String(time.getSeconds()).padStart(2, '0')}`
 }
 
 /**
@@ -146,5 +155,22 @@ export const debounce = (func, wait = 1000) => {
     timer = setTimeout(function () {
       func.apply(this, args)
     }, wait)
+  }
+}
+
+/**
+ * 时间戳转多少分钟之前
+ * @param time
+ * @returns {string|*}
+ */
+export const timeFormat = (timestamp) => {
+  let mistiming = Math.round((Date.now() - timestamp) / 1000);
+  let arrr = ['年', '个月', '周', '天', '小时', '分钟', '秒'];
+  let arrn = [31536000, 2592000, 604800, 86400, 3600, 60, 1];
+  for (let i = 0; i < arrn.length; i++) {
+    let inm = Math.floor(mistiming / arrn[i]);
+    if (inm != 0) {
+      return inm + arrr[i] + '前';
+    }
   }
 }

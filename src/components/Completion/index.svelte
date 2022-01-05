@@ -7,6 +7,7 @@
   <FillParameter
     data={parametersData}
     paramId={paramId}
+    freezeData={freezeData}
     on:check={handleClickFillIn}
     on:update={handleUpdateClick}
     on:required={getRequiredData}
@@ -40,7 +41,7 @@
   // 获取外部传入的参数
   const params = getContext('optionsInfo');
 
-  // let freezeData = [];
+  let freezeData = [];
 
   // 参数数据
   let parametersData = [];
@@ -304,7 +305,7 @@
     const data = params?.data;
     if (data) {
       parametersData = data.parameters;
-      // freezeData = data.parameters;
+      freezeData = [...data.parameters];
       froala.html.set(data.template || '');
     }
 

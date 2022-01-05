@@ -40,7 +40,7 @@ export default {
         "defaultValue": "",
         "name": "参数",
         "options": [
-          "请输入选项名称"
+          "请输入选项名称",
         ],
         "description": "",
         "style": "all",

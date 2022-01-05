@@ -105,6 +105,7 @@
               bind:value={data.defaultValue}
               name="defaultValue"
               placeholder="请输入默认值"
+              maxlength={data.maxLength}
               on:input={() => handleEditInputEvent('defaultValue')}
             >
           </div>
@@ -458,6 +459,14 @@
       {/if}
     </div>
   </Accordion>
+
+  <Dialog
+    message="初始值已超出字符限制，将删除多余部分，是否继续？"
+    isCancel={false}
+    buttonText="继续"
+    id="maxLength"
+    on:click={handleReplaceDefaultVal}
+  />
 </div>
 
 <script>
@@ -480,6 +489,7 @@
     // DATE_FORMAT_OPTIONS,
   } from '@/config/parameter';
 
+  import Dialog from '@/components/Base/dialog';
   import Accordion from '@/components/Base/Accordion/index.svelte';
 
   // 事件派发
@@ -656,7 +666,7 @@
   }
 
   // 插入表格行列
-  const handleInsertTable = async (row, col) => {
+  const handleInsertTable = (row, col) => {
     tableRow = row + 1;
     tableCol = col + 1;
 
@@ -669,7 +679,7 @@
       })
     }
 
-    const {template, id} = await tableRender(tableRow, tableCol);
+    const {template, id} = tableRender(tableRow, tableCol);
 
     froala.html.insert(template);
     dispatch('add', id);
@@ -699,7 +709,7 @@
 
   // 添加选项设置
   const handleAddOptionItem = () => {
-    data.options = [...data.options, '请输入选项名称'];
+    data.options = [...data.options, `请输入选项名称${data.options.length + 1}`];
 
     changeLayout();
   }
@@ -713,6 +723,13 @@
   const handleDeleteOptionsItem = (removeIndex) => {
     data.options = data.options.filter((item, index) => index !== removeIndex);
     changeLayout();
+  }
+
+  // 超出最大长度-更新默认值
+  const handleReplaceDefaultVal = () => {
+    data.defaultValue = String(data.defaultValue).substring(0, data.maxLength);
+
+    handleEditInputEvent('defaultValue');
   }
 
   // 参数编辑-change-event;
@@ -747,6 +764,11 @@
 
       // 字符限制
       'maxLength': () => {
+        // 限制默认值
+        if (data.defaultValue.length > data.maxLength) {
+          UIkit.modal('#maxLength').show();
+        }
+
         updateParameterAttr('data-maxlength', data.maxLength);
       },
       // 字体
@@ -805,11 +827,12 @@
     }
 
     const id = randomId();
-    const data = {...initData[paramType], id};
+    const LEN = $parametersStore.data?.parameters?.length + 1 || 1;
+    const res = {...initData[paramType], name: `参数${LEN}`, id};
 
-    parametersStore.addData(data);
+    parametersStore.addData(res);
 
-    froala.html.insert(parameters[paramType](data));
+    froala.html.insert(parameters[paramType](res));
   }, 300);
 
 
