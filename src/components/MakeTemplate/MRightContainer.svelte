@@ -79,8 +79,16 @@
 
   <Accordion title="参数编辑" visible="{isVisible}" disabled="{!isVisible}">
     <div class="pg-edit-item-wrapper">
+      <ul uk-accordion>
+        <li>
+          <a class="uk-accordion-title parameter-instruction" href="#">参数使用说明</a>
+          <div class="uk-accordion-content">
+            {@html underDescription[paramType]}
+          </div>
+        </li>
+      </ul>
       <!--参数名称-->
-      <div>
+      <div class="uk-margin-small-top">
         <label class="uk-form-label" for="">参数名称</label>
         <div class="uk-form-controls uk-margin-small-top">
           <input
@@ -206,7 +214,7 @@
       {#if isSize}
         <div class="uk-margin-small-top">
           <label class="uk-form-label" for="">控件大小</label>
-          <div class="uk-form-controls uk-margin-small-top">
+          <div class="uk-form-controls uk-margin-small-top control-size-container">
             {#each CONTROL_OPTIONS as item}
               <label>
                 <input
@@ -280,8 +288,8 @@
             <select
               class="uk-select uk-form-small uk-text-emphasis"
               name="fontFamily"
-              on:change={() => handleEditChangeEvent('fontFamily')}
               bind:value={fontConfig.fontFamily}
+              on:change={() => handleEditChangeEvent('fontFamily')}
             >
               <option value="none">请选择</option>
               {#each FONT_LISTS as item}
@@ -473,9 +481,11 @@
   import {onDestroy, createEventDispatcher} from 'svelte';
 
   import initData from "@/utils/init-data";
-  import {colorHex, debounce, randomId, insertParameterVerify} from '@/utils';
   import {froalaStore, parametersStore} from "@/store/froala";
+  import {colorHex, debounce, randomId, insertParameterVerify} from '@/utils';
+
   import * as parameters from '@/parameters';
+  import underDescription from '@/parameters/under';
   import {PARAMETERS} from '@/config/parameter';
   import {tableRender} from '@/event/tableRender';
   import {
@@ -608,12 +618,15 @@
   // 设置身份证默认值
   const handleEditIdCardInputEvent = (event) => {
     const key = event.key;
-    if (key !== 'Backspace' && key !== 'x' && key !== 'X' && !/^[0-9]*$/.test(key)) return;
+    const keys = ['Backspace', 'x', 'X', 'y', 'Y', 'z', 'Z'];
+    if (!keys.includes(key) && !/^[0-9]*$/.test(key)) return;
+
     const idCards = [...currentParameter.children];
     const values = event.target.value.split('');
 
     if (values.length > 18) return;
 
+    // TODO 身份证优化
     if (key === 'Backspace') {
       idCards.forEach((element, index) => {
         const value = values[index] ? values[index] : '';
@@ -623,12 +636,11 @@
       return;
     }
 
-    values.forEach((value, index) => {
-      idCards[index].innerHTML = value;
-      idCards[index].setAttribute('data-shadow-value', value);
+    idCards.forEach((node, index) => {
+      node.innerHTML = values[index] || ''
+      node.setAttribute('data-shadow-value', values[index] || '');
     })
   }
-
 
   // 选择切换布局
   const changeLayout = () => {

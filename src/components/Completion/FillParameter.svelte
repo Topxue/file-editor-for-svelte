@@ -12,7 +12,7 @@
           on:change={handleIsRequired}>
         仅看必填
       </label>
-      <!--      <label><input class="uk-checkbox" type="checkbox" bind:checked={isOnlyWrite}> 仅看待我填写</label>-->
+      <!--<label><input class="uk-checkbox" type="checkbox" bind:checked={isOnlyWrite}> 仅看待我填写</label>-->
     </div>
     {#each data as param, index}
       <!--文本-->
@@ -23,6 +23,11 @@
             class:is-required={param.isRequired}
             class:is-active={param.id === paramId}
             for="">{param.name}</label>
+          <div class="completion-content uk-text-muted">
+            <i class="fa fa fa-exclamation-circle"
+               uk-tooltip="title: 填写说明; delay: 500"></i>
+            {param.description}
+          </div>
           <div class="uk-form-controls uk-inline uk-width-1-1">
             <i class="uk-form-icon {ICON_ENUM[param.paramType]}"></i>
             <input
@@ -49,6 +54,11 @@
             class:is-required={param.isRequired}
             class:is-active={param.id === paramId}
             for="">{param.name}</label>
+          <div class="completion-content uk-text-muted">
+            <i class="fa fa fa-exclamation-circle"
+               uk-tooltip="title: 填写说明; delay: 500"></i>
+            {param.description}
+          </div>
           <div class="uk-form-controls uk-inline uk-width-1-1">
             <div class="uk-text-muted trip-text">请在正文中填写</div>
           </div>
@@ -63,6 +73,11 @@
             class:is-required={param.isRequired}
             class:is-active={param.id === paramId}
             for="">{param.name}</label>
+          <div class="completion-content uk-text-muted">
+            <i class="fa fa fa-exclamation-circle"
+               uk-tooltip="title: 填写说明; delay: 500"></i>
+            {param.description}
+          </div>
           <div class="uk-form-controls upload-wrapper uk-inline uk-width-1-1">
             {#if param.imgUrl}
               <button
@@ -106,6 +121,11 @@
             class:is-required={param.isRequired}
             class:is-active={param.id === paramId}
             for="">{param.name}</label>
+          <div class="completion-content uk-text-muted">
+            <i class="fa fa fa-exclamation-circle"
+               uk-tooltip="title: 填写说明; delay: 500"></i>
+            {param.description}
+          </div>
           <div class="uk-form-controls uk-inline uk-width-1-1" class:margin-btm={param.layout !== 'dropdown'}>
             {#if param.layout === 'dropdown'}
               <i class="uk-form-icon {ICON_ENUM[param.paramType]}"></i>
@@ -144,6 +164,11 @@
             class:is-required={param.isRequired}
             class:is-active={param.id === paramId}
             for="">{param.name}</label>
+          <div class="completion-content uk-text-muted">
+            <i class="fa fa fa-exclamation-circle"
+               uk-tooltip="title: 填写说明; delay: 500"></i>
+            {param.description}
+          </div>
           <div class="uk-form-controls uk-inline uk-width-1-1" class:margin-btm={param.layout !== 'dropdown'}>
             {#if param.layout === 'dropdown'}
               <i class="uk-form-icon {ICON_ENUM[param.paramType]}"></i>
@@ -180,6 +205,11 @@
             class:is-required={param.isRequired}
             class:is-active={param.id === paramId}
             for="">{param.name}</label>
+          <div class="completion-content uk-text-muted">
+            <i class="fa fa fa-exclamation-circle"
+               uk-tooltip="title: 填写说明; delay: 500"></i>
+            {param.description}
+          </div>
           <div class="uk-form-controls uk-inline uk-width-1-1">
             <i class="uk-form-icon {ICON_ENUM[param.paramType]}"></i>
             <input
@@ -240,8 +270,6 @@
     } else {
       data = freezeData;
     }
-
-    console.log(freezeData, 'freezeData...')
   }
 
   // 参数填充-input-event;
@@ -255,10 +283,12 @@
     }
     dispatch('required', data);
   }
+
   // 身份证填充
   const fillInIdCardKeyupEvent = (paramType, index, event) => {
     const key = event.key;
-    if (key !== 'Backspace' && key !== 'x' && key !== 'X' && !/^[0-9]*$/.test(key)) return;
+    const keys = ['Backspace', 'x', 'X', 'y', 'Y', 'z', 'Z'];
+    if (!keys.includes(key) && !/^[0-9]*$/.test(key)) return;
 
     const value = data[index].defaultValue;
     const parameter = froalaContainer.querySelector(`[data-param-type=${paramType}][id=${paramId}]`);

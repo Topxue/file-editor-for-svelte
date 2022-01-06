@@ -10,7 +10,11 @@ $primary: #1e87f0;
   --toolbar-top: 0;
   --toolbar-width: 100%;
   --pg-container-witdh: 100vh;
-  font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC, sans-serif !important;
+  --font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC, sans-serif !important;
+}
+
+body, html {
+  font-family: var(--font-family);
 }
 
 #pg-toolbar-container {
@@ -57,6 +61,9 @@ $primary: #1e87f0;
     padding: 10px;
     box-sizing: border-box;
     font-size: 13px;
+    border-radius: 3px;
+    border: 1px solid #ebeef5;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.10);
   }
 
   .dropdown-header {
@@ -107,6 +114,7 @@ $primary: #1e87f0;
   overflow-y: hidden;
   box-sizing: border-box;
   background-color: #f7f8f8;
+  font-family: var(--font-family);
 
   .pg-mk-header-wrapper {
     @include MHeader;
@@ -329,6 +337,47 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
   text-align: left;
   padding-bottom: 40px;
   overflow-y: auto;
+
+  .parameter-instruction {
+    margin-bottom: -2px;
+    font-size: 13px;
+    height: 35px;
+    line-height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    padding: 0 10px;
+    color: #f0a128;
+    background-color: #F8EDD5;
+    border-radius: 4px;
+  }
+
+  .uk-accordion-content {
+    margin: 0 0 10px 0;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #F8EDD5;
+    border-radius: 4px;
+  }
+}
+
+.description-container {
+  li {
+    color: #7f8997;
+    font-size: 12px;
+    line-height: 25px;
+    &:before {
+      content: "";
+      margin-right: 8px;
+      margin-bottom: 2px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50px;
+      display: inline-block;
+      background: #7f8997;
+    }
+  }
 }
 
 .uk-flex-align-items {
@@ -600,7 +649,7 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
 
 .remove-image-btn {
   position: absolute;
-  left: 18px;
+  left: 14px;
   bottom: 0;
   z-index: 99;
 }
@@ -760,3 +809,21 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
   display: block;
 }
 
+.control-size-container {
+  line-height: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.completion-content {
+  padding-bottom: 5px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  i {
+    font-size: 15px;
+    padding-right: 3px;
+  }
+}

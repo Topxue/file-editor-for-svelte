@@ -1,5 +1,5 @@
 <div class="pg-custom-select-container" style="top:{style.top}; left:{style.left}; width:{style.width}">
-  <ul class="pg-select-container" class:visible transition:fly={{ duration: 80, easing: cubicInOut, y: -5 }}>
+  <ul class="pg-select-container" class:visible>
     {#each data as item}
       {#if multiple}
         <li
@@ -15,8 +15,6 @@
 
 <script>
   import {createEventDispatcher} from 'svelte';
-  import {fly} from 'svelte/transition';
-  import {cubicInOut} from 'svelte/easing';
 
   let style = {};
 

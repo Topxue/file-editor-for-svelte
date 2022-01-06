@@ -22,7 +22,7 @@ export default {
         "paramType": "image",
         "isRequired": true,
         "name": "参数",
-        "description": "",
+        "description": "填写说明1",
         "id": "WSnZgvYqdrZADmbmqoxqSBtgOwDoeBMM"
       },
       {
@@ -42,7 +42,7 @@ export default {
         "options": [
           "请输入选项名称",
         ],
-        "description": "",
+        "description": "填写说明1",
         "style": "all",
         "id": "YEnPPgdjyjUWXwkFilkRyuEpclidcTxO",
         "maxLength": 1000
@@ -68,7 +68,7 @@ export default {
         "defaultValue": "",
         "name": "参数",
         "options": [],
-        "description": "",
+        "description": "填写说明1",
         "style": "bottom",
         "id": "fIVCkwSIioBQMhpkqXOwyQAxQwHBvSPL",
         "maxLength": 1000
@@ -94,7 +94,7 @@ export default {
         "defaultValue": "",
         "name": "参数",
         "options": [],
-        "description": "",
+        "description": "填写说明1",
         "style": "bottom",
         "id": "gJbhkZIHlEsrrVIPRGFWyRCPdFaAghEi",
         "maxLength": 1000

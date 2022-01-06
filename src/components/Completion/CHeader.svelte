@@ -1,7 +1,6 @@
 <header class="initiate-header-wrapper uk-flex uk-flex-between">
   <div class="pg-mk-header-left-wrapper uk-flex">
     <div class="pg-header-return-back uk-margin-right">
-<!--      <i class="uk-icon uk-text-primary" uk-icon="icon: chevron-left"></i>-->
       <i class="fa fa-angle-left" aria-hidden="true"></i>
       <button class="uk-button uk-button-link uk-text-primary" on:click={handleBack}>返回</button>
     </div>
@@ -34,7 +33,8 @@
       >发起
       </button>
       {#if isInitiate}
-        <div class="dropdown-container" uk-dropdown>
+        <div class="dropdown-container"
+             uk-dropdown="animation: uk-animation-slide-top-small; duration: 300;delay-hide:300;">
           <div class="dropdown-header uk-text-emphasis">尚有未填写完成的必填内容 需要全部填写完成后才可发起</div>
           <hr class="uk-divider-small">
           <div class="uk-text-emphasis">未填写的必填参数：（点击参数名称可定位）</div>
@@ -58,8 +58,9 @@
 
 <script>
   import {createEventDispatcher, getContext, onDestroy} from 'svelte';
-  import {debounce, getCurrentTime, timeFormat} from '@/utils';
+
   import {froalaStore} from '@/store/froala';
+  import {debounce, getCurrentTime, timeFormat} from '@/utils';
 
   // 事件派发
   const dispatch = createEventDispatcher();

@@ -12,7 +12,6 @@ function createFroalaStore() {
 
 export const froalaStore = createFroalaStore();
 
-
 const defaultOption = {
   target: null,
   isOff: false,
@@ -22,10 +21,10 @@ const defaultOption = {
   }
 }
 
+let freezeData = [];
+
 function createParametersStore(defaultVal) {
   const {subscribe, set, update} = writable(defaultVal);
-
-  let freezeData = [];
 
   return {
     subscribe,
@@ -74,7 +73,7 @@ function createParametersStore(defaultVal) {
 
     // 初始化store数据
     setData: (data) => {
-      freezeData = data.data.parameters;
+      freezeData = data?.data?.parameters || [];
       set(data);
     },
 

@@ -7,15 +7,16 @@
     {#each parameters as param}
       <a href="#{param.id}" uk-scroll class="uk-scroll-a">
         <li
-          class="panel-param-item"
+          class="panel-param-item uk-transition-toggle"
           class:is-active={param.id === checkedId}
           on:click={handleCheckCurrentParameter.bind(null, param.id)}>
           <span class="pane-params-name" class:required={param.isRequired}>{param.name}</span>
           <span class="pane-params-icon {ICON_ENUM[param?.paramType]}"></span>
 
           <span
-            class="pane-params-close"
+            class="pane-params-close uk-transition-fade"
             uk-toggle="target: #dialog-container"
+            uk-tooltip="title:刪除;delay: 500"
             on:click|stopPropagation|preventDefault={() => deleteId = param.id}
           >
              <i class="fa fa-times-circle" aria-hidden="true"></i>

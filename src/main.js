@@ -86,11 +86,11 @@ const editor = new FileTemplateEditor({
   target: '#root',
   isOff: false,
   data: {
-    template: '',
-    parameters: [],
-    // fileName: 'joker',
-    // template: data.templateContent,
-    // parameters: data.params
+    // template: '',
+    // parameters: [],
+    fileName: 'joker',
+    template: data.templateContent,
+    parameters: data.params
   },
   // 返回
   back() {
@@ -100,6 +100,7 @@ const editor = new FileTemplateEditor({
   realSave(data) {
     console.log(data, 'data...')
   },
+  // 获取填充参数数据
   getInitiate(data) {
     console.log(data, 'data')
   }
