@@ -1,6 +1,6 @@
 <!--<MHeader on:save={handleSaveData}/>-->
-<!--<div id="pg-toolbar-container"></div>-->
-<div class="pg-editor-body-container pg-editor-make-container">
+<div id="pg-toolbar-container"></div>
+<div class="pg-editor-body-container">
   <!--  窗格参数-->
   <MLeftContainer
     checkedId={paramId}
@@ -11,7 +11,6 @@
   <!-- 参数设置 -->
   <MRightContainer paramId={paramId}/>
 </div>
-
 
 <script>
   import {onMount} from 'svelte';
@@ -43,9 +42,9 @@
     parameters = option.data.parameters;
   })
 
-  onMount(async () => {
+  onMount(() => {
     // 初始化froala
-    await initFroala();
+    initFroala();
   })
 
   const initFroala = () => {
@@ -55,16 +54,13 @@
         'initialized': () => {
           // 获取store数据
           getInitStoreData();
+          resetToolBarContainer();
         },
         'click': (clickEvent) => {
           handleClickEditor(clickEvent);
         },
         'table.inserted': function (table) {
           this.html.insert(replaceTableContent(table));
-        },
-
-        'html.get': (html) => {
-          return html.replace('is-active', '');
         },
         'commands.redo': () => {
           commandsRedoAndUndo();
@@ -119,29 +115,24 @@
     }
   }
 
+  // 重装 tool bar
+  const resetToolBarContainer = () => {
+    const toolBar = document.querySelector('.fr-toolbar');
+    toolBar.remove();
+
+    const customToolBarContainer = document.querySelector('#pg-toolbar-container');
+    customToolBarContainer.append(toolBar);
+  }
+
+  // 编辑区域注册事件
   const handleClickEditor = (event) => {
     froala.toolbar.enable();
 
     const target = event.target.closest('[data-param-type]');
     paramId = target?.getAttribute('id');
 
-    //重置 img popup位置
-    if (target && target.tagName === 'IMG') {
-      setImagePopupPosition(target)
-    }
     // 当前活动参数
     currentActiveParameter(target);
-  }
-
-  // 设置图片popup定位
-  const setImagePopupPosition = async (target) => {
-    const {top} = target.getBoundingClientRect();
-    const imgHeight = +window.getComputedStyle(target).width.split('px')[0];
-
-    setTimeout(() => {
-      frPopup = document.querySelector('.fr-popup');
-      frPopup.style.top = top + imgHeight + 42 + 'px';
-    })
   }
 
   // 删除参数
@@ -156,9 +147,9 @@
 
   // 操作回滚
   const commandsRedoAndUndo = debounce(() => {
+    const froalaContainer = froala.$el[0];
     const freezeData = parametersStore.getFreezeData();
 
-    const froalaContainer = froala.$el[0];
     const parameterArray = [...froalaContainer.querySelectorAll('[data-param-type]')] || [];
 
     const parameters = parameterArray.map(node => {
@@ -169,5 +160,4 @@
 
     parametersStore.updateParameters(parameters)
   }, 300)
-
 </script>

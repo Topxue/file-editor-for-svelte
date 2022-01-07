@@ -833,7 +833,18 @@
     const res = {...initData[paramType], name: `参数${paramCount}`, id};
     parametersStore.addData(res);
     froala.html.insert(parameters[paramType](res));
+
+    defaultShowEdit(id);
   }, 300);
+
+
+  // 默认值展开参数编辑
+  const defaultShowEdit = (id) => {
+    const froalaContainer = froala.$el[0];
+    const parameter = froalaContainer.querySelector(`[data-param-type][id=${id}]`);
+
+    parameter.click();
+  }
 
 
   onDestroy(unsubscribe);

@@ -5,22 +5,18 @@
  * @type {string}
  */
 export const PG_EDITOR_CONTAINER = '#pg-editor-container';
-
 /**
  * 模板编辑器配置
  */
 export const editorConfig = {
+  width: 810,
   height: 810,
   language: 'zh_cn',
   autofocus: true,
-  // toolbarSticky: true,
-  // toolbarStickyOffset: 50,
-  // direction: 'ltr',
-  htmlExecuteScripts: true,
+  // htmlExecuteScripts: true,
   placeholderText: '请输入内容',
   lineBreakerTags: ['table', 'hr', 'p'],
   htmlUntouched: true,
-  // toolbarContainer: '#pg-toolbar-container',
   toolbarButtons: [
     'undo', 'redo', 'clearFormatting', '|',
     'paragraphFormat', 'fontFamily', 'fontSize', '|',
@@ -39,7 +35,7 @@ export const editorConfig = {
  * 填充编辑器配置
  */
 export const fillingConfig = {
-  height: 840,
+  height: 810,
   language: 'zh_cn',
   // toolbarContainer: '#pg-toolbar-container',
   htmlAllowedEmptyTags: ['p', 'span', 'image'],

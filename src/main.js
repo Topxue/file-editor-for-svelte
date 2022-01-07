@@ -48,6 +48,7 @@ class FileTemplateEditor {
   static _createIconLink() {
     const HREF_URL = 'https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css';
     let link = document.createElement('link');
+    link.type = "text/css";
     link.rel = 'stylesheet';
     link.href = HREF_URL;
     const head = document.getElementsByTagName('head')[0];
