@@ -1,6 +1,6 @@
 <!--<MHeader on:save={handleSaveData}/>-->
-<div id="pg-toolbar-container"></div>
-<div class="pg-editor-body-container">
+<!--<div id="pg-toolbar-container"></div>-->
+<div class="pg-editor-body-container pg-editor-make-container">
   <!--  窗格参数-->
   <MLeftContainer
     checkedId={paramId}
@@ -43,9 +43,9 @@
     parameters = option.data.parameters;
   })
 
-  onMount(() => {
+  onMount(async () => {
     // 初始化froala
-    initFroala();
+    await initFroala();
   })
 
   const initFroala = () => {
@@ -61,6 +61,10 @@
         },
         'table.inserted': function (table) {
           this.html.insert(replaceTableContent(table));
+        },
+
+        'html.get': (html) => {
+          return html.replace('is-active', '');
         },
         'commands.redo': () => {
           commandsRedoAndUndo();
@@ -81,7 +85,7 @@
           // 插入列
           if (cmd === 'tableColumns') {
             const res = copyData.find(item => item.id === paramId);
-
+            if (!res) return;
             // 左右侧插入列
             if (param === 'after' || param === 'before') {
               res.columnKeys.push(`column${res.columnKeys.length}`);
@@ -107,18 +111,24 @@
       froala.html.set(params?.data?.template);
       parameters = data?.parameters || [];
     }
+
+    const froalaContainer = froala.$el[0];
+    const selects = [...froalaContainer.querySelectorAll('input[type=radio]'), ...froalaContainer.querySelectorAll('input[type=checkbox]')];
+    if (selects.length) {
+      selects.forEach(node => node.setAttribute('onclick', 'return false;'))
+    }
   }
 
   const handleClickEditor = (event) => {
+    froala.toolbar.enable();
+
     const target = event.target.closest('[data-param-type]');
     paramId = target?.getAttribute('id');
-
 
     //重置 img popup位置
     if (target && target.tagName === 'IMG') {
       setImagePopupPosition(target)
     }
-
     // 当前活动参数
     currentActiveParameter(target);
   }

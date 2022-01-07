@@ -91,7 +91,7 @@
   $:if (parametersData?.length) {
     requireData = parametersData.filter(item => {
       if (item.isRequired) {
-        if (!item.defaultValue && item.paramType !== 'image') {
+        if (!item.defaultValue || !item.defaultValue.length && item.paramType !== 'image') {
           return item
         } else {
           if (!item?.imgUrl && item.paramType === 'image') return item;

@@ -34,6 +34,7 @@
   import FillParameter from './FillParameter.svelte';
   import ImagePopup from '@/components/Base/image-popup';
 
+  import {pasteClearNode} from "@/utils";
   import {froalaStore} from "@/store/froala";
   import {fillingConfig, PG_EDITOR_CONTAINER} from '@/config/froala';
   import {currentActiveParameter} from '@/event/viewEvent';
@@ -59,8 +60,6 @@
   let optionData = [];
   let target = null;
 
-  // $:if (parametersData?.length) params?.getInitiate && params?.getInitiate(parametersData);
-
   onMount(async () => {
     await initFroala();
     initGlobeClickEvent();
@@ -74,6 +73,7 @@
       events: {
         'initialized': () => {
           froala.edit.off();
+          froala.toolbar.hide();
           getParameterData();
         }
       }
@@ -85,6 +85,12 @@
   const initGlobeClickEvent = () => {
     // 注册全局事件
     froalaContainer.addEventListener('click', handleClickEditor);
+    // 粘贴事件
+    froalaContainer.addEventListener('paste', pasteClearNode);
+    // 禁止拖入内容
+    froalaContainer.addEventListener("drop", (event) => {
+      event.preventDefault();
+    });
     document.body.addEventListener('click', handlerBodyClick);
   }
 
@@ -107,7 +113,6 @@
   // 文本参数编辑事件
   const parameterChangeEvent = (event) => {
     const target = event.target;
-
     updateParameterData(target.innerHTML);
   }
 
@@ -120,47 +125,45 @@
     parametersData = data;
   }
 
+  // 获取身份证value
+  const getIdCardValue = (target) => {
+    return [...target.parentNode.childNodes].reduce((prev, next) => {
+      return prev + next.innerHTML;
+    }, '') || '';
+  }
+
   // 身份证参数编辑事件
   const parameterIdCardChangeEvent = (event) => {
+    const Reg = /[^\d.|x|X]/g;
+    const target = event.target;
+
+    target.innerHTML = target.innerHTML.replace(Reg, '').substring(0, 1);
+    target.setAttribute('data-shadow-value', target.innerHTML);
+
+    if (target.innerHTML && target.nextElementSibling) {
+      target.nextElementSibling.focus();
+    }
+
+    updateParameterData(getIdCardValue(target));
+  }
+
+  // 身份证删除事件
+  const parameterIdCardDeleteEvent = (event) => {
     const key = event.key;
     const target = event.target;
 
-    if (key !== 'Backspace' && key !== 'x' && key !== 'X' && !/^[0-9]*$/.test(key)) {
-      target.innerHTML = '';
-      return;
-    }
-
-    const setFilInInValue = () => {
-      const value = [...target.parentNode.childNodes].reduce((prev, next) => {
-        return prev + next.innerHTML;
-      }, '') || '';
-
-      updateParameterData(value);
-    }
-
-    setTimeout(() => {
-      if (key === 'Backspace') {
-        if (target.previousSibling) {
-          target.previousSibling.focus();
-          target.innerHTML = '';
-          target.setAttribute('data-shadow-value', '');
-        } else {
-          target.innerHTML = '';
-          target.setAttribute('data-shadow-value', '');
-        }
-        setFilInInValue();
-        return;
-      }
-
-      if (target.innerHTML.length > 1) target.innerHTML = target.innerHTML[0];
-      target.setAttribute('data-shadow-value', target.innerHTML);
-      if (target.nextElementSibling) {
-        target.nextElementSibling.focus();
+    if (key === 'Backspace') {
+      if (target.previousSibling) {
+        target.previousSibling.focus();
+        target.innerHTML = '';
+        target.setAttribute('data-shadow-value', '');
       } else {
-        target.blur()
+        target.innerHTML = '';
+        target.setAttribute('data-shadow-value', '');
       }
-      setFilInInValue();
-    }, 0);
+    }
+
+    updateParameterData(getIdCardValue(target));
   }
 
   // 控制参数编辑是否可编辑并注册编辑事件
@@ -177,8 +180,11 @@
         const idCards = [...node.children];
         idCards.forEach(elem => {
           elem.setAttribute('contenteditable', true);
-          elem.addEventListener('keydown', parameterIdCardChangeEvent)
+          // elem.addEventListener('keydown', parameterIdCardChangeEvent)
         })
+
+        node.addEventListener('input', parameterIdCardChangeEvent);
+        node.addEventListener('keydown', parameterIdCardDeleteEvent);
       }
 
       const layout = node?.getAttribute('data-layout');

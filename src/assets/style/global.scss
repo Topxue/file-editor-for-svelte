@@ -17,16 +17,10 @@ body, html {
   font-family: var(--font-family);
 }
 
-#pg-toolbar-container {
-  //position: fixed;
-  //z-index: 999;
-  //right: 0;
-  //background: #fff;
-  //background-color: transparent;
-  //margin-top: 48px;
-  top: var(--toolbar-top);
-  width: var(--toolbar-width);
-}
+//#pg-toolbar-container {
+//  top: var(--toolbar-top);
+//  width: var(--toolbar-width);
+//}
 
 
 .fr-toolbar .fr-btn-grp {
@@ -176,26 +170,20 @@ body, html {
   outline: none;
 }
 
-a[href='https://www.froala.com/wysiwyg-editor?k=u'] {
-  font-size: 0 !important;
-  padding: 0 !important;
-  height: 0 !important;
-  display: none !important;
-}
 
 .fr-second-toolbar {
   display: none;
 }
 
 /*工具栏按钮宽度自适应*/
-.fr-toolbar .fr-command.fr-btn {
-  width: auto !important;
-}
-
-/*图标宽度自适应*/
-.fr-toolbar .fr-command.fr-btn i {
-  width: auto !important;
-}
+//.fr-toolbar .fr-command.fr-btn {
+//  width: auto !important;
+//}
+//
+///*图标宽度自适应*/
+//.fr-toolbar .fr-command.fr-btn i {
+//  width: auto !important;
+//}
 
 .fr-toolbar.fr-top {
   height: 40px;
@@ -207,26 +195,20 @@ a[href='https://www.froala.com/wysiwyg-editor?k=u'] {
   text-align: center;
   box-shadow: 0 3px 8px #00000026;
   background-color: transparent;
-  padding-left: calc(100% - 99%);
+  //background: #fff;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  //padding-left: calc(100% - 99%);
 }
 
 
 .fr-wrapper {
   border: none !important;
-
-  > div[style*='z-index: 9999'] {
-    position: absolute !important;
-    top: -10000px !important;
-    opacity: 0 !important;
-    display: none !important;
-  }
 }
 
-a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysiwyg-editor?k=u"] {
-  display: none !important;
-  position: absolute;
-  top: -99999999px;
-}
 
 .pg-flex {
   display: flex;
@@ -256,6 +238,9 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
   }
 }
 
+.pg-editor-make-container {
+  margin-top: 36px;
+}
 
 .pg-editor-body-container {
   display: flex;
@@ -367,6 +352,7 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
     color: #7f8997;
     font-size: 12px;
     line-height: 25px;
+
     &:before {
       content: "";
       margin-right: 8px;
@@ -756,6 +742,18 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
 .pg-custom-select-container {
   position: fixed;
   z-index: 999;
+
+  &:after {
+    content: '';
+    border-width: 9px;
+    border-style: solid;
+    border-color: transparent transparent #fff transparent;
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: -17px;
+    left: 60px;
+  }
 }
 
 .pg-select-container {
@@ -770,29 +768,17 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
   border: 1px solid #e4e7ed;
   max-height: 215px;
   overflow: auto;
-}
 
-.pg-select-container::after {
-  content: '';
-  border-width: 9px;
-  border-style: solid;
-  border-color: transparent transparent #fff transparent;
-  width: 0;
-  height: 0;
-  position: absolute;
-  top: -18px;
-  left: 52px;
-}
+  .option-item {
+    padding: 8px 10px;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+  }
 
-.pg-select-container .option-item {
-  padding: 8px 10px;
-  cursor: pointer;
-  user-select: none;
-  position: relative;
-}
-
-.pg-select-container > .is-active {
-  color: #2489f2;
+  .is-active {
+    color: #2489f2;
+  }
 }
 
 .option-item.is-active::after {

@@ -134,7 +134,7 @@
               name="defaultValue"
               placeholder="请输入默认值"
               maxlength="18"
-              on:keyup={handleEditIdCardInputEvent}
+              on:input={handleEditIdCardInputEvent}
             >
           </div>
         </div>
@@ -513,6 +513,9 @@
 
   // props
   export let paramId = null;
+  // 记录参数名称count值
+  let paramCount = 0;
+
   $:isVisible = !!paramId;
   // 当前参数
   $:currentParameter = document.querySelector("[data-param-type][id=" + paramId + "]");
@@ -616,26 +619,12 @@
   }
 
   // 设置身份证默认值
-  const handleEditIdCardInputEvent = (event) => {
-    const key = event.key;
-    const keys = ['Backspace', 'x', 'X', 'y', 'Y', 'z', 'Z'];
-    if (!keys.includes(key) && !/^[0-9]*$/.test(key)) return;
-
+  const handleEditIdCardInputEvent = () => {
+    const Reg = /[^\d.|x|X]/g;
     const idCards = [...currentParameter.children];
-    const values = event.target.value.split('');
+    data.defaultValue = data.defaultValue.replace(Reg, '');
 
-    if (values.length > 18) return;
-
-    // TODO 身份证优化
-    if (key === 'Backspace') {
-      idCards.forEach((element, index) => {
-        const value = values[index] ? values[index] : '';
-        element.innerHTML = !isNaN(value) ? value : '';
-        element.setAttribute('data-shadow-value', !isNaN(value) ? value : '');
-      })
-      return;
-    }
-
+    const values = data.defaultValue.split('');
     idCards.forEach((node, index) => {
       node.innerHTML = values[index] || ''
       node.setAttribute('data-shadow-value', values[index] || '');
@@ -838,12 +827,11 @@
       })
     }
 
+    paramCount++;
+
     const id = randomId();
-    const LEN = $parametersStore.data?.parameters?.length + 1 || 1;
-    const res = {...initData[paramType], name: `参数${LEN}`, id};
-
+    const res = {...initData[paramType], name: `参数${paramCount}`, id};
     parametersStore.addData(res);
-
     froala.html.insert(parameters[paramType](res));
   }, 300);
 

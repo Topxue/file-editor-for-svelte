@@ -1,10 +1,9 @@
 import './config/plugin';
 import './assets/style/global.scss';
-
-import App from './App.svelte';
 import {froalaStore, parametersStore} from "./store/froala";
-import testData from './config/test';
+import App from './App.svelte';
 
+import testData from './config/test';
 
 class FileTemplateEditor {
   constructor(options) {
@@ -49,7 +48,6 @@ class FileTemplateEditor {
   static _createIconLink() {
     const HREF_URL = 'https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css';
     let link = document.createElement('link');
-    link.type = 'text/css';
     link.rel = 'stylesheet';
     link.href = HREF_URL;
     const head = document.getElementsByTagName('head')[0];
@@ -76,10 +74,6 @@ class FileTemplateEditor {
   }
 }
 
-// window.onbeforeunload = async () => {
-//   await FileTemplateEditor.clearData();
-// }
-
 // 测试代码
 const data = testData.data;
 const editor = new FileTemplateEditor({
@@ -105,6 +99,5 @@ const editor = new FileTemplateEditor({
     console.log(data, 'data')
   }
 })
-
 
 export default FileTemplateEditor;

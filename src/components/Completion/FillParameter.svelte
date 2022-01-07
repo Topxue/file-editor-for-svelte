@@ -23,11 +23,13 @@
             class:is-required={param.isRequired}
             class:is-active={param.id === paramId}
             for="">{param.name}</label>
-          <div class="completion-content uk-text-muted">
-            <i class="fa fa fa-exclamation-circle"
-               uk-tooltip="title: 填写说明; delay: 500"></i>
-            {param.description}
-          </div>
+          {#if param.description}
+            <div class="completion-content uk-text-muted">
+              <i class="fa fa fa-exclamation-circle"
+                 uk-tooltip="title: 填写说明; delay: 500"></i>
+              {param.description}
+            </div>
+          {/if}
           <div class="uk-form-controls uk-inline uk-width-1-1">
             <i class="uk-form-icon {ICON_ENUM[param.paramType]}"></i>
             <input
@@ -54,11 +56,13 @@
             class:is-required={param.isRequired}
             class:is-active={param.id === paramId}
             for="">{param.name}</label>
-          <div class="completion-content uk-text-muted">
-            <i class="fa fa fa-exclamation-circle"
-               uk-tooltip="title: 填写说明; delay: 500"></i>
-            {param.description}
-          </div>
+          {#if param.description}
+            <div class="completion-content uk-text-muted">
+              <i class="fa fa fa-exclamation-circle"
+                 uk-tooltip="title: 填写说明; delay: 500"></i>
+              {param.description}
+            </div>
+          {/if}
           <div class="uk-form-controls uk-inline uk-width-1-1">
             <div class="uk-text-muted trip-text">请在正文中填写</div>
           </div>
@@ -73,11 +77,13 @@
             class:is-required={param.isRequired}
             class:is-active={param.id === paramId}
             for="">{param.name}</label>
-          <div class="completion-content uk-text-muted">
-            <i class="fa fa fa-exclamation-circle"
-               uk-tooltip="title: 填写说明; delay: 500"></i>
-            {param.description}
-          </div>
+          {#if param.description}
+            <div class="completion-content uk-text-muted">
+              <i class="fa fa fa-exclamation-circle"
+                 uk-tooltip="title: 填写说明; delay: 500"></i>
+              {param.description}
+            </div>
+          {/if}
           <div class="uk-form-controls upload-wrapper uk-inline uk-width-1-1">
             {#if param.imgUrl}
               <button
@@ -114,18 +120,21 @@
 
       <!--单选-->
       {#if param.paramType === 'radio'}
-        <a class="uk-margin uk-scroll-a" uk-scroll href="#{param.id}"
-           on:click={(event) => handleClickFillIn(param, event)}>
-          <label
-            class="uk-form-label"
-            class:is-required={param.isRequired}
-            class:is-active={param.id === paramId}
-            for="">{param.name}</label>
-          <div class="completion-content uk-text-muted">
-            <i class="fa fa fa-exclamation-circle"
-               uk-tooltip="title: 填写说明; delay: 500"></i>
-            {param.description}
-          </div>
+        <div class="uk-margin" on:click={(event) => handleClickFillIn(param, event)}>
+          <a class="uk-scroll-a" uk-scroll href="#{param.id}">
+            <label
+              class="uk-form-label"
+              class:is-required={param.isRequired}
+              class:is-active={param.id === paramId}
+              for="">{param.name}</label>
+          </a>
+          {#if param.description}
+            <div class="completion-content uk-text-muted">
+              <i class="fa fa fa-exclamation-circle"
+                 uk-tooltip="title: 填写说明; delay: 500"></i>
+              {param.description}
+            </div>
+          {/if}
           <div class="uk-form-controls uk-inline uk-width-1-1" class:margin-btm={param.layout !== 'dropdown'}>
             {#if param.layout === 'dropdown'}
               <i class="uk-form-icon {ICON_ENUM[param.paramType]}"></i>
@@ -152,23 +161,26 @@
               {/each}
             {/if}
           </div>
-        </a>
+        </div>
       {/if}
 
       <!--多选-->
       {#if param.paramType === 'checkbox'}
-        <a class="uk-margin uk-scroll-a" uk-scroll href="#{param.id}"
-           on:click={(event) => handleClickFillIn(param, event)}>
-          <label
-            class="uk-form-label"
-            class:is-required={param.isRequired}
-            class:is-active={param.id === paramId}
-            for="">{param.name}</label>
-          <div class="completion-content uk-text-muted">
-            <i class="fa fa fa-exclamation-circle"
-               uk-tooltip="title: 填写说明; delay: 500"></i>
-            {param.description}
-          </div>
+        <div class="uk-margin" on:click={(event) => handleClickFillIn(param, event)}>
+          <a class="uk-scroll-a" uk-scroll href="#{param.id}">
+            <label
+              class="uk-form-label"
+              class:is-required={param.isRequired}
+              class:is-active={param.id === paramId}
+              for="">{param.name}</label>
+          </a>
+          {#if param.description}
+            <div class="completion-content uk-text-muted">
+              <i class="fa fa fa-exclamation-circle"
+                 uk-tooltip="title: 填写说明; delay: 500"></i>
+              {param.description}
+            </div>
+          {/if}
           <div class="uk-form-controls uk-inline uk-width-1-1" class:margin-btm={param.layout !== 'dropdown'}>
             {#if param.layout === 'dropdown'}
               <i class="uk-form-icon {ICON_ENUM[param.paramType]}"></i>
@@ -194,7 +206,7 @@
               {/each}
             {/if}
           </div>
-        </a>
+        </div>
       {/if}
 
       <!--身份证-->
@@ -205,11 +217,13 @@
             class:is-required={param.isRequired}
             class:is-active={param.id === paramId}
             for="">{param.name}</label>
-          <div class="completion-content uk-text-muted">
-            <i class="fa fa fa-exclamation-circle"
-               uk-tooltip="title: 填写说明; delay: 500"></i>
-            {param.description}
-          </div>
+          {#if param.description}
+            <div class="completion-content uk-text-muted">
+              <i class="fa fa fa-exclamation-circle"
+                 uk-tooltip="title: 填写说明; delay: 500"></i>
+              {param.description}
+            </div>
+          {/if}
           <div class="uk-form-controls uk-inline uk-width-1-1">
             <i class="uk-form-icon {ICON_ENUM[param.paramType]}"></i>
             <input
@@ -218,7 +232,7 @@
               maxlength="18"
               name="idcard"
               bind:value="{param.defaultValue}"
-              on:keyup={fillInIdCardKeyupEvent.bind(null,param.paramType, index) }
+              on:input={fillInIdCardKeyupEvent.bind(null,param.paramType, index) }
               placeholder="请输入"/>
           </div>
         </a>
@@ -285,21 +299,21 @@
   }
 
   // 身份证填充
-  const fillInIdCardKeyupEvent = (paramType, index, event) => {
-    const key = event.key;
-    const keys = ['Backspace', 'x', 'X', 'y', 'Y', 'z', 'Z'];
-    if (!keys.includes(key) && !/^[0-9]*$/.test(key)) return;
-
-    const value = data[index].defaultValue;
+  const fillInIdCardKeyupEvent = (paramType, index) => {
+    const Reg = /[^\d.|x|X]/g;
     const parameter = froalaContainer.querySelector(`[data-param-type=${paramType}][id=${paramId}]`);
+    const idCards = [...parameter.children];
 
-    const childArr = [...parameter.children];
-    const valArr = value.split('');
+    data[index].defaultValue = data[index].defaultValue.replace(Reg, '');
 
-    childArr.forEach((node, index) => node.innerHTML = valArr[index] || '');
+    const values = data[index].defaultValue.split('');
+    idCards.forEach((node, index) => {
+      node.innerHTML = values[index] || ''
+      node.setAttribute('data-shadow-value', values[index] || '');
+    })
+
     dispatch('required', data);
   }
-
 
   //  图片上传
   const handleUploadImage = (event) => {
@@ -312,11 +326,6 @@
 
       updateImageData(url);
     };
-  }
-
-  // 获取其他节点
-  const getSiblings = (node) => {
-    return Array.from(node.parentNode.parentNode.children).filter(n => n !== node)
   }
 
   // 单选选择-no dropdown
@@ -332,6 +341,8 @@
         node.checked = false;
       }
     })
+
+    dispatch('required', data);
   }
 
   // 多选选择-no dropdown
@@ -350,6 +361,8 @@
     });
 
     parameter.setAttribute('data-shadow-value', values.join(','));
+
+    dispatch('required', data);
   }
 
   // 更新图片参数跟数据

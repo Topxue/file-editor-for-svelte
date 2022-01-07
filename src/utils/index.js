@@ -174,3 +174,29 @@ export const timeFormat = (timestamp) => {
     }
   }
 }
+
+/**
+ * 粘贴清空html 节点 只保留内容
+ * @param event
+ */
+export const pasteClearNode = (event) => {
+  event.preventDefault();
+  let text;
+  const clp = (event.originalEvent || event).clipboardData;
+  // 兼容针对于opera ie等浏览器
+  if (!clp) {
+    text = window.clipboardData.getData("text") || "";
+    if (text) {
+      if (window.getSelection) {
+        let newNode = document.createElement("span");
+        newNode.innerHTML = text;
+        window.getSelection().getRangeAt(0).insertNode(newNode);
+      } else {
+        document.selection.createRange().pasteHTML(text);
+      }
+    }
+  } else {
+    text = clp.getData('text/plain') || "";
+    if (text) document.execCommand('insertText', false, text);
+  }
+}
