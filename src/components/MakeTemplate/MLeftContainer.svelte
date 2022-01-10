@@ -1,6 +1,6 @@
 <div class="pg-html-panel-params">
   <ul uk-tab uk-sticky>
-    <li class="uk-active"><a href={"javascript:void(0)"}>参数 <sup class="uk-badge">{parameters?.length || 0}</sup></a>
+    <li class="uk-active"><a href={"javascript:void(0)"}>参数 <sup class="uk-badge">{parameters.length || 0}</sup></a>
     </li>
   </ul>
   <ul class="uk-list pane-params-container">
@@ -11,7 +11,7 @@
           class:is-active={param.id === checkedId}
           on:click={handleCheckCurrentParameter.bind(null, param.id)}>
           <span class="pane-params-name" class:required={param.isRequired}>{param.name}</span>
-          <span class="pane-params-icon {ICON_ENUM[param?.paramType]}"></span>
+          <span class="pane-params-icon {ICON_ENUM[param.paramType]}"></span>
 
           <span
             class="pane-params-close uk-transition-fade"

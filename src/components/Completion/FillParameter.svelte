@@ -1,6 +1,6 @@
 <div class="fill-in-container">
   <ul uk-tab uk-sticky>
-    <li class="uk-active"><a href={"javascript:void(0)"}>参数填写<sup class="uk-badge">{data?.length || 0}</sup></a></li>
+    <li class="uk-active"><a href={"javascript:void(0)"}>参数填写<sup class="uk-badge">{data.length || 0}</sup></a></li>
   </ul>
   <form class="uk-form-stacked uk-margin">
     <div class="uk-form-controls uk-flex uk-flex-right">
