@@ -1,9 +1,6 @@
 /** Created by xwp on 2021-11-15 **/
 
-import db from "@/utils/db";
-
-export const date = async (key) => {
-  const data = await db.getItem(key) || {};
+export const date = (data) => {
   const {id, defaultValue, style, name, format} = data;
 
   return `&nbsp;<span

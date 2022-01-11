@@ -1,14 +1,7 @@
 /** Created by xwp on 2021-12-22 **/
-import db from "@/utils/db";
-
-/**
- * 插入table数据
- */
-const insertTableData = async () => {
-  const data = await db.addItem({paramType: 'table'});
-
-  return data;
-}
+import {randomId} from '@/utils';
+import initData from "@/utils/init-data";
+import {parametersStore} from "@/store/froala";
 
 /**
  * 生成表头
@@ -44,25 +37,30 @@ const createTableRowCol = (row, col) => {
  * 根据列生成 column key
  * @param col
  */
-const generateColumnsKey = (id, col) => {
+const generateColumnsKey = (data, col) => {
   const columnKeys = [];
   for (let i = 0; i < col; i++) {
     columnKeys.push(`column${i}`);
   }
-  db?.setItem(id, {columnKeys})
+
+  data.columnKeys = columnKeys;
+
+  return data;
 }
 
 /**
  * table 渲染
  * @returns {string}
  */
-export const tableRender = async (row, col) => {
-  const res = await insertTableData();
-  const id = res?.target.result;
+export const tableRender = (row, col) => {
+  const id = randomId();
+  const data = {...initData['table'], id};
 
-  await generateColumnsKey(id, col);
+  const resData = generateColumnsKey(data, col);
 
-  return `
+  parametersStore.addData(resData);
+
+  const template = `
    <div class="fr-deletable pg-table-container" data-param-name="表格1" data-param-type="table" id="${id}">
       <table class="" style="width: 100%;">
         <thead data-pg-table="thead">
@@ -76,4 +74,9 @@ export const tableRender = async (row, col) => {
       </table>
    </div>
   `
+
+  return {
+    template,
+    id
+  }
 }

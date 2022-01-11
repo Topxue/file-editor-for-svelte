@@ -1,8 +1,6 @@
 /** Created by xwp on 2021-12-13 **/
-import db from "@/utils/db";
 
-export const text = async (key) => {
-  const data = await db.getItem(key) || {};
+export const text = (data) => {
   const {id, defaultValue, style, name, maxLength} = data;
 
   return `&nbsp;<span

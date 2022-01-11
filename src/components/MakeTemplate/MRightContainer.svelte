@@ -79,8 +79,16 @@
 
   <Accordion title="参数编辑" visible="{isVisible}" disabled="{!isVisible}">
     <div class="pg-edit-item-wrapper">
+      <ul uk-accordion>
+        <li>
+          <a class="uk-accordion-title parameter-instruction" href="#">参数使用说明</a>
+          <div class="uk-accordion-content">
+            {@html underDescription[paramType]}
+          </div>
+        </li>
+      </ul>
       <!--参数名称-->
-      <div>
+      <div class="uk-margin-small-top">
         <label class="uk-form-label" for="">参数名称</label>
         <div class="uk-form-controls uk-margin-small-top">
           <input
@@ -105,6 +113,7 @@
               bind:value={data.defaultValue}
               name="defaultValue"
               placeholder="请输入默认值"
+              maxlength={data.maxLength}
               on:input={() => handleEditInputEvent('defaultValue')}
             >
           </div>
@@ -112,21 +121,6 @@
 
       {/if}
 
-      <!--日期默认值-->
-      {#if isDateFormat}
-        <div class="uk-margin-small-top">
-          <label class="uk-form-label" for="">默认值</label>
-          <div class="uk-form-controls uk-margin-small-top">
-            <DateInput
-              format={data.format}
-              bind:value={date}
-              placeholder="选择日期"
-              on:select={handleChangeDate}
-              locale={localeFromDateFnsLocale(zhCN)}
-            />
-          </div>
-        </div>
-      {/if}
 
       <!--身份证默认值-->
       {#if idCardDefault}
@@ -140,7 +134,7 @@
               name="defaultValue"
               placeholder="请输入默认值"
               maxlength="18"
-              on:keyup={handleEditIdCardInputEvent}
+              on:input={handleEditIdCardInputEvent}
             >
           </div>
         </div>
@@ -157,23 +151,23 @@
       {/if}
 
       <!--日期格式-->
-      {#if isDateFormat}
-        <div class="uk-margin-small-top">
-          <label class="uk-form-label" for="">日期格式</label>
-          <div class="uk-form-controls uk-margin-small-top">
-            <select
-              class="uk-select uk-form-small uk-text-emphasis"
-              name="format"
-              bind:value={data.format}
-              on:change={handleChangeDateFormat}
-            >
-              {#each DATE_FORMAT_OPTIONS as date}
-                <option value={date.value}>{date.label}</option>
-              {/each}
-            </select>
-          </div>
-        </div>
-      {/if}
+      <!--{#if isDateFormat}-->
+      <!--  <div class="uk-margin-small-top">-->
+      <!--    <label class="uk-form-label" for="">日期格式</label>-->
+      <!--    <div class="uk-form-controls uk-margin-small-top">-->
+      <!--      <select-->
+      <!--        class="uk-select uk-form-small uk-text-emphasis"-->
+      <!--        name="format"-->
+      <!--        bind:value={data.format}-->
+      <!--        on:change={handleChangeDateFormat}-->
+      <!--      >-->
+      <!--        {#each DATE_FORMAT_OPTIONS as date}-->
+      <!--          <option value={date.value}>{date.label}</option>-->
+      <!--        {/each}-->
+      <!--      </select>-->
+      <!--    </div>-->
+      <!--  </div>-->
+      <!--{/if}-->
 
       <!--布局-->
       {#if optionSet}
@@ -220,7 +214,7 @@
       {#if isSize}
         <div class="uk-margin-small-top">
           <label class="uk-form-label" for="">控件大小</label>
-          <div class="uk-form-controls uk-margin-small-top">
+          <div class="uk-form-controls uk-margin-small-top control-size-container">
             {#each CONTROL_OPTIONS as item}
               <label>
                 <input
@@ -294,8 +288,8 @@
             <select
               class="uk-select uk-form-small uk-text-emphasis"
               name="fontFamily"
-              on:change={() => handleEditChangeEvent('fontFamily')}
               bind:value={fontConfig.fontFamily}
+              on:change={() => handleEditChangeEvent('fontFamily')}
             >
               <option value="none">请选择</option>
               {#each FONT_LISTS as item}
@@ -382,7 +376,7 @@
         <div class="uk-margin-small-top">
           <label class="uk-form-label" for="">选项设置</label>
           <div class="uk-form-controls uk-margin-small-top" id="pg-option-setting-wrapper">
-            {#each options as item, index}
+            {#each data.options as item, index}
               <div class="uk-flex uk-flex-align-items uk-margin-small-top">
                 <input
                   class="uk-input uk-form-small pg-change-option-val"
@@ -455,8 +449,8 @@
       {/if}
 
       <!--表头Key设置-->
-      {#if tableDefault && columnKeys?.length}
-        {#each columnKeys as column, index}
+      {#if tableDefault && data.columnKeys}
+        {#each data.columnKeys as column, index}
           <div class="uk-margin-small-top">
             <label class="uk-form-label" for="">第{index + 1}列Key：</label>
             <div class="uk-form-controls uk-margin-small-top">
@@ -473,17 +467,25 @@
       {/if}
     </div>
   </Accordion>
+
+  <Dialog
+    message="初始值已超出字符限制，将删除多余部分，是否继续？"
+    isCancel={false}
+    buttonText="继续"
+    id="maxLength"
+    on:click={handleReplaceDefaultVal}
+  />
 </div>
 
 <script>
   import {onDestroy, createEventDispatcher} from 'svelte';
-  import zhCN from 'date-fns/locale/zh-CN';
-  import {DateInput, localeFromDateFnsLocale} from '@/components/Base/date-picker-svelte';
 
-  import db from "@/utils/db";
-  import {colorHex, insertParameterVerify} from '@/utils';
-  import {froalaStore} from "@/store/froala";
+  import initData from "@/utils/init-data";
+  import {froalaStore, parametersStore} from "@/store/froala";
+  import {colorHex, debounce, randomId, insertParameterVerify} from '@/utils';
+
   import * as parameters from '@/parameters';
+  import underDescription from '@/parameters/under';
   import {PARAMETERS} from '@/config/parameter';
   import {tableRender} from '@/event/tableRender';
   import {
@@ -494,9 +496,10 @@
     CONTROL_OPTIONS,
     FONT_SIZE_OPTIONS,
     FONT_WEIGHT_OPTIONS,
-    DATE_FORMAT_OPTIONS,
+    // DATE_FORMAT_OPTIONS,
   } from '@/config/parameter';
 
+  import Dialog from '@/components/Base/dialog';
   import Accordion from '@/components/Base/Accordion/index.svelte';
 
   // 事件派发
@@ -510,6 +513,9 @@
 
   // props
   export let paramId = null;
+  // 记录参数名称count值
+  let paramCount = 0;
+
   $:isVisible = !!paramId;
   // 当前参数
   $:currentParameter = document.querySelector("[data-param-type][id=" + paramId + "]");
@@ -533,8 +539,7 @@
   $:isAlignMent = ['text', 'table', 'date'].includes(paramType);
   // 选项设置
   $:optionSet = ['radio', 'checkbox'].includes(paramType);
-  // 日期格式
-  $:isDateFormat = paramType === 'date';
+
   // 身份证默认值
   $:idCardDefault = paramType === 'idcard';
   // table默认值
@@ -546,8 +551,6 @@
   let fontConfig = {};
   // 控件大小
   let size = {};
-  // table column keys
-  export let columnKeys = [];
 
   // 控件大小-显示状态
   let sizeChecked = 'fixed';
@@ -557,11 +560,6 @@
   let fontSize = 'none';
   // 字体颜色
   let fontColor = '';
-  // 选项设置-选项
-  let options = [];
-  // 日期
-  // $:date = data.defaultValue ? data.defaultValue : new Date();
-  let date = new Date();
 
   // 表格标题
   let tableTitle = '插入表格';
@@ -569,9 +567,10 @@
   let tableCol = null;
 
   $: if (paramId) {
-    db.getItem(paramId).then((res) => {
-      data = res;
-      options = res?.options;
+    parametersStore.subscribe(params => {
+      const res = params.data.parameters.find(item => item.id === paramId);
+
+      data = res || {};
       paramType = res?.paramType;
 
       if (JSON.stringify(res?.fontConfig) !== '{}') {
@@ -603,89 +602,33 @@
     if (['name', 'defaultValue'].includes(attrName)) {
       if (attrName === 'name') {
         updateParameterAttr('data-param-name', data[attrName]);
-
-        dispatch('update', {
-          name: data.name,
-          id: data.id,
-          isRequired: data.isRequired
-        });
+        parametersStore.updateData();
       }
 
       if (attrName === 'defaultValue') {
         currentParameter.innerHTML = data.defaultValue;
         updateParameterAttr('data-shadow-value', data.defaultValue);
       }
-
-      db.setItem(data.id, {
-        [attrName]: data[attrName]
-      })
     }
 
     // 控件大小-自定义
     if (['width', 'height'].includes(attrName)) {
       currentParameter.style.minwidth = size.width + 'px';
       currentParameter.style.minHeight = size.height + 'px';
-
-      db.setItem(data.id, {
-        fontConfig: {
-          size: [sizeChecked, {
-            width: size.width,
-            height: size.height
-          }]
-        }
-      })
-    }
-
-    // 填写说明
-    if (attrName === 'description') {
-      db.setItem(data.id, {
-        description: data.description
-      })
     }
   }
 
   // 设置身份证默认值
-  const handleEditIdCardInputEvent = (event) => {
-    const key = event.key;
-    if (key !== 'Backspace' && key !== 'x' && key !== 'X' && !/^[0-9]*$/.test(key)) return;
+  const handleEditIdCardInputEvent = () => {
+    const Reg = /[^\d.|x|X]/g;
     const idCards = [...currentParameter.children];
-    const values = event.target.value.split('');
+    data.defaultValue = data.defaultValue.replace(Reg, '');
 
-    if (values.length > 18) return;
-
-    // 更新数据
-    const id = currentParameter.getAttribute('id');
-    db.setItem(id, {
-      defaultValue: values.join('')
+    const values = data.defaultValue.split('');
+    idCards.forEach((node, index) => {
+      node.innerHTML = values[index] || ''
+      node.setAttribute('data-shadow-value', values[index] || '');
     })
-
-    if (key === 'Backspace') {
-      idCards.forEach((element, index) => {
-        const value = values[index] ? values[index] : '';
-        element.innerHTML = !isNaN(value) ? value : '';
-        element.setAttribute('data-shadow-value', !isNaN(value) ? value : '');
-      })
-      return;
-    }
-
-    values.forEach((value, index) => {
-      idCards[index].innerHTML = value;
-      idCards[index].setAttribute('data-shadow-value', value);
-    })
-  }
-
-
-  // 选择日期
-  const handleChangeDate = ({detail}) => {
-    currentParameter.innerHTML = detail;
-    updateParameterAttr('data-shadow-value', detail);
-
-    db.setItem(data.id, {defaultValue: detail});
-  }
-
-  // 切换日期格式
-  const handleChangeDateFormat = () => {
-    db.setItem(data.id, {format: data.format})
   }
 
   // 选择切换布局
@@ -693,7 +636,7 @@
     if (data.layout === 'dropdown') {
       currentParameter.innerHTML = '';
     } else {
-      currentParameter.innerHTML = options.reduce((prev, value) => {
+      currentParameter.innerHTML = data?.options.reduce((prev, value) => {
         return prev + `<label><input type=${paramType} value="${value}" placeholder="请输入选项名称" onclick="return false;"><span class="pg-radio-label">${value}</span></label>`
       }, '');
     }
@@ -724,7 +667,7 @@
   }
 
   // 插入表格行列
-  const handleInsertTable = async (row, col) => {
+  const handleInsertTable = (row, col) => {
     tableRow = row + 1;
     tableCol = col + 1;
 
@@ -737,48 +680,57 @@
       })
     }
 
-    froala.html.insert(await tableRender(tableRow, tableCol));
+    const {template, id} = tableRender(tableRow, tableCol);
+
+    froala.html.insert(template);
+    dispatch('add', id);
   }
 
   // 自定义行列
   const handleCustomTableRowCol = async () => {
-    froala.html.insert(await tableRender(tableRow, tableCol));
+    const {template, id} = await tableRender(tableRow, tableCol);
+
+    froala.html.insert(template);
+    dispatch('add', id);
 
     setTimeout(() => {
       tableRow = null;
       tableCol = null;
-    }, 0)
+    }, 300)
   }
 
   // 更新 column keys
   const handleUpdateColumnKey = (index) => {
-    db.setItem(data.id, {columnKeys});
-
     const froalaContainer = froala.$el[0];
     const table = froalaContainer.querySelector(`[id=${data.id}]`);
     const ths = [...table.querySelectorAll('th')];
 
-    ths[index].setAttribute('data-pg-th', columnKeys[index]);
+    ths[index].setAttribute('data-pg-th', data.columnKeys[index]);
   }
 
   // 添加选项设置
   const handleAddOptionItem = () => {
-    options = [...options, '请输入选项名称'];
-    db.setItem(data.id, {options});
+    data.options = [...data.options, `请输入选项名称${data.options.length + 1}`];
+
     changeLayout();
   }
 
   // 设置选项
   const handleSetOptionItem = () => {
-    db.setItem(data.id, {options});
     changeLayout();
   }
 
   // 删除选项设置
   const handleDeleteOptionsItem = (removeIndex) => {
-    options = options.filter((item, index) => index !== removeIndex);
-    db.setItem(data.id, {options});
+    data.options = data.options.filter((item, index) => index !== removeIndex);
     changeLayout();
+  }
+
+  // 超出最大长度-更新默认值
+  const handleReplaceDefaultVal = () => {
+    data.defaultValue = String(data.defaultValue).substring(0, data.maxLength);
+
+    handleEditInputEvent('defaultValue');
   }
 
   // 参数编辑-change-event;
@@ -786,10 +738,7 @@
     const eventEnum = {
       // 外观
       'style': () => {
-        updateParameterAttr('data-border-type', data.style)
-        db.setItem(data.id, {
-          style: data.style
-        })
+        updateParameterAttr('data-border-type', data.style);
       },
       // 控件大小
       'size': () => {
@@ -803,82 +752,51 @@
           currentParameter.style.minwidth = size.width + 'px';
           currentParameter.style.minHeight = size.height + 'px';
         }
-        db.setItem(data.id, {
-          fontConfig: {
-            size: [sizeChecked, {
-              width: size.width,
-              height: size.height
-            }]
-          }
-        })
+
+        fontConfig.size = [sizeChecked, size];
       },
       // 布局
       'layout': () => {
         const layout = data.layout;
         updateParameterAttr('data-layout', layout);
-        db.setItem(data.id, {layout});
         // 切换布局渲染数据
         changeLayout();
       },
 
       // 字符限制
       'maxLength': () => {
+        // 限制默认值
+        if (data.defaultValue.length > data.maxLength) {
+          UIkit.modal('#maxLength').show();
+        }
+
         updateParameterAttr('data-maxlength', data.maxLength);
-        db.setItem(data.id, {
-          maxLength: data.maxLength
-        })
       },
       // 字体
       'fontFamily': () => {
         updateParameterStyle('fontFamily', fontConfig.fontFamily);
-        db.setItem(data.id, {
-          fontConfig: {
-            fontFamily: fontConfig.fontFamily
-          }
-        })
       },
       // 字体大小
       'fontSize': () => {
         updateParameterStyle('fontSize', fontSize + 'px');
-        db.setItem(data.id, {
-          fontConfig: {fontSize}
-        })
+
+        fontConfig.fontSize = fontSize;
       },
       // 字体粗细
       'fontWeight': () => {
         updateParameterStyle('fontWeight', fontConfig.fontWeight)
-        db.setItem(data.id, {
-          fontConfig: {
-            fontWeight: fontConfig.fontWeight
-          }
-        })
       },
       // 字体颜色
       'color': () => {
         updateParameterStyle('color', fontColor);
-        db.setItem(data.id, {
-          fontConfig: {
-            color: fontColor
-          }
-        })
+        fontConfig.color = fontColor;
       },
       // 必填
       'isRequired': () => {
-        db.setItem(data.id, {
-          isRequired: data.isRequired
-        })
-
-        dispatch('update', {
-          name: data.name,
-          id: data.id,
-          isRequired: data.isRequired
-        });
+        parametersStore.updateData();
       },
       // 隐藏表头
       'hideThead': () => {
-        db.setItem(data.id, {
-          hideThead: data.hideThead
-        })
         const ths = document.querySelectorAll('[data-pg-th]');
         if (ths?.length) {
           ths.forEach(node => node.style.display = data.hideThead ? 'none' : '');
@@ -895,17 +813,11 @@
     const textAlign = value === 'flex-end' ? 'right' : value === 'flex-start' ? 'left' : 'center';
     updateParameterStyle('textAlign', textAlign);
 
-    db.setItem(data.id, {
-      fontConfig: {
-        justifyContent: value
-      }
-    })
+    fontConfig.justifyContent = value;
   }
 
   // 插入参数库模板
-  const handleInsertParameter = async (paramType) => {
-    if (paramType === 'table') return;
-
+  const handleInsertParameter = debounce((paramType) => {
     const verify = insertParameterVerify();
     if (!verify) {
       return UIkit?.notification({
@@ -915,13 +827,25 @@
       })
     }
 
-    const res = await db.addItem({paramType});
-    const id = res?.target.result;
+    paramCount++;
 
-    dispatch('add', id);
+    const id = randomId();
+    const res = {...initData[paramType], name: `参数${paramCount}`, id};
+    parametersStore.addData(res);
+    froala.html.insert(parameters[paramType](res));
 
-    froala.html.insert(await parameters[paramType](id));
+    defaultShowEdit(id);
+  }, 300);
+
+
+  // 默认值展开参数编辑
+  const defaultShowEdit = (id) => {
+    const froalaContainer = froala.$el[0];
+    const parameter = froalaContainer.querySelector(`[data-param-type][id=${id}]`);
+
+    parameter.click();
   }
+
 
   onDestroy(unsubscribe);
 </script>

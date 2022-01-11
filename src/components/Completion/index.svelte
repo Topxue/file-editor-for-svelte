@@ -1,14 +1,18 @@
 <CHeader parametersData={parametersData} on:scroll={handleScroll}/>
-<!-- 编辑容器 -->
-<div id="pg-editor-container" class="pg-editor-container"></div>
-<!--参数填写-->
-<FillParameter
-  data={parametersData}
-  paramId={paramId}
-  on:check={handleClickFillIn}
-  on:update={handleUpdateClick}
-  on:required={getRequiredData}
-/>
+<div class="pg-editor-body-container">
+  <div style="width: 340px"></div>
+  <!-- 编辑容器 -->
+  <div id="pg-editor-container" class="pg-editor-container initiate-container"></div>
+  <!--参数填写-->
+  <FillParameter
+    data={parametersData}
+    paramId={paramId}
+    freezeData={freezeData}
+    on:check={handleClickFillIn}
+    on:update={handleUpdateClick}
+    on:required={getRequiredData}
+  />
+</div>
 
 <!--下拉选择-->
 <Select
@@ -30,14 +34,15 @@
   import FillParameter from './FillParameter.svelte';
   import ImagePopup from '@/components/Base/image-popup';
 
-  import db from '@/utils/db';
-
+  import {pasteClearNode} from "@/utils";
   import {froalaStore} from "@/store/froala";
   import {fillingConfig, PG_EDITOR_CONTAINER} from '@/config/froala';
   import {currentActiveParameter} from '@/event/viewEvent';
 
   // 获取外部传入的参数
   const params = getContext('optionsInfo');
+
+  let freezeData = [];
 
   // 参数数据
   let parametersData = [];
@@ -57,9 +62,7 @@
 
   onMount(async () => {
     await initFroala();
-    await getParameterData();
     initGlobeClickEvent();
-    controlParameterIsEdit();
   })
 
   // 初始化froala
@@ -70,6 +73,8 @@
       events: {
         'initialized': () => {
           froala.edit.off();
+          froala.toolbar.hide();
+          getParameterData();
         }
       }
     });
@@ -80,6 +85,12 @@
   const initGlobeClickEvent = () => {
     // 注册全局事件
     froalaContainer.addEventListener('click', handleClickEditor);
+    // 粘贴事件
+    froalaContainer.addEventListener('paste', pasteClearNode);
+    // 禁止拖入内容
+    froalaContainer.addEventListener("drop", (event) => {
+      event.preventDefault();
+    });
     document.body.addEventListener('click', handlerBodyClick);
   }
 
@@ -102,7 +113,6 @@
   // 文本参数编辑事件
   const parameterChangeEvent = (event) => {
     const target = event.target;
-
     updateParameterData(target.innerHTML);
   }
 
@@ -115,53 +125,50 @@
     parametersData = data;
   }
 
+  // 获取身份证value
+  const getIdCardValue = (target) => {
+    return [...target.parentNode.childNodes].reduce((prev, next) => {
+      return prev + next.innerHTML;
+    }, '') || '';
+  }
+
   // 身份证参数编辑事件
   const parameterIdCardChangeEvent = (event) => {
+    const Reg = /[^\d.|x|X]/g;
+    const target = event.target;
+
+    target.innerHTML = target.innerHTML.replace(Reg, '').substring(0, 1);
+    target.setAttribute('data-shadow-value', target.innerHTML);
+
+    if (target.innerHTML && target.nextElementSibling) {
+      target.nextElementSibling.focus();
+    }
+
+    updateParameterData(getIdCardValue(target));
+  }
+
+  // 身份证删除事件
+  const parameterIdCardDeleteEvent = (event) => {
     const key = event.key;
     const target = event.target;
 
-    if (key !== 'Backspace' && key !== 'x' && key !== 'X' && !/^[0-9]*$/.test(key)) {
-      target.innerHTML = '';
-      return;
-    }
-
-    const setFilInInValue = () => {
-      const value = [...target.parentNode.childNodes].reduce((prev, next) => {
-        return prev + next.innerHTML;
-      }, '') || '';
-
-      updateParameterData(value);
-    }
-
-    setTimeout(() => {
-      if (key === 'Backspace') {
-        if (target.previousSibling) {
-          target.previousSibling.focus();
-          target.innerHTML = '';
-          target.setAttribute('data-shadow-value', '');
-        } else {
-          target.innerHTML = '';
-          target.setAttribute('data-shadow-value', '');
-        }
-        setFilInInValue();
-        return;
-      }
-
-      if (target.innerHTML.length > 1) target.innerHTML = target.innerHTML[0];
-      target.setAttribute('data-shadow-value', target.innerHTML);
-      if (target.nextElementSibling) {
-        target.nextElementSibling.focus();
+    if (key === 'Backspace') {
+      if (target.previousSibling) {
+        target.previousSibling.focus();
+        target.innerHTML = '';
+        target.setAttribute('data-shadow-value', '');
       } else {
-        target.blur()
+        target.innerHTML = '';
+        target.setAttribute('data-shadow-value', '');
       }
-      setFilInInValue();
-    }, 0);
+    }
+
+    updateParameterData(getIdCardValue(target));
   }
 
   // 控制参数编辑是否可编辑并注册编辑事件
   const controlParameterIsEdit = () => {
     const parameters = froalaContainer.querySelectorAll('[data-param-type]');
-
     parameters.forEach(node => {
       const paramType = node.getAttribute('data-param-type');
       if (paramType === 'text') {
@@ -173,8 +180,11 @@
         const idCards = [...node.children];
         idCards.forEach(elem => {
           elem.setAttribute('contenteditable', true);
-          elem.addEventListener('keydown', parameterIdCardChangeEvent)
+          // elem.addEventListener('keydown', parameterIdCardChangeEvent)
         })
+
+        node.addEventListener('input', parameterIdCardChangeEvent);
+        node.addEventListener('keydown', parameterIdCardDeleteEvent);
       }
 
       const layout = node?.getAttribute('data-layout');
@@ -197,9 +207,7 @@
 
   // 单选-no-dropdown
   const handleChangeRadio = (inputs, event) => {
-
     const value = event.target.value;
-
     inputs.forEach(node => {
       if (node.value === value) {
         node.checked = true
@@ -299,19 +307,15 @@
   })
 
   // 获取参数数据
-  const getParameterData = async () => {
-    const data = await db.getAll();
+  const getParameterData = () => {
+    const data = params?.data;
+    if (data) {
+      parametersData = data.parameters;
+      freezeData = [...data.parameters];
+      froala.html.set(data.template || '');
+    }
 
-    parametersData = data.map(item => {
-      if (item.paramType === 'date') {
-        item.defaultValue = new Date(item.defaultValue);
-      }
-      return item
-    })
-
-    // 获取模板
-    const res = await db.getItemTmp();
-    froala.html.set(res.template || '')
+    controlParameterIsEdit();
   }
 
   // 编辑器点击事件
@@ -403,8 +407,3 @@
   }
 
 </script>
-<style>
-    .pg-editor-container {
-        margin-top: 66px;
-    }
-</style>

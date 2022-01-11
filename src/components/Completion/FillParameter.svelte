@@ -1,6 +1,6 @@
 <div class="fill-in-container">
   <ul uk-tab uk-sticky>
-    <li class="uk-active"><a href={"javascript:void(0)"}>参数填写<sup class="uk-badge">{data?.length || 0}</sup></a></li>
+    <li class="uk-active"><a href={"javascript:void(0)"}>参数填写<sup class="uk-badge">{data.length || 0}</sup></a></li>
   </ul>
   <form class="uk-form-stacked uk-margin">
     <div class="uk-form-controls uk-flex uk-flex-right">
@@ -12,7 +12,7 @@
           on:change={handleIsRequired}>
         仅看必填
       </label>
-      <label><input class="uk-checkbox" type="checkbox" bind:checked={isOnlyWrite}> 仅看待我填写</label>
+      <!--<label><input class="uk-checkbox" type="checkbox" bind:checked={isOnlyWrite}> 仅看待我填写</label>-->
     </div>
     {#each data as param, index}
       <!--文本-->
@@ -23,6 +23,13 @@
             class:is-required={param.isRequired}
             class:is-active={param.id === paramId}
             for="">{param.name}</label>
+          {#if param.description}
+            <div class="completion-content uk-text-muted">
+              <i class="fa fa fa-exclamation-circle"
+                 uk-tooltip="title: 填写说明; delay: 500"></i>
+              {param.description}
+            </div>
+          {/if}
           <div class="uk-form-controls uk-inline uk-width-1-1">
             <i class="uk-form-icon {ICON_ENUM[param.paramType]}"></i>
             <input
@@ -30,6 +37,7 @@
               type="text"
               name="{param.paramType}"
               bind:value="{param.defaultValue}"
+              maxlength={param.maxLength}
               placeholder="请输入"
               on:input={() => handleEditInputEvent(param.paramType, index)}
             >
@@ -48,6 +56,13 @@
             class:is-required={param.isRequired}
             class:is-active={param.id === paramId}
             for="">{param.name}</label>
+          {#if param.description}
+            <div class="completion-content uk-text-muted">
+              <i class="fa fa fa-exclamation-circle"
+                 uk-tooltip="title: 填写说明; delay: 500"></i>
+              {param.description}
+            </div>
+          {/if}
           <div class="uk-form-controls uk-inline uk-width-1-1">
             <div class="uk-text-muted trip-text">请在正文中填写</div>
           </div>
@@ -62,6 +77,13 @@
             class:is-required={param.isRequired}
             class:is-active={param.id === paramId}
             for="">{param.name}</label>
+          {#if param.description}
+            <div class="completion-content uk-text-muted">
+              <i class="fa fa fa-exclamation-circle"
+                 uk-tooltip="title: 填写说明; delay: 500"></i>
+              {param.description}
+            </div>
+          {/if}
           <div class="uk-form-controls upload-wrapper uk-inline uk-width-1-1">
             {#if param.imgUrl}
               <button
@@ -98,13 +120,21 @@
 
       <!--单选-->
       {#if param.paramType === 'radio'}
-        <a class="uk-margin uk-scroll-a" uk-scroll href="#{param.id}"
-           on:click={(event) => handleClickFillIn(param, event)}>
-          <label
-            class="uk-form-label"
-            class:is-required={param.isRequired}
-            class:is-active={param.id === paramId}
-            for="">{param.name}</label>
+        <div class="uk-margin" on:click={(event) => handleClickFillIn(param, event)}>
+          <a class="uk-scroll-a" uk-scroll href="#{param.id}">
+            <label
+              class="uk-form-label"
+              class:is-required={param.isRequired}
+              class:is-active={param.id === paramId}
+              for="">{param.name}</label>
+          </a>
+          {#if param.description}
+            <div class="completion-content uk-text-muted">
+              <i class="fa fa fa-exclamation-circle"
+                 uk-tooltip="title: 填写说明; delay: 500"></i>
+              {param.description}
+            </div>
+          {/if}
           <div class="uk-form-controls uk-inline uk-width-1-1" class:margin-btm={param.layout !== 'dropdown'}>
             {#if param.layout === 'dropdown'}
               <i class="uk-form-icon {ICON_ENUM[param.paramType]}"></i>
@@ -131,18 +161,26 @@
               {/each}
             {/if}
           </div>
-        </a>
+        </div>
       {/if}
 
       <!--多选-->
       {#if param.paramType === 'checkbox'}
-        <a class="uk-margin uk-scroll-a" uk-scroll href="#{param.id}"
-           on:click={(event) => handleClickFillIn(param, event)}>
-          <label
-            class="uk-form-label"
-            class:is-required={param.isRequired}
-            class:is-active={param.id === paramId}
-            for="">{param.name}</label>
+        <div class="uk-margin" on:click={(event) => handleClickFillIn(param, event)}>
+          <a class="uk-scroll-a" uk-scroll href="#{param.id}">
+            <label
+              class="uk-form-label"
+              class:is-required={param.isRequired}
+              class:is-active={param.id === paramId}
+              for="">{param.name}</label>
+          </a>
+          {#if param.description}
+            <div class="completion-content uk-text-muted">
+              <i class="fa fa fa-exclamation-circle"
+                 uk-tooltip="title: 填写说明; delay: 500"></i>
+              {param.description}
+            </div>
+          {/if}
           <div class="uk-form-controls uk-inline uk-width-1-1" class:margin-btm={param.layout !== 'dropdown'}>
             {#if param.layout === 'dropdown'}
               <i class="uk-form-icon {ICON_ENUM[param.paramType]}"></i>
@@ -168,28 +206,7 @@
               {/each}
             {/if}
           </div>
-        </a>
-      {/if}
-
-      <!--日期-->
-      {#if param.paramType === 'date'}
-        <a class="uk-margin uk-scroll-a" uk-scroll href="#{param.id}" on:click={() => handleClickFillIn(param)}>
-          <label
-            class="uk-form-label"
-            class:is-required={param.isRequired}
-            class:is-active={param.id === paramId}
-            for="">{param.name}</label>
-          <div class="uk-form-controls uk-inline uk-width-1-1">
-            <i class="uk-form-icon {ICON_ENUM[param.paramType]}"></i>
-            <DateInput
-              format={param.format}
-              placeholder="选择日期"
-              bind:value={param.defaultValue}
-              on:select={handleChangeDate.bind(null, param.paramType, index)}
-              locale={localeFromDateFnsLocale(zhCN)}
-            />
-          </div>
-        </a>
+        </div>
       {/if}
 
       <!--身份证-->
@@ -200,6 +217,13 @@
             class:is-required={param.isRequired}
             class:is-active={param.id === paramId}
             for="">{param.name}</label>
+          {#if param.description}
+            <div class="completion-content uk-text-muted">
+              <i class="fa fa fa-exclamation-circle"
+                 uk-tooltip="title: 填写说明; delay: 500"></i>
+              {param.description}
+            </div>
+          {/if}
           <div class="uk-form-controls uk-inline uk-width-1-1">
             <i class="uk-form-icon {ICON_ENUM[param.paramType]}"></i>
             <input
@@ -208,7 +232,7 @@
               maxlength="18"
               name="idcard"
               bind:value="{param.defaultValue}"
-              on:keyup={fillInIdCardKeyupEvent.bind(null,param.paramType, index) }
+              on:input={fillInIdCardKeyupEvent.bind(null,param.paramType, index) }
               placeholder="请输入"/>
           </div>
         </a>
@@ -218,14 +242,12 @@
 </div>
 <script>
   import {onMount, createEventDispatcher} from "svelte";
-
-  import zhCN from 'date-fns/locale/zh-CN';
   import {ICON_ENUM, defaultImageBg} from '@/config/parameter';
-  import {DateInput, localeFromDateFnsLocale} from '@/components/Base/date-picker-svelte';
 
   // 参数数据
   export let data = [];
   export let paramId = null;
+  export let freezeData = [];
 
   // 仅看必填
   let isRequired = false;
@@ -257,7 +279,11 @@
 
   // 仅看必填
   const handleIsRequired = () => {
-    console.log(isRequired)
+    if (isRequired) {
+      data = freezeData.filter(item => item.isRequired)
+    } else {
+      data = freezeData;
+    }
   }
 
   // 参数填充-input-event;
@@ -271,25 +297,22 @@
     }
     dispatch('required', data);
   }
+
   // 身份证填充
-  const fillInIdCardKeyupEvent = (paramType, index, event) => {
-    const key = event.key;
-    if (key !== 'Backspace' && key !== 'x' && key !== 'X' && !/^[0-9]*$/.test(key)) return;
-
-    const value = data[index].defaultValue;
+  const fillInIdCardKeyupEvent = (paramType, index) => {
+    const Reg = /[^\d.|x|X]/g;
     const parameter = froalaContainer.querySelector(`[data-param-type=${paramType}][id=${paramId}]`);
+    const idCards = [...parameter.children];
 
-    const childArr = [...parameter.children];
-    const valArr = value.split('');
+    data[index].defaultValue = data[index].defaultValue.replace(Reg, '');
 
-    childArr.forEach((node, index) => node.innerHTML = valArr[index] || '');
+    const values = data[index].defaultValue.split('');
+    idCards.forEach((node, index) => {
+      node.innerHTML = values[index] || ''
+      node.setAttribute('data-shadow-value', values[index] || '');
+    })
+
     dispatch('required', data);
-  }
-
-  // 日期选择
-  const handleChangeDate = (paramType, index, event) => {
-    const parameter = froalaContainer.querySelector(`[data-param-type=${paramType}][id=${paramId}]`);
-    updateParameter(parameter, event.detail);
   }
 
   //  图片上传
@@ -305,11 +328,6 @@
     };
   }
 
-  // 获取其他节点
-  const getSiblings = (node) => {
-    return Array.from(node.parentNode.parentNode.children).filter(n => n !== node)
-  }
-
   // 单选选择-no dropdown
   const handleChangeRadio = (value) => {
     const parameter = froalaContainer.querySelector(`[data-param-type=radio][id=${paramId}]`);
@@ -323,6 +341,8 @@
         node.checked = false;
       }
     })
+
+    dispatch('required', data);
   }
 
   // 多选选择-no dropdown
@@ -341,6 +361,8 @@
     });
 
     parameter.setAttribute('data-shadow-value', values.join(','));
+
+    dispatch('required', data);
   }
 
   // 更新图片参数跟数据
@@ -372,9 +394,4 @@
   }
 
 </script>
-<style>
-    .uk-scroll-a {
-        display: inherit;
-    }
-</style>
 

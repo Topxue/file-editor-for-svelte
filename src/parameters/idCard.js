@@ -1,6 +1,4 @@
 /** Created by xwp on 2021-11-17 **/
-import db from "@/utils/db";
-
 const template = () => {
   let htmlTpl = '';
   for (let i = 0; i < 18; i++) {
@@ -9,8 +7,7 @@ const template = () => {
   return htmlTpl
 }
 
-export const idcard = async (key) => {
-  const data = await db.getItem(key) || {};
+export const idcard = (data) => {
   const {id, name} = data;
 
   return `&nbsp;<span class="fr-deletable id-card-wrapper" contenteditable="false" id="${id}" data-param-name="${name}" data-param-type="idcard">${template()}</span></span>&nbsp;`

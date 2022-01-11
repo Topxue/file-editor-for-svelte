@@ -18,10 +18,7 @@ export const observeDocument = (froala, callback) => {
       if (mutationRecord.removedNodes) {
         for (let removedNode of mutationRecord.removedNodes) {
           // 查询为参数的节点-找到 不再遍历节点;
-          if (removedNode?.tagName && removedNode?.hasAttribute('data-param-type')) {
-            callback && callback();
-            return;
-          }
+          if (removedNode?.tagName) callback && callback();
         }
       }
     }

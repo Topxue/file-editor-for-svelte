@@ -4,10 +4,7 @@
  * @createTime  2021-11-15
  */
 
-import db from '@/utils/db';
-
-const select = async (key) => {
-  const params = await db.getItem(key) || {};
+const select = (params) => {
   const {id, style, name, layout} = params;
 
   return `&nbsp;<span

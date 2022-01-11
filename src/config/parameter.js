@@ -30,11 +30,11 @@ export const PARAMETERS = [
     icon: 'fa fa-check-square',
     type: 'checkbox'
   },
-  {
-    label: '日期',
-    icon: 'fa fa-calendar',
-    type: 'date'
-  },
+  // {
+  //   label: '日期',
+  //   icon: 'fa fa-calendar',
+  //   type: 'date'
+  // },
   {
     label: '身份证号',
     icon: 'fa fa-id-card',

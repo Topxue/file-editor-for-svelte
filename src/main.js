@@ -1,9 +1,9 @@
 import './config/plugin';
 import './assets/style/global.scss';
-import db from './utils/db';
+import {froalaStore, parametersStore} from "./store/froala";
 import App from './App.svelte';
-import {froalaStore} from "./store/froala";
-import {getUpdateParametersData} from './utils';
+
+import testData from './config/test';
 
 class FileTemplateEditor {
   constructor(options) {
@@ -15,6 +15,7 @@ class FileTemplateEditor {
 
   _init() {
     this.initApp();
+    this._initFroalaInstance();
     FileTemplateEditor._createIconLink();
   }
 
@@ -31,16 +32,25 @@ class FileTemplateEditor {
         options: props,
       },
     })
+
+    parametersStore.setData(props)
+  }
+
+  _initFroalaInstance() {
+    froalaStore.subscribe(froala => {
+      this.froala = froala;
+    })
   }
 
   /**
    * 动态加载 font-awesome.css
    */
   static _createIconLink() {
+    const HREF_URL = 'https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css';
     let link = document.createElement('link');
-    link.type = 'text/css';
+    link.type = "text/css";
     link.rel = 'stylesheet';
-    link.href = 'https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css';
+    link.href = HREF_URL;
     const head = document.getElementsByTagName('head')[0];
     head.appendChild(link);
   }
@@ -49,48 +59,46 @@ class FileTemplateEditor {
    * 获取模板&参数数据
    * @returns {{html: (*|string), parameters: *[]}}
    */
-  async getData() {
-    froalaStore.subscribe(froala => {
-      this.froala = froala;
-    })
-
+  getData() {
     const froala = this.froala;
     const template = froala.html?.get().replace('is-active', '') || '';
-    const parameters = await getUpdateParametersData(froala);
+    let parameters = [];
+
+    parametersStore.subscribe(store => {
+      parameters = store.data.parameters;
+    })
 
     return {
       template,
       parameters
     }
   }
-
-  /**
-   * 清空数据库数据
-   * @returns {Promise<void>}
-   */
-  async clearData() {
-    await db.setItemTmp('');
-    await db.removeAll();
-  }
 }
 
 // 测试代码
+const data = testData.data;
 const editor = new FileTemplateEditor({
   target: '#root',
   isOff: false,
   data: {
-    template: '',
-    parameters: []
+    // template: '',
+    // parameters: [],
+    fileName: 'joker',
+    template: data.templateContent,
+    parameters: data.params
   },
+  // 返回
+  back() {
+    console.log('back...')
+  },
+  // 实时保存
+  realSave(data) {
+    console.log(data, 'data...')
+  },
+  // 获取填充参数数据
   getInitiate(data) {
     console.log(data, 'data')
   }
 })
-
-// setTimeout(async () => {
-//   console.log(editor)
-//   console.log(await editor.getData(), 'editor...')
-// }, 1000)
-
 
 export default FileTemplateEditor;

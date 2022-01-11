@@ -10,17 +10,93 @@ $primary: #1e87f0;
   --toolbar-top: 0;
   --toolbar-width: 100%;
   --pg-container-witdh: 100vh;
+  --font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC, sans-serif !important;
 }
 
-#pg-toolbar-container {
-  //position: fixed;
-  //z-index: 999;
-  //right: 0;
-  //background: #fff;
-  //background-color: transparent;
-  //margin-top: 48px;
-  top: var(--toolbar-top);
-  width: var(--toolbar-width);
+body, html {
+  font-family: var(--font-family);
+}
+
+//#pg-toolbar-container {
+//  top: var(--toolbar-top);
+//  width: var(--toolbar-width);
+//}
+
+
+.fr-toolbar .fr-btn-grp {
+  display: flex !important;
+}
+
+.initiate-header-wrapper {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  box-sizing: border-box;
+  height: 50px;
+  border-bottom: 1px solid $bord-color;
+
+  .pg-header-return-back {
+    display: flex;
+    align-items: center;
+
+    .fa-angle-left {
+      font-size: 22px;
+      margin-right: 5px;
+      margin-top: -2px;
+      color: #1e87f0;
+    }
+  }
+
+
+  .dropdown-container {
+    width: 320px;
+    line-height: 20px;
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 13px;
+    border-radius: 3px;
+    border: 1px solid #ebeef5;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.10);
+  }
+
+  .dropdown-header {
+    width: 170px;
+    font-weight: 600;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .uk-divider-small::after {
+    width: 100%;
+  }
+
+  .param-list {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .param-list span {
+    color: #4c596e;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .param-list span:hover {
+    color: #2489f2;
+  }
+
+  .param-list span .is-required {
+    padding-left: -8px;
+    content: "*";
+    color: #ed521f;
+    position: absolute;
+  }
+
+  .send-disabled {
+    cursor: not-allowed;
+  }
 }
 
 .pg-container {
@@ -32,7 +108,7 @@ $primary: #1e87f0;
   overflow-y: hidden;
   box-sizing: border-box;
   background-color: #f7f8f8;
-  font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC, sans-serif !important;
+  font-family: var(--font-family);
 
   .pg-mk-header-wrapper {
     @include MHeader;
@@ -60,6 +136,10 @@ $primary: #1e87f0;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     overflow-y: auto;
     border-radius: 0 !important;
+  }
+
+  .initiate-container {
+    //margin-top: 66px;
   }
 }
 
@@ -90,26 +170,20 @@ $primary: #1e87f0;
   outline: none;
 }
 
-a[href='https://www.froala.com/wysiwyg-editor?k=u'] {
-  font-size: 0 !important;
-  padding: 0 !important;
-  height: 0 !important;
-  display: none !important;
-}
 
 .fr-second-toolbar {
   display: none;
 }
 
 /*工具栏按钮宽度自适应*/
-.fr-toolbar .fr-command.fr-btn {
-  width: auto !important;
-}
-
-/*图标宽度自适应*/
-.fr-toolbar .fr-command.fr-btn i {
-  width: auto !important;
-}
+//.fr-toolbar .fr-command.fr-btn {
+//  width: auto !important;
+//}
+//
+///*图标宽度自适应*/
+//.fr-toolbar .fr-command.fr-btn i {
+//  width: auto !important;
+//}
 
 .fr-toolbar.fr-top {
   height: 40px;
@@ -123,51 +197,10 @@ a[href='https://www.froala.com/wysiwyg-editor?k=u'] {
   background-color: transparent;
 }
 
+
 .fr-wrapper {
   border: none !important;
-
-  > div[style*='z-index: 9999'] {
-    position: absolute !important;
-    top: -10000px !important;
-    opacity: 0 !important;
-    display: none !important;
-  }
 }
-
-a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysiwyg-editor?k=u"] {
-  display: none !important;
-  position: absolute;
-  top: -99999999px;
-}
-
-.pg-flex {
-  display: flex;
-  align-items: center;
-}
-
-.pg-button {
-  color: #ffffff;
-  border: 1px solid $primary;
-  background: #ffffff;
-  overflow: visible;
-  text-transform: none;
-  display: inline-block;
-  box-sizing: border-box;
-  vertical-align: middle;
-  font-size: 14px;
-  text-align: center;
-  text-decoration: none;
-  text-transform: uppercase;
-  transition: .1s ease-in-out;
-  transition-property: color, background-color, border-color;
-  cursor: pointer;
-
-  &:hover {
-    color: #fff;
-    background-color: $primary;
-  }
-}
-
 
 .pg-editor-body-container {
   display: flex;
@@ -249,6 +282,48 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
   text-align: left;
   padding-bottom: 40px;
   overflow-y: auto;
+
+  .parameter-instruction {
+    margin-bottom: -2px;
+    font-size: 13px;
+    height: 35px;
+    line-height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    padding: 0 10px;
+    color: #f0a128;
+    background-color: #F8EDD5;
+    border-radius: 4px;
+  }
+
+  .uk-accordion-content {
+    margin: 0 0 10px 0;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #F8EDD5;
+    border-radius: 4px;
+  }
+}
+
+.description-container {
+  li {
+    color: #7f8997;
+    font-size: 12px;
+    line-height: 25px;
+
+    &:before {
+      content: "";
+      margin-right: 8px;
+      margin-bottom: 2px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50px;
+      display: inline-block;
+      background: #7f8997;
+    }
+  }
 }
 
 .uk-flex-align-items {
@@ -374,12 +449,16 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
       position: absolute;
       top: -9px;
       right: -7px;
-      width: 18px;
+      width: 20px;
       font-weight: bold;
       opacity: 0;
 
       &:hover {
         color: #ed521f;
+      }
+
+      .fa-times-circle {
+        font-size: 18px;
       }
     }
 
@@ -429,9 +508,10 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
   user-select: none;
   width: 320px;
   max-width: 320px;
-  position: absolute;
+  //height: 100vh;
+  position: relative;
   right: 0;
-  top: 48px;
+  //top: 48px;
   bottom: 0;
   padding: 10px 24px 0 16px;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
@@ -453,6 +533,10 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
 
   .is-active {
     color: #2489f2;
+  }
+
+  .uk-scroll-a {
+    display: inherit;
   }
 }
 
@@ -511,7 +595,7 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
 
 .remove-image-btn {
   position: absolute;
-  left: 18px;
+  left: 14px;
   bottom: 0;
   z-index: 99;
 }
@@ -531,4 +615,161 @@ a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysi
 .uk-scroll-a {
   outline: none;
   text-decoration: none !important;
+}
+
+.fr-popup {
+  transition: all .3s;
+}
+
+.is-visible {
+  display: inline-block !important;
+}
+
+.pg-image-popup-container {
+  display: none;
+
+  .image-popup-container {
+    width: 320px;
+    max-width: 320px;
+    height: 120px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 1px 1px rgba(0, 0, 0, 0.16);
+    border-radius: 2px;
+    box-sizing: border-box;
+    user-select: none;
+    margin-top: 10px;
+    border-top: 5px solid #222;
+    position: fixed;
+    z-index: 999;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .fr-arrow {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid #222;
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    margin-left: -5px;
+    display: inline-block;
+  }
+
+  .upload-wrapper {
+    cursor: pointer;
+    width: 100%;
+    position: relative;
+  }
+
+  .upload-wrapper input {
+    cursor: pointer;
+  }
+
+  .uk-form-custom {
+    width: 320px;
+    height: 95px;
+    cursor: pointer;
+    line-height: 100px;
+    border: 2px dashed #e5e5e5;
+    position: relative;
+  }
+}
+
+.pg-dialog-container {
+  font-size: 14px;
+
+  .uk-modal-dialog {
+    width: 370px !important;
+    top: 32% !important;
+    padding: 0 15px 15px 15px;
+  }
+
+  .uk-modal-title {
+    font-size: 20px;
+    line-height: 2.3;
+  }
+
+  .dialog-button-container {
+    margin-top: 10px;
+  }
+}
+
+.pg-custom-select-container {
+  position: fixed;
+  z-index: 999;
+
+  //&:after {
+  //  content: '';
+  //  border-width: 9px;
+  //  border-style: solid;
+  //  border-color: transparent transparent #fff transparent;
+  //  width: 0;
+  //  height: 0;
+  //  position: absolute;
+  //  top: -17px;
+  //  left: 60px;
+  //}
+}
+
+.pg-select-container {
+  position: relative;
+  background: #FFFFFF;
+  box-sizing: border-box;
+  display: none;
+  font-size: 13px;
+  padding: 4px 0;
+  border-radius: 3px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.10);
+  border: 1px solid #e4e7ed;
+  max-height: 215px;
+  overflow: auto;
+
+  .option-item {
+    padding: 8px 10px;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+  }
+
+  .is-active {
+    color: #2489f2;
+  }
+}
+
+.option-item.is-active::after {
+  content: "✔";
+  position: absolute;
+  right: 10px;
+}
+
+.pg-select-container li:hover {
+  background-color: #f5f7fa;
+}
+
+.visible {
+  display: block;
+}
+
+.control-size-container {
+  line-height: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.completion-content {
+  padding-bottom: 5px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  i {
+    font-size: 15px;
+    padding-right: 3px;
+  }
 }

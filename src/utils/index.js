@@ -1,7 +1,5 @@
 /** Created by xwp on 2021-12-16 **/
 
-import db from "./db";
-
 /**
  * 生成随机 ID
  * @type {function(): string}
@@ -85,12 +83,21 @@ export const insertParameterVerify = () => {
 }
 
 /**
- * 当前时间
+ * 当前日期
  * @param froala
  */
-export const getCurrentTime = (time = +new Date()) => {
+export const getCurrentDate = (time = +new Date()) => {
   const date = new Date(time + 8 * 3600 * 1000);
   return date.toJSON().substr(0, 19).replace('T', ' ').replace(/-/g, '-');
+}
+
+/**
+ * 获取当前时间
+ * @param time
+ * @returns {string}
+ */
+export const getCurrentTime = (time = new Date()) => {
+  return `${time.getHours()}:${String(time.getMinutes()).padStart(2, '0')}:${String(time.getSeconds()).padStart(2, '0')}`
 }
 
 /**
@@ -130,21 +137,66 @@ export const getFroalaContentParams = (froala) => {
   return parameters;
 }
 
+
 /**
- * 获取并且更新参数库数据
+ * 防抖函数 非立即执行（延迟执行）
+ * @param func
+ * @param wait
+ * @returns {(function(): void)|*}
  */
-export const getUpdateParametersData = async (froala) => {
-  const parameters = await getFroalaContentParams(froala);
+export const debounce = (func, wait = 1000) => {
+  let timer;
+  return function () {
+    const context = this; // 注意 this 指向
+    const args = arguments; // arguments中存着event
 
-  const dbDataAll = await db.getAll();
-  const data = dbDataAll.map(item => {
-    const isExist = parameters.find(element => element.getAttribute('id') === item.id);
-    if (isExist) {
-      return item
-    } else {
-      db.removeItem(item.id);
+    if (timer) clearTimeout(timer);
+
+    timer = setTimeout(function () {
+      func.apply(this, args)
+    }, wait)
+  }
+}
+
+/**
+ * 时间戳转多少分钟之前
+ * @param time
+ * @returns {string|*}
+ */
+export const timeFormat = (timestamp) => {
+  let mistiming = Math.round((Date.now() - timestamp) / 1000);
+  let arrr = ['年', '个月', '周', '天', '小时', '分钟', '秒'];
+  let arrn = [31536000, 2592000, 604800, 86400, 3600, 60, 1];
+  for (let i = 0; i < arrn.length; i++) {
+    let inm = Math.floor(mistiming / arrn[i]);
+    if (inm != 0) {
+      return inm + arrr[i] + '前';
     }
-  }).filter(item => item);
+  }
+}
 
-  return data;
+/**
+ * 粘贴清空html 节点 只保留内容
+ * @param event
+ */
+export const pasteClearNode = (event) => {
+  event.preventDefault();
+  let text;
+  const clp = (event.originalEvent || event).clipboardData;
+  // 兼容针对于opera ie等浏览器
+  if (!clp) {
+    text = window.clipboardData.getData("text") || "";
+    if (text) {
+      if (window.getSelection) {
+        let newNode = document.createElement("span");
+        newNode.innerHTML = text;
+        window.getSelection().getRangeAt(0).insertNode(newNode);
+      } else {
+        document.selection.createRange().pasteHTML(text);
+      }
+    }
+  } else {
+    text = clp.getData('text/plain') || "";
+    if (text) document.execCommand('insertText', false, text);
+  }
 }

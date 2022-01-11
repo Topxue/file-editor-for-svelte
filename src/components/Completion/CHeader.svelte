@@ -1,14 +1,24 @@
-<header class="pg-mk-header-wrapper uk-flex uk-flex-between">
+<header class="initiate-header-wrapper uk-flex uk-flex-between">
   <div class="pg-mk-header-left-wrapper uk-flex">
     <div class="pg-header-return-back uk-margin-right">
-      <i class="uk-icon uk-text-primary" uk-icon="icon: chevron-left"></i>
-      <button class="uk-button uk-button-link uk-text-primary">返回</button>
+      <i class="fa fa-angle-left" aria-hidden="true"></i>
+      <button class="uk-button uk-button-link uk-text-primary" on:click={handleBack}>返回</button>
     </div>
   </div>
 
   <div class="pg-header-center-content">
     <span class="title uk-text-emphasis">补全文件内容</span>
-    <div class="description uk-text-muted">所有编辑将实时保存</div>
+    <div class="description uk-text-muted">所有编辑将实时保存
+      {#if isWrite}
+        <span>| <i class="fa fa-pencil" aria-hidden="true"></i> 输入中...</span>
+      {:else if realTime}
+        <span> |  {realTime}</span>
+        {#if timeAgo}
+          <span>{'(' + timeAgo + ')'}</span>
+        {/if}
+        <span>自动保存成功</span>
+      {/if}
+    </div>
   </div>
 
   <div class="pg-mk-header-right-wrapper">
@@ -23,11 +33,12 @@
       >发起
       </button>
       {#if isInitiate}
-        <div class="dropdown-container" uk-dropdown>
+        <div class="dropdown-container"
+             uk-dropdown="animation: uk-animation-slide-top-small; duration: 300;delay-hide:300;">
           <div class="dropdown-header uk-text-emphasis">尚有未填写完成的必填内容 需要全部填写完成后才可发起</div>
           <hr class="uk-divider-small">
           <div class="uk-text-emphasis">未填写的必填参数：（点击参数名称可定位）</div>
-          <div class="uk-text-muted">文件：测试</div>
+          <div class="uk-text-muted">文件：{params.data?.fileName || ''}</div>
           <div class="param-list">
             {#each requireData as item}
               <a
@@ -46,14 +57,33 @@
 </header>
 
 <script>
-  import {createEventDispatcher, getContext} from 'svelte';
+  import {createEventDispatcher, getContext, onDestroy} from 'svelte';
+
+  import {froalaStore} from '@/store/froala';
+  import {debounce, getCurrentTime, timeFormat} from '@/utils';
 
   // 事件派发
   const dispatch = createEventDispatcher();
   const params = getContext('optionsInfo');
 
   //  是否可以发起
-  let isInitiate = false;
+  let isInitiate = true;
+  let realTime = '';
+  let timeAgo = '';
+  let isWrite = false;
+
+  let editTime = null;
+
+  let timeId = null;
+
+  // 状态锁
+  let lock = false;
+
+  let froala = null;
+  froalaStore.subscribe(value => {
+    froala = value;
+  })
+
   // 参数
   export let parametersData = [];
   let requireData = [];
@@ -61,7 +91,7 @@
   $:if (parametersData?.length) {
     requireData = parametersData.filter(item => {
       if (item.isRequired) {
-        if (!item.defaultValue && item.paramType !== 'image') {
+        if (!item.defaultValue || !item.defaultValue.length && item.paramType !== 'image') {
           return item
         } else {
           if (!item?.imgUrl && item.paramType === 'image') return item;
@@ -70,58 +100,58 @@
     })
 
     isInitiate = requireData.length;
+
+    if (lock) {
+      isWrite = true;
+      handleRealTime();
+    }
+
+    lock = true;
+  }
+
+  const handleRealTime = debounce(() => {
+    isWrite = false;
+    editTime = Date.parse(new Date())
+    realTime = getCurrentTime();
+
+    handleGetTimeAgo();
+    handleRealSave();
+  }, 1000)
+
+  const handleGetTimeAgo = () => {
+    clearInterval(timeId);
+    timeId = setInterval(() => {
+      timeAgo = timeFormat(editTime);
+    }, 1000);
+  }
+
+  // 实时保存
+  const handleRealSave = () => {
+    const template = froala.html?.get().replace('is-active', '') || '';
+
+    params?.realSave && params?.realSave({
+      template,
+      parameters: parametersData
+    })
+  }
+
+  // 返回
+  const handleBack = () => {
+    params.back && params.back();
   }
 
   // 发起数据
   const handleInitiate = () => {
-    params.getInitiate && params.getInitiate([]);
+    const template = froala.html?.get().replace('is-active', '') || '';
+
+    params.getInitiate && params.getInitiate({
+      template,
+      parameters: parametersData
+    });
   }
 
+  onDestroy(() => {
+    clearInterval(timeId);
+  })
+
 </script>
-<style>
-    .dropdown-container {
-        width: 320px;
-        line-height: 20px;
-        padding: 10px;
-        box-sizing: border-box;
-        font-size: 13px;
-    }
-
-    .dropdown-header {
-        width: 170px;
-        font-weight: 600;
-        text-align: center;
-        margin: 0 auto;
-    }
-
-    .uk-divider-small::after {
-        width: 100%;
-    }
-
-    .param-list {
-        margin-top: 5px;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .param-list span {
-        color: #4c596e;
-        position: relative;
-        cursor: pointer;
-    }
-
-    .param-list span:hover {
-        color: #2489f2;
-    }
-
-    .param-list span .is-required {
-        padding-left: -8px;
-        content: "*";
-        color: #ed521f;
-        position: absolute;
-    }
-
-    .send-disabled {
-        cursor: not-allowed;
-    }
-</style>
