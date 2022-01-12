@@ -8,25 +8,25 @@ const mode = process.env.NODE_ENV || 'development';
 const prod = mode === 'production';
 
 const PATHS = {
-  src: path.join(__dirname, 'src')
+	src: path.join(__dirname, 'src')
 }
 
 module.exports = {
 	entry: {
 		'build/bundle': ['./src/main.js']
 	},
-//   optimization: {
-//       usedExports: true,
-// 	    minimize: true,
-// 	    minimizer: [new TerserPlugin({
-// 	    	test: /\.js(\?.*)?$/i,    //匹配参与压缩的文件
-// 	    	parallel: true,    //使用多进程并发运行
-// 	    	terserOptions: {    //Terser 压缩配置
-// 	    		output:{comments: false}
-// 	    	},
-// 	    	extractComments: true,    //将注释剥离到单独的文件中
-// 	    })],
-//   },
+	//   optimization: {
+	//       usedExports: true,
+	// 	    minimize: true,
+	// 	    minimizer: [new TerserPlugin({
+	// 	    	test: /\.js(\?.*)?$/i,    //匹配参与压缩的文件
+	// 	    	parallel: true,    //使用多进程并发运行
+	// 	    	terserOptions: {    //Terser 压缩配置
+	// 	    		output:{comments: false}
+	// 	    	},
+	// 	    	extractComments: true,    //将注释剥离到单独的文件中
+	// 	    })],
+	//   },
 	resolve: {
 		alias: {
 			svelte: path.dirname(require.resolve('svelte/package.json')),
@@ -41,7 +41,7 @@ module.exports = {
 		library: 'FileTemplateEditor',
 		libraryTarget: 'umd',
 		libraryExport: "default",
-    globalObject: "this",
+		globalObject: "this",
 	},
 	module: {
 		rules: [
@@ -77,7 +77,7 @@ module.exports = {
 						loader: 'css-loader',
 						options: {
 							sourceMap: !prod,
-							importLoaders:2
+							importLoaders: 2
 						}
 					},
 					{
@@ -100,16 +100,16 @@ module.exports = {
 					}
 				]
 			},
-			   {
-              test: /\.(png|jpe?g|gif|webp)(\?.*)?$/,
-              use: {
-                loader: 'url-loader',
-                options: {
-                  limit: 10000,
-                  name: 'img/[name].[ext]'
-                },
-              },
-            },
+			{
+				test: /\.(png|jpe?g|gif|webp)(\?.*)?$/,
+				use: {
+					loader: 'url-loader',
+					options: {
+						limit: 10000,
+						name: 'img/[name].[ext]'
+					},
+				},
+			},
 			{
 				// required to prevent errors from Svelte on Webpack 5+
 				test: /node_modules\/svelte\/.*\.mjs$/,
@@ -121,17 +121,17 @@ module.exports = {
 	},
 	mode,
 	plugins: [
-	 new MiniCssExtractPlugin({
-   			filename: 'build/file-template-editor.css'
-   }),
-   new Purgecss({
-      paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
-      variables: true,
-      fontFace: true,
-      keyframes: true,
-      rejected: true,
-      safelist: ['body','svg', /^\[data/,/^uk-open/,/^uk-notification/, /^fr-/, /^:root/]
-   })
+		new MiniCssExtractPlugin({
+			filename: 'build/file-template-editor.css'
+		}),
+		new Purgecss({
+			paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
+			variables: true,
+			fontFace: true,
+			keyframes: true,
+			rejected: true,
+			safelist: ['body', 'svg', /^\[data/, /^uk-open/, /^uk-notification/, /^fr-/, /^:root/]
+		})
 	],
 	devtool: prod ? false : 'source-map',
 	devServer: {

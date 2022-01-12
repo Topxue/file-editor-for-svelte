@@ -8,7 +8,7 @@
 const selects = (params) => {
   const {id, style, name, layout} = params;
 
-  return `&nbsp;<span
+  return `<span
     contenteditable="false"
     class="fr-deletable pg-param-text pg-param-common"
     type="text"

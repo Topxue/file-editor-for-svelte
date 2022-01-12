@@ -3,7 +3,7 @@ import './assets/style/global.scss';
 import {froalaStore, parametersStore} from "./store/froala";
 import App from './App.svelte';
 
-import testData from './config/test';
+// import testData from './config/test';
 
 class FileTemplateEditor {
   constructor(options) {
@@ -76,16 +76,16 @@ class FileTemplateEditor {
 }
 
 // 测试代码
-const data = testData.data;
+// const data = testData.data;
 const editor = new FileTemplateEditor({
   target: '#root',
   isOff: false,
   data: {
-    // template: '',
-    // parameters: [],
-    fileName: 'joker',
-    template: data.templateContent,
-    parameters: data.params
+    template: '',
+    parameters: [],
+    // fileName: 'joker',
+    // template: data.templateContent,
+    // parameters: data.params
   },
   // 返回
   back() {

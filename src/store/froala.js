@@ -1,4 +1,6 @@
 /** Created by xwp on 2021-12-13 **/
+import {deepClone} from '../utils/index';
+
 import {writable} from 'svelte/store';
 
 function createFroalaStore() {
@@ -33,12 +35,12 @@ function createParametersStore(defaultVal) {
     },
     // 添加参数数据
     addData: (item) => update(param => {
-      freezeData?.push(item);
+      const deepCloneItem = deepClone(item);
+      freezeData?.push(deepCloneItem);
 
       const parameters = [...param.data.parameters];
-
       const isExist = parameters.find(res => res.id === item.id);
-      if (!isExist) parameters.push(item);
+      if (!isExist) parameters.push(deepCloneItem);
 
       return {
         ...param,

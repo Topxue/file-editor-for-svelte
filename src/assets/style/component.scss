@@ -1,0 +1,136 @@
+/*date-picker-styled*/
+.date-picker-container {
+  width: 300px;
+  height: 300px;
+  color: #666;
+  background-color: #fff;
+  border: 1px solid #d2d2d2;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  box-sizing: border-box;
+  padding: 0;
+
+  .date-picker-header {
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e2e2e2;
+    box-sizing: border-box;
+    padding: 0 10px;
+
+    & > div:hover {
+      color: $base-color;
+      cursor: pointer;
+    }
+
+    .check-date-left, .check-date-right {
+      width: 35px;
+      text-align: center;
+      font-size: 23px;
+    }
+  }
+
+  .date-picker-table {
+    padding: 10px;
+
+    .active {
+      color: $base-color;
+    }
+
+    table {
+      width: 100%;
+      text-align: center;
+
+      tr {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2px;
+      }
+
+      th {
+        display: inline-block;
+        width: 35px;
+        height: 30px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      td {
+        display: inline-block;
+        width: 35px;
+        height: 30px;
+        line-height: 30px;
+        cursor: pointer;
+        box-sizing: border-box;
+        font-size: 12px;
+
+        &:hover {
+          color: $base-color;
+        }
+
+        transition-duration: .3s;
+      }
+
+      td {
+        &:hover {
+          background-color: #eee;
+        }
+      }
+    }
+
+    .more-date {
+      color: #c0c4cc;
+    }
+
+    .date-checker-year-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+
+      li {
+        width: 89px;
+        height: 36px;
+        line-height: 36px;
+        text-align: center;
+        margin-bottom: 10px;
+        user-select: none;
+        cursor: pointer;
+
+        &:not(.active):hover {
+          background-color: #eee;
+        }
+
+        transition-duration: .3s;
+      }
+
+      .active {
+        background-color: $base-color;
+        color: #FFFFFF;
+      }
+    }
+
+    .date-checker-mouth-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+
+      li {
+        width: 25%;
+        margin: 17px 0;
+        height: 36px;
+        line-height: 36px;
+        text-align: center;
+        cursor: pointer;
+
+        &:not(.active):hover {
+          background-color: #eee;
+        }
+      }
+
+      .active {
+        background-color: $base-color;
+        color: #FFFFFF;
+      }
+    }
+  }
+}

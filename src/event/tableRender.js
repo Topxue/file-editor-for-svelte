@@ -52,15 +52,17 @@ const generateColumnsKey = (data, col) => {
  * table 渲染
  * @returns {string}
  */
+let tableCount = 0;
 export const tableRender = (row, col) => {
+  tableCount++;
+
   const id = randomId();
-  const data = {...initData['table'], id};
+  const data = {...initData['table'], name: `table${tableCount}`, id};
 
   const resData = generateColumnsKey(data, col);
-
   parametersStore.addData(resData);
 
-  const template = `
+  const template = `&nbsp;
    <div class="fr-deletable pg-table-container" data-param-name="表格1" data-param-type="table" id="${id}">
       <table class="" style="width: 100%;">
         <thead data-pg-table="thead">
@@ -72,7 +74,7 @@ export const tableRender = (row, col) => {
             ${createTableRowCol(row, col)}
         </tbody>
       </table>
-   </div>
+   </div>&nbsp;
   `
 
   return {

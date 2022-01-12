@@ -1,62 +1,62 @@
 /** Created by xwp on 2021-12-31 **/
 export default {
-  "code": 10000,
-  "msg": "成功",
-  "status": true,
-  "traceCode": null,
-  "traceCodeList": null,
-  "data": {
-    "id": "61d6b5ac968dda6569926a58",
+  "code": 10000, "msg": "成功", "status": true, "traceCode": null, "traceCodeList": null, "data": {
+    "id": "61dd470c968d09f3afd868ed",
     "templateName": "测试-PG",
-    "fileId": "61d6b5ab25109e15bea91f90",
+    "fileId": "61dd470c25109e15bea923ad",
     "creator": "王冉",
     "creatorId": "20201208110142952121862",
     "companyId": "20210910094954138233718",
     "companyName": "测试-0910王冉测试公司",
-    "createDate": "2022-01-06 17:26:04",
+    "createDate": "2022-01-11 16:59:56",
     "available": 1,
     "templateType": "html",
-    "templateContent": '<p>&nbsp;<span class="fr-deletable pg-param-text pg-param-common" contenteditable="false" data-border-type="all" data-layout="horizontal" data-param-name="单选" data-param-type="radio" id="XwpTUoFQFQipLZeLsGqpEIXofEVxLtzc" type="text"><label><input type="radio" value="请输入选项名称" placeholder="请输入选项名称" onclick="return false;"><span class="pg-radio-label">请输入选项名称</span></label><label><input type="radio" value="请输入选项名称2" placeholder="请输入选项名称" onclick="return false;"><span class="pg-radio-label">请输入选项名称2</span></label><label><input type="radio" value="请输入选项名称3" placeholder="请输入选项名称" onclick="return false;"><span class="pg-radio-label">请输入选项名称3</span></label></span>&nbsp;&nbsp;<span class="fr-deletable pg-param-text pg-param-common " contenteditable="false" data-border-type="all" data-layout="vertical" data-param-name="多选" data-param-type="checkbox" id="YDTqBJypBdFDgbbIbinhSDTSmHmFYVSD" type="text"><label><input type="checkbox" value="多选1" placeholder="请输入选项名称" onclick="return false;"><span class="pg-radio-label">多选1</span></label><label><input type="checkbox" value="多选2" placeholder="请输入选项名称" onclick="return false;"><span class="pg-radio-label">多选2</span></label><label><input type="checkbox" value="多选3" placeholder="请输入选项名称" onclick="return false;"><span class="pg-radio-label">多选3</span></label></span>&nbsp;</p>',
+    "templateContent": `<p>&nbsp;<span class="fr-deletable id-card-wrapper" contenteditable="false" data-param-name="参数1" data-param-type="idcard" id="BwEwSmqAQdOPBGQMKtFYSJZcoKjZrpvk"><span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span><span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span><span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span><span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span><span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span><span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span><span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span><span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span><span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span><span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span><span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span><span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span><span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span><span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span><span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span><span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span><span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span><span class="pg-param-card-item" data-shadow-value="" name="person" contenteditable="false"></span></span>&nbsp;</p><p>&nbsp;<span contenteditable="false" class="fr-deletable pg-param-text pg-param-common" type="text" id="OiHPbqILxAXcIIfZfaKVrIBXFESQcvDI" data-shadow-value="" data-param-type="text" data-param-name="参数1" data-maxlength="1000" data-border-type="bottom"></span>&nbsp;</p><p><br></p><p><img class="pg-image-parameter " src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAAE7CAYAAAArYeaHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAhdEVYdENyZWF0aW9uIFRpbWUAMjAxOToxMDoyOSAxNDo0MzoyOUay+ycAAAODSURBVHhe7dOhAcAwDMCwrP//u7CV7AcTifgCP+/uN0Dm/AUiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoSYCSFmQoiZEGImhJgJIWZCiJkQYiaEmAkhZkKImRBiJoTUzAXE2AZcEksseQAAAABJRU5ErkJggg==" data-param-type="image" data-param-name="参数2" style="width: 411px; height: 572.035px; padding: 1px;" id="OJbSiMcfqoJFkRimZypgJpUrQedNYFaY" alt="">&nbsp;</p>`,
     "params": [{
-      "layout": "horizontal",
-      "paramType": "radio",
+      "paramType": "idcard",
       "isRequired": true,
       "columnKeys": [],
       "fontConfig": {
         "fontFamily": "none",
+        "size": ["fixed", {"width": 148, "height": 17}],
         "color": null,
         "fontSize": "none",
         "fontWeight": "inherit",
         "justifyContent": "flex-start"
       },
       "defaultValue": "",
-      "name": "单选",
-      "options": ["请输入选项名称", "请输入选项名称2", "请输入选项名称3"],
+      "name": "参数1",
+      "options": [],
       "description": "",
-      "style": "all",
-      "id": "XwpTUoFQFQipLZeLsGqpEIXofEVxLtzc",
+      "style": "bottom",
+      "id": "BwEwSmqAQdOPBGQMKtFYSJZcoKjZrpvk",
       "maxLength": 1000
     }, {
-      "layout": "vertical",
-      "paramType": "checkbox",
+      "paramType": "text",
       "isRequired": true,
       "columnKeys": [],
       "fontConfig": {
         "fontFamily": "none",
+        "size": ["fixed", {"width": 148, "height": 17}],
         "color": null,
         "fontSize": "none",
         "fontWeight": "inherit",
         "justifyContent": "flex-start"
       },
       "defaultValue": "",
-      "name": "多选",
-      "options": ["多选1", "多选2", "多选3"],
-      "description": "",
-      "style": "all",
-      "id": "YDTqBJypBdFDgbbIbinhSDTSmHmFYVSD",
+      "name": "参数1",
+      "options": [],
+      "description": "这是文本",
+      "style": "bottom",
+      "id": "OiHPbqILxAXcIIfZfaKVrIBXFESQcvDI",
       "maxLength": 1000
+    }, {
+      "imgUrl": "",
+      "paramType": "image",
+      "isRequired": true,
+      "name": "参数2",
+      "description": "这是图片",
+      "id": "OJbSiMcfqoJFkRimZypgJpUrQedNYFaY"
     }]
-  },
-  "token": null,
-  "refreshToken": null
+  }, "token": null, "refreshToken": null
 }

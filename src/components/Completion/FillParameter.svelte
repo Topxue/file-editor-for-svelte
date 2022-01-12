@@ -44,6 +44,35 @@
           </div>
         </a>
       {/if}
+      <!--日期-->
+      <!--{#if param.paramType === 'date'}-->
+      <!--  <a class="uk-margin uk-scroll-a" uk-scroll href="#{param.id}" on:click={() => handleClickFillIn(param)}>-->
+      <!--    <label-->
+      <!--      class="uk-form-label"-->
+      <!--      class:is-required={param.isRequired}-->
+      <!--      class:is-active={param.id === paramId}-->
+      <!--      for="">{param.name}</label>-->
+      <!--    {#if param.description}-->
+      <!--      <div class="completion-content uk-text-muted">-->
+      <!--        <i class="fa fa fa-exclamation-circle"-->
+      <!--           uk-tooltip="title: 填写说明; delay: 500"></i>-->
+      <!--        {param.description}-->
+      <!--      </div>-->
+      <!--    {/if}-->
+      <!--    <div class="uk-form-controls uk-inline uk-width-1-1">-->
+      <!--      <i class="uk-form-icon {ICON_ENUM[param.paramType]}"></i>-->
+      <!--      <input-->
+      <!--        class="uk-input uk-form-small uk-text-emphasis"-->
+      <!--        type="text"-->
+      <!--        name="{param.paramType}"-->
+      <!--        bind:value="{param.defaultValue}"-->
+      <!--        maxlength={param.maxLength}-->
+      <!--        placeholder="请选择"-->
+      <!--        readonly-->
+      <!--      >-->
+      <!--    </div>-->
+      <!--  </a>-->
+      <!--{/if}-->
 
       <!-- 表格-->
       {#if param.paramType === 'table'}

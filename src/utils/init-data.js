@@ -29,7 +29,7 @@ export default {
     style: 'all',
     layout: 'dropdown',
     defaultValue: '',
-    options: ['请输入选项名称'],
+    options: ['选项1'],
     description: '',
     fontConfig: {
       fontFamily: 'none',
@@ -48,7 +48,7 @@ export default {
     style: 'all',
     layout: 'dropdown',
     defaultValue: '',
-    options: ['请输入选项名称'],
+    options: ['选项1'],
     description: '',
     fontConfig: {
       fontFamily: 'none',

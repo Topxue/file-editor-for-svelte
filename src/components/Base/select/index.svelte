@@ -1,17 +1,19 @@
-<div class="pg-custom-select-container" style="top:{style.top}; left:{style.left}; width:{style.width}">
-  <ul class="pg-select-container" class:visible>
-    {#each data as item}
-      {#if multiple}
-        <li
-          class="option-item"
-          class:is-active={value.includes(item)}
-          on:click={() => handleCheckClick(item)}>{item}</li>
-      {:else }
-        <li class:is-active={item == value[0]} class="option-item" on:click={() => handleCheckClick(item)}>{item}</li>
-      {/if}
-    {/each}
-  </ul>
-</div>
+{#if visible}
+  <div class="pg-custom-select-container" style="top:{style.top}; left:{style.left}; width:{style.width}">
+    <ul class="pg-select-container" class:visible>
+      {#each data as item}
+        {#if multiple}
+          <li
+            class="option-item"
+            class:is-active={value.includes(item)}
+            on:click={() => handleCheckClick(item)}>{item}</li>
+        {:else }
+          <li class:is-active={item == value[0]} class="option-item" on:click={() => handleCheckClick(item)}>{item}</li>
+        {/if}
+      {/each}
+    </ul>
+  </div>
+{/if}
 
 <script>
   import {createEventDispatcher} from 'svelte';

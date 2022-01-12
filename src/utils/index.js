@@ -147,11 +147,8 @@ export const getFroalaContentParams = (froala) => {
 export const debounce = (func, wait = 1000) => {
   let timer;
   return function () {
-    const context = this; // 注意 this 指向
-    const args = arguments; // arguments中存着event
-
+    const args = arguments;
     if (timer) clearTimeout(timer);
-
     timer = setTimeout(function () {
       func.apply(this, args)
     }, wait)
@@ -199,4 +196,58 @@ export const pasteClearNode = (event) => {
     text = clp.getData('text/plain') || "";
     if (text) document.execCommand('insertText', false, text);
   }
+}
+
+/**
+ * 阻止参数内回车事件
+ */
+export const handlePreventEnter = (event) => {
+  const target = event.target;
+  const paramType = target.closest('[data-param-type]');
+
+  if (paramType) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      return UIkit?.notification({
+        message: '参数内不允许换行',
+        status: 'danger',
+        timeout: 1500,
+      })
+    }
+  }
+}
+
+/**
+ * @desc 深拷贝，支持常见类型
+ * @param {Any} values
+ * @return {Any}
+ */
+export const deepClone = (values) => {
+  let copy;
+
+  if (null == values || "object" != typeof values) return values;
+
+  if (values instanceof Date) {
+    copy = new Date();
+    copy.setTime(values.getTime());
+    return copy;
+  }
+
+  if (values instanceof Array) {
+    copy = [];
+    for (let i = 0, len = values.length; i < len; i++) {
+      copy[i] = deepClone(values[i]);
+    }
+    return copy;
+  }
+
+  if (values instanceof Object) {
+    copy = {};
+    for (let attr in values) {
+      if (values.hasOwnProperty(attr)) copy[attr] = deepClone(values[attr]);
+    }
+    return copy;
+  }
+
+  throw new Error("Unable to copy values! Its type isn't supported.");
 }

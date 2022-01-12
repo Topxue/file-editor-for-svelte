@@ -1,6 +1,6 @@
 {
   "name": "pg-file-template-editor",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "private": false,
   "author": "PG",
   "main": "public/build/file-template-editor.js",
@@ -16,6 +16,7 @@
   ],
   "devDependencies": {
     "@babel/core": "^7.16.5",
+    "@babel/plugin-proposal-optional-chaining": "^7.16.7",
     "@babel/plugin-transform-runtime": "^7.16.5",
     "@babel/preset-env": "^7.16.5",
     "autoprefixer": "^10.4.0",
@@ -46,10 +47,15 @@
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
     "build:dev": "cross-env NODE_ENV=development webpack --config webpack.config.js",
     "dev": "webpack serve --content-base public",
-    "postinstall":"patch-package"
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "froala-editor": "^4.0.8",
     "uikit": "^3.9.4"
-  }
+  },
+  "browserslist": [
+    "last 1 version",
+    "> 1%",
+    "IE 10"
+  ]
 }

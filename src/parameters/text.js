@@ -3,7 +3,7 @@
 export const text = (data) => {
   const {id, defaultValue, style, name, maxLength} = data;
 
-  return `&nbsp;<span
+  return `<span
     contenteditable="false"
     class="fr-deletable pg-param-text pg-param-common"
     type="text"

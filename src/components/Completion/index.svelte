@@ -34,7 +34,7 @@
   import FillParameter from './FillParameter.svelte';
   import ImagePopup from '@/components/Base/image-popup';
 
-  import {pasteClearNode} from "@/utils";
+  import {pasteClearNode, handlePreventEnter} from "@/utils";
   import {froalaStore} from "@/store/froala";
   import {fillingConfig, PG_EDITOR_CONTAINER} from '@/config/froala';
   import {currentActiveParameter} from '@/event/viewEvent';
@@ -92,6 +92,8 @@
       event.preventDefault();
     });
     document.body.addEventListener('click', handlerBodyClick);
+    // 阻止参数内回车事件
+    froalaContainer.addEventListener('keydown', handlePreventEnter);
   }
 
   // 控制编辑器是否可编辑器
@@ -113,6 +115,19 @@
   // 文本参数编辑事件
   const parameterChangeEvent = (event) => {
     const target = event.target;
+    const maxLength = target.getAttribute('data-maxlength');
+
+    if (target.innerHTML.length > maxLength) {
+      event.preventDefault();
+
+      const value = target.innerHTML.substring(0, maxLength);
+      target.innerHTML = value;
+      updateParameterData(value);
+
+      target.blur();
+      return;
+    }
+
     updateParameterData(target.innerHTML);
   }
 
@@ -173,7 +188,7 @@
       const paramType = node.getAttribute('data-param-type');
       if (paramType === 'text') {
         node.setAttribute('contenteditable', true);
-        node.addEventListener('input', parameterChangeEvent)
+        node.addEventListener('keyup', parameterChangeEvent)
       }
 
       if (paramType === 'idcard') {

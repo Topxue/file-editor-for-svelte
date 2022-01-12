@@ -95,6 +95,7 @@
             class="uk-input uk-form-small uk-text-emphasis"
             type="text"
             name="name"
+            maxlength="30"
             placeholder="请输入参数名称"
             bind:value={data.name}
             on:input={() => handleEditInputEvent('name')}
@@ -118,7 +119,6 @@
             >
           </div>
         </div>
-
       {/if}
 
 
@@ -150,24 +150,43 @@
         </div>
       {/if}
 
+      <!--日期默认值-->
+      {#if dateDefault}
+        <div class="uk-margin-small-top">
+          <label class="uk-form-label" for="">默认值</label>
+          <div class="uk-form-controls uk-margin-small-top">
+            <input
+              id="date-select"
+              class="uk-input uk-form-small uk-text-emphasis"
+              type="text"
+              name="defaultValue"
+              placeholder="请选择"
+              readonly
+              bind:value={data.defaultValue}
+            >
+          </div>
+        </div>
+      {/if}
+
+
       <!--日期格式-->
-      <!--{#if isDateFormat}-->
-      <!--  <div class="uk-margin-small-top">-->
-      <!--    <label class="uk-form-label" for="">日期格式</label>-->
-      <!--    <div class="uk-form-controls uk-margin-small-top">-->
-      <!--      <select-->
-      <!--        class="uk-select uk-form-small uk-text-emphasis"-->
-      <!--        name="format"-->
-      <!--        bind:value={data.format}-->
-      <!--        on:change={handleChangeDateFormat}-->
-      <!--      >-->
-      <!--        {#each DATE_FORMAT_OPTIONS as date}-->
-      <!--          <option value={date.value}>{date.label}</option>-->
-      <!--        {/each}-->
-      <!--      </select>-->
-      <!--    </div>-->
-      <!--  </div>-->
-      <!--{/if}-->
+      {#if dateDefault}
+        <div class="uk-margin-small-top">
+          <label class="uk-form-label" for="">日期格式</label>
+          <div class="uk-form-controls uk-margin-small-top">
+            <select
+              class="uk-select uk-form-small uk-text-emphasis"
+              name="format"
+              bind:value={data.format}
+              on:change={handleChangeDateFormat}
+            >
+              {#each DATE_FORMAT_OPTIONS as date}
+                <option value={date.value}>{date.label}</option>
+              {/each}
+            </select>
+          </div>
+        </div>
+      {/if}
 
       <!--布局-->
       {#if optionSet}
@@ -408,6 +427,7 @@
             class="uk-textarea uk-text-emphasis"
             name="description"
             placeholder="对该参数的其他说明(限100字)"
+            maxlength="100"
             bind:value={data.description}
             on:input={() => handleEditInputEvent('description')}
           />
@@ -466,6 +486,13 @@
         {/each}
       {/if}
     </div>
+
+    <DatePicker
+      target="#date-select"
+      format={dateFormat}
+      value={data.defaultValue}
+      on:done={handleDateDone}
+    />
   </Accordion>
 
   <Dialog
@@ -475,6 +502,7 @@
     id="maxLength"
     on:click={handleReplaceDefaultVal}
   />
+
 </div>
 
 <script>
@@ -496,10 +524,11 @@
     CONTROL_OPTIONS,
     FONT_SIZE_OPTIONS,
     FONT_WEIGHT_OPTIONS,
-    // DATE_FORMAT_OPTIONS,
+    DATE_FORMAT_OPTIONS,
   } from '@/config/parameter';
 
   import Dialog from '@/components/Base/dialog';
+  import DatePicker from '@/components/Base/date-picker';
   import Accordion from '@/components/Base/Accordion/index.svelte';
 
   // 事件派发
@@ -544,6 +573,8 @@
   $:idCardDefault = paramType === 'idcard';
   // table默认值
   $: tableDefault = paramType === 'table';
+  // 日期默认值
+  $:dateDefault = paramType === 'date';
 
   // 参数数据
   let data = {};
@@ -551,6 +582,8 @@
   let fontConfig = {};
   // 控件大小
   let size = {};
+  // 日期格式
+  let dateFormat = 'yyyy-MM-dd';
 
   // 控件大小-显示状态
   let sizeChecked = 'fixed';
@@ -570,6 +603,8 @@
     parametersStore.subscribe(params => {
       const res = params.data.parameters.find(item => item.id === paramId);
 
+      // console.log(params.data.parameters, paramId, res, 'params...')
+
       data = res || {};
       paramType = res?.paramType;
 
@@ -579,14 +614,13 @@
         if (res?.fontConfig?.size) {
           size = res?.fontConfig?.size[1];
           sizeChecked = res?.fontConfig?.size[0];
-          fontSize = isNaN(Number(res?.fontConfig?.fontSize)) ? 'none' : Number(res?.fontConfig?.fontSize);
         }
 
+        fontSize = isNaN(Number(res?.fontConfig?.fontSize)) ? 'none' : Number(res?.fontConfig?.fontSize);
         fontColor = res?.fontConfig?.color ? colorHex(res?.fontConfig?.color) : '';
       }
     })
   }
-
 
   // 更新参数样式
   const updateParameterStyle = (styleName, value) => {
@@ -629,6 +663,57 @@
       node.innerHTML = values[index] || ''
       node.setAttribute('data-shadow-value', values[index] || '');
     })
+  }
+
+  // 日期默认值选择
+  const handleDateDone = (event) => {
+    const dateVal = event.detail;
+    data.defaultValue = dateVal;
+
+    currentParameter.innerHTML = dateVal;
+    updateParameterAttr('data-shadow-value', dateVal);
+  }
+
+  // 切换日期格式
+  const handleChangeDateFormat = () => {
+    dateFormat = data.format;
+
+    const defaultVal = data.defaultValue;
+    const Reg_hor = /(.+?)\-(.+?)\-(.+)/, Reg_slash = /(.+?)\/(.+?)\/(.+)/, Reg_c = /[\u4e00-\u9fa5]/g;
+
+    const format = {
+      'yyyy年MM月dd日': () => {
+        if (Reg_hor.test(defaultVal)) {
+          data.defaultValue = defaultVal.replace(Reg_hor, "$1年$2月$3日");
+        }
+        if (Reg_slash.test(defaultVal)) {
+          data.defaultValue = defaultVal.replace(Reg_slash, "$1年$2月$3日");
+        }
+      },
+      'yyyy-MM-dd': () => {
+        if (Reg_c.test(defaultVal)) {
+          data.defaultValue = defaultVal.replace(Reg_c, (reg) => reg === '日' ? '' : '-');
+        }
+
+        if (Reg_slash.test(defaultVal)) {
+          data.defaultValue = defaultVal.replace(Reg_slash, '$1-$2-$3');
+        }
+      },
+      'yyyy/MM/dd': () => {
+        if (Reg_hor.test(defaultVal)) {
+          data.defaultValue = defaultVal.replace(Reg_hor, "$1/$2/$3");
+        }
+
+        if (Reg_c.test(defaultVal)) {
+          data.defaultValue = defaultVal.replace(Reg_c, (reg) => reg === '日' ? '' : '/');
+        }
+      }
+    }
+
+    format[dateFormat] && format[dateFormat]();
+
+    currentParameter.innerHTML = data.defaultValue;
+    updateParameterAttr('data-shadow-value', data.defaultValue);
   }
 
   // 选择切换布局
@@ -710,7 +795,7 @@
 
   // 添加选项设置
   const handleAddOptionItem = () => {
-    data.options = [...data.options, `请输入选项名称${data.options.length + 1}`];
+    data.options = [...data.options, `选项${data.options.length + 1}`];
 
     changeLayout();
   }
@@ -831,6 +916,7 @@
 
     const id = randomId();
     const res = {...initData[paramType], name: `参数${paramCount}`, id};
+
     parametersStore.addData(res);
     froala.html.insert(parameters[paramType](res));
 
