@@ -23,8 +23,7 @@
 
   $: {
     if (target) {
-      console.log(target.getBoundingClientRect())
-      const {top, left, width, height} = target.getBoundingClientRect();
+      const {top, left, height} = target.getBoundingClientRect();
 
       style = {
         left: left + 'px',

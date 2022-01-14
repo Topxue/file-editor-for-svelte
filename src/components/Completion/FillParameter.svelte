@@ -27,7 +27,7 @@
             <div class="completion-content uk-text-muted">
               <i class="fa fa fa-exclamation-circle"
                  uk-tooltip="title: 填写说明; delay: 500"></i>
-              {param.description}
+              <span>{param.description}</span>
             </div>
           {/if}
           <div class="uk-form-controls uk-inline uk-width-1-1">
@@ -56,7 +56,7 @@
       <!--      <div class="completion-content uk-text-muted">-->
       <!--        <i class="fa fa fa-exclamation-circle"-->
       <!--           uk-tooltip="title: 填写说明; delay: 500"></i>-->
-      <!--        {param.description}-->
+      <!--        <span>{param.description}</span>-->
       <!--      </div>-->
       <!--    {/if}-->
       <!--    <div class="uk-form-controls uk-inline uk-width-1-1">-->
@@ -89,7 +89,7 @@
             <div class="completion-content uk-text-muted">
               <i class="fa fa fa-exclamation-circle"
                  uk-tooltip="title: 填写说明; delay: 500"></i>
-              {param.description}
+              <span>{param.description}</span>
             </div>
           {/if}
           <div class="uk-form-controls uk-inline uk-width-1-1">
@@ -108,9 +108,10 @@
             for="">{param.name}</label>
           {#if param.description}
             <div class="completion-content uk-text-muted">
-              <i class="fa fa fa-exclamation-circle"
-                 uk-tooltip="title: 填写说明; delay: 500"></i>
-              {param.description}
+              <i class="fa fa-exclamation-circle"
+                 uk-tooltip="title: 填写说明; delay: 500">
+              </i>
+              <span>{param.description}</span>
             </div>
           {/if}
           <div class="uk-form-controls upload-wrapper uk-inline uk-width-1-1">
@@ -161,7 +162,7 @@
             <div class="completion-content uk-text-muted">
               <i class="fa fa fa-exclamation-circle"
                  uk-tooltip="title: 填写说明; delay: 500"></i>
-              {param.description}
+              <span>{param.description}</span>
             </div>
           {/if}
           <div class="uk-form-controls uk-inline uk-width-1-1" class:margin-btm={param.layout !== 'dropdown'}>
@@ -207,7 +208,7 @@
             <div class="completion-content uk-text-muted">
               <i class="fa fa fa-exclamation-circle"
                  uk-tooltip="title: 填写说明; delay: 500"></i>
-              {param.description}
+              <span>{param.description}</span>
             </div>
           {/if}
           <div class="uk-form-controls uk-inline uk-width-1-1" class:margin-btm={param.layout !== 'dropdown'}>
@@ -250,7 +251,7 @@
             <div class="completion-content uk-text-muted">
               <i class="fa fa fa-exclamation-circle"
                  uk-tooltip="title: 填写说明; delay: 500"></i>
-              {param.description}
+              <span>{param.description}</span>
             </div>
           {/if}
           <div class="uk-form-controls uk-inline uk-width-1-1">

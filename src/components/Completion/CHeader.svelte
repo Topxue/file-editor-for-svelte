@@ -109,6 +109,8 @@
     }
 
     lock = true;
+  } else {
+    isInitiate = false;
   }
 
   const handleRealTime = debounce(() => {

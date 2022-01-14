@@ -6,9 +6,19 @@
           <li
             class="option-item"
             class:is-active={value.includes(item)}
-            on:click={() => handleCheckClick(item)}>{item}</li>
+            on:click={() => handleCheckClick(item)}>
+            <span>{item}</span>
+            {#if value.includes(item)}
+              <i class="fa fa-check is-active" aria-hidden="true"></i>
+            {/if}
+          </li>
         {:else }
-          <li class:is-active={item == value[0]} class="option-item" on:click={() => handleCheckClick(item)}>{item}</li>
+          <li class:is-active={item == value[0]} class="option-item" on:click={() => handleCheckClick(item)}>
+            <span>{item}</span>
+            {#if item == value[0]}
+              <i class="fa fa-check is-active" aria-hidden="true"></i>
+            {/if}
+          </li>
         {/if}
       {/each}
     </ul>

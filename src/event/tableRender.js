@@ -52,12 +52,9 @@ const generateColumnsKey = (data, col) => {
  * table 渲染
  * @returns {string}
  */
-let tableCount = 0;
-export const tableRender = (row, col) => {
-  tableCount++;
-
+export const tableRender = (row, col, name) => {
   const id = randomId();
-  const data = {...initData['table'], name: `table${tableCount}`, id};
+  const data = {...initData['table'], name, id};
 
   const resData = generateColumnsKey(data, col);
   parametersStore.addData(resData);

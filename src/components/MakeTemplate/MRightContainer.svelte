@@ -38,6 +38,7 @@
                         <input
                           class="uk-input uk-form-small"
                           type="text"
+                          maxlength="2"
                           bind:value={tableRow}
                           placeholder="请输入行数">
                       </div>
@@ -48,15 +49,18 @@
                         <input
                           class="uk-input uk-form-small"
                           type="text"
+                          maxlength="2"
                           bind:value={tableCol}
                           placeholder="请输入列数">
                       </div>
                     </div>
                   </form>
-                  <p class="uk-text-right uk-margin-small-top">
+                  <p class="uk-text-right uk-margin">
                     <button class="uk-button uk-button-default uk-button-small uk-modal-close" type="button">取消</button>
-                    <button class="uk-button uk-button-primary uk-button-small uk-modal-close" type="button"
-                            on:click={handleCustomTableRowCol}>确定
+                    <button
+                      class="uk-button uk-button-primary uk-button-small uk-modal-close"
+                      type="button"
+                      on:click={handleCustomTableRowCol}>确定
                     </button>
                   </p>
                 </div>
@@ -222,7 +226,8 @@
                   bind:group={data.style}
                   on:change={() => handleEditChangeEvent('style')}
                 >
-                <span class:bottom={item.value === 'bottom'} class:borderAll={item.value === 'all'}>{item.label}</span>
+                <span class:bottom={item.value === 'bottom'}
+                      class:borderAll={item.value === 'all'}>{item.label}</span>
               </label>
             {/each}
           </div>
@@ -256,7 +261,8 @@
                     min="148"
                     bind:value={size.width}
                     name="width"
-                    type="number"
+                    type="text"
+                    maxlength="3"
                     placeholder="请输入"
                     on:input={() => handleEditInputEvent('width')}
                   >
@@ -270,7 +276,8 @@
                     min="17"
                     bind:value={size.height}
                     name="height"
-                    type="number"
+                    type="text"
+                    maxlength="3"
                     placeholder="请输入"
                     on:input={() => handleEditInputEvent('height')}
                   >
@@ -468,23 +475,23 @@
         </div>
       {/if}
 
-      <!--表头Key设置-->
-      {#if tableDefault && data.columnKeys}
-        {#each data.columnKeys as column, index}
-          <div class="uk-margin-small-top">
-            <label class="uk-form-label" for="">第{index + 1}列Key：</label>
-            <div class="uk-form-controls uk-margin-small-top">
-              <input
-                class="uk-input uk-form-small uk-text-emphasis"
-                type="text"
-                name="columnKeys"
-                bind:value={column}
-                on:input={handleUpdateColumnKey.bind(null, index)}
-                placeholder="请输入">
-            </div>
-          </div>
-        {/each}
-      {/if}
+      <!--表头Key设置 暂时注释key的显示-->
+      <!--{#if tableDefault && data.columnKeys}-->
+      <!--  {#each data.columnKeys as column, index}-->
+      <!--    <div class="uk-margin-small-top">-->
+      <!--      <label class="uk-form-label" for="">第{index + 1}列Key：</label>-->
+      <!--      <div class="uk-form-controls uk-margin-small-top">-->
+      <!--        <input-->
+      <!--          class="uk-input uk-form-small uk-text-emphasis"-->
+      <!--          type="text"-->
+      <!--          name="columnKeys"-->
+      <!--          bind:value={column}-->
+      <!--          on:input={handleUpdateColumnKey.bind(null, index)}-->
+      <!--          placeholder="请输入">-->
+      <!--      </div>-->
+      <!--    </div>-->
+      <!--  {/each}-->
+      <!--{/if}-->
     </div>
 
     <DatePicker
@@ -510,6 +517,7 @@
 
   import initData from "@/utils/init-data";
   import {froalaStore, parametersStore} from "@/store/froala";
+  // import {controlSizeWidthValid} from '@/utils/validation';
   import {colorHex, debounce, randomId, insertParameterVerify} from '@/utils';
 
   import * as parameters from '@/parameters';
@@ -544,12 +552,16 @@
   export let paramId = null;
   // 记录参数名称count值
   let paramCount = 0;
+  // 记录table参数名称值
+  let tableCount = 0;
 
   $:isVisible = !!paramId;
   // 当前参数
   $:currentParameter = document.querySelector("[data-param-type][id=" + paramId + "]");
   // 参数类型
   let paramType = '';
+  // store parameters
+  $:parametersData = $parametersStore.data.parameters;
 
   /**
    * 参数编辑显示状态
@@ -601,9 +613,14 @@
 
   $: if (paramId) {
     parametersStore.subscribe(params => {
+      const parametersData = params.data.parameters;
       const res = params.data.parameters.find(item => item.id === paramId);
 
-      // console.log(params.data.parameters, paramId, res, 'params...')
+      // 重置参数记录值
+      if (!parametersData.length) {
+        tableCount = 0;
+        paramCount = 0;
+      }
 
       data = res || {};
       paramType = res?.paramType;
@@ -647,7 +664,7 @@
 
     // 控件大小-自定义
     if (['width', 'height'].includes(attrName)) {
-      currentParameter.style.minwidth = size.width + 'px';
+      currentParameter.style.minWidth = size.width + 'px';
       currentParameter.style.minHeight = size.height + 'px';
     }
   }
@@ -765,7 +782,8 @@
       })
     }
 
-    const {template, id} = tableRender(tableRow, tableCol);
+    tableCount++;
+    const {template, id} = tableRender(tableRow, tableCol, `table${tableCount}`);
 
     froala.html.insert(template);
     dispatch('add', id);
@@ -773,7 +791,8 @@
 
   // 自定义行列
   const handleCustomTableRowCol = async () => {
-    const {template, id} = await tableRender(tableRow, tableCol);
+    tableCount++;
+    const {template, id} = await tableRender(tableRow, tableCol, `table${tableCount}`);
 
     froala.html.insert(template);
     dispatch('add', id);
@@ -912,6 +931,10 @@
       })
     }
 
+    if (!$parametersStore.data.parameters.length) {
+      paramCount = 0;
+    }
+
     paramCount++;
 
     const id = randomId();
@@ -929,7 +952,8 @@
     const froalaContainer = froala.$el[0];
     const parameter = froalaContainer.querySelector(`[data-param-type][id=${id}]`);
 
-    parameter.click();
+    dispatch('autoActive', parameter);
+    // parameter.click();
   }
 
 

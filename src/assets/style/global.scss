@@ -139,8 +139,12 @@ body, html {
     border-radius: 0 !important;
   }
 
-  .initiate-container {
-    //margin-top: 66px;
+  //.initiate-container {
+  //  //margin-top: 66px;
+  //}
+
+  input:invalid {
+    border-color: #f56c6c;
   }
 }
 
@@ -507,7 +511,7 @@ body, html {
 
 .fill-in-container {
   user-select: none;
-  width: 320px;
+  min-width: 320px;
   max-width: 320px;
   //height: 100vh;
   position: relative;
@@ -703,18 +707,6 @@ body, html {
 .pg-custom-select-container {
   position: fixed;
   z-index: 999;
-
-  //&:after {
-  //  content: '';
-  //  border-width: 9px;
-  //  border-style: solid;
-  //  border-color: transparent transparent #fff transparent;
-  //  width: 0;
-  //  height: 0;
-  //  position: absolute;
-  //  top: -17px;
-  //  left: 60px;
-  //}
 }
 
 .pg-select-container {
@@ -735,6 +727,9 @@ body, html {
     cursor: pointer;
     user-select: none;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .is-active {
@@ -742,11 +737,11 @@ body, html {
   }
 }
 
-.option-item.is-active::after {
-  content: "✔";
-  position: absolute;
-  right: 10px;
-}
+//.option-item.is-active::after {
+//  content: "✔";
+//  position: absolute;
+//  right: 10px;
+//}
 
 .pg-select-container li:hover {
   background-color: #f5f7fa;
@@ -765,12 +760,26 @@ body, html {
 
 .completion-content {
   padding-bottom: 5px;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+  //display: flex;
+  //align-items: center;
+  //flex-wrap: wrap;
 
   i {
     font-size: 15px;
     padding-right: 3px;
   }
 }
+
+.parameter-instruction::before {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAK5JREFUOE9jZKAQMFKon4E2Bryfr+HAyMSYJRB/PYyQC3G64P18jQYGJgZjwfgbvvgMwesFkCGMTAzeAvE3THEZQjAMoIYkC8TfkMVmCEEDQJqghlQLxN9gRTeEKAM+LlRf8f8/40WBhBvtJBvwYYH6SkYGhqP8CTcnkeyFDws1V/7/9/+6YOKNBpIDkRjNIEOxhgEoITEwMDjgsxnmIqICkeyERCgZ4/QCMRphagCT8jQRJ834nwAAAABJRU5ErkJggg==');
+}
+
+.uk-open > .parameter-instruction::before {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAI5JREFUOE9jZKAQMFKon2G4GfBhocZ/gfgbeL31YaHGmf//GEoEE28cAIUfiuL3C9XzGRkYJ+AyBKSZkYFhM3/8jUZY4GPYhssQbJoxXAAzFd0QkGYGRoazAnE30tGjHad/PyzQKGFgZOhmYGA4i0szThfAbPm4SLPmP8N/WWw24wwDUlPmcEuJpPofpB4AWV8yETIez84AAAAASUVORK5CYII=");
+}
+
+.svelte-use-form-hint.svelte-1lthqr2 {
+  color: #f56c6c !important;
+  font-size: 12px !important;
+}
+
