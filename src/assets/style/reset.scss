@@ -19,6 +19,10 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
+table, caption, tbody, tfoot, thead, tr, th, td {
+  word-break: break-all;
+}
+
 h3 {
   font-size: 18px;
   font-weight: bold;

@@ -40,6 +40,7 @@
                           type="text"
                           maxlength="2"
                           bind:value={tableRow}
+                          on:input={handleChangeTableRow}
                           placeholder="请输入行数">
                       </div>
                     </div>
@@ -51,6 +52,7 @@
                           type="text"
                           maxlength="2"
                           bind:value={tableCol}
+                          on:input={handleChangeTableCol}
                           placeholder="请输入列数">
                       </div>
                     </div>
@@ -664,6 +666,24 @@
 
     // 控件大小-自定义
     if (['width', 'height'].includes(attrName)) {
+      if (size.width > 668) {
+        size.width = 668;
+        UIkit?.notification({
+          message: '宽度必须小于668',
+          status: 'danger',
+          timeout: 2500,
+        })
+      }
+
+      if (size.height > 200) {
+        size.height = 200;
+        UIkit?.notification({
+          message: '高度必须小于200',
+          status: 'danger',
+          timeout: 2500,
+        })
+      }
+
       currentParameter.style.minWidth = size.width + 'px';
       currentParameter.style.minHeight = size.height + 'px';
     }
@@ -762,6 +782,39 @@
     })
   }
 
+  // 校验自定行数
+  const handleChangeTableRow = () => {
+    if (tableRow < 1) {
+      tableRow = 1;
+
+      UIkit?.notification({
+        message: '行最小为1',
+        status: 'danger',
+        timeout: 2500,
+      })
+    }
+  }
+
+  // 校验自定列数
+  const handleChangeTableCol = () => {
+    if (tableCol < 1) {
+      tableCol = 1;
+      UIkit?.notification({
+        message: '列最小为1',
+        status: 'danger',
+        timeout: 2500,
+      })
+    }
+    if (tableCol > 10) {
+      tableCol = 10;
+      UIkit?.notification({
+        message: '列最大为10',
+        status: 'danger',
+        timeout: 2500,
+      })
+    }
+  }
+
   const handleMouseLeave = () => {
     tableTitle = '插入表格';
     const tds = [...document.querySelector('#pg-table-selector-wrapper').children];
@@ -849,11 +902,14 @@
         if (sizeChecked === 'auto') {
           currentParameter.style.display = 'inline';
         } else if (sizeChecked === 'fixed') {
+          size.width = 148;
+          size.height = 17;
+
           currentParameter.style.display = 'inline-flex';
-          currentParameter.style.minwidth = '148px';
+          currentParameter.style.minWidth = '148px';
           currentParameter.style.minHeight = '17px';
         } else {
-          currentParameter.style.minwidth = size.width + 'px';
+          currentParameter.style.minWidth = size.width + 'px';
           currentParameter.style.minHeight = size.height + 'px';
         }
 
