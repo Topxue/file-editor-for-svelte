@@ -59,6 +59,7 @@
   let optionVal = [];
   let optionData = [];
   let target = null;
+  let toggle = null;
 
   onMount(async () => {
     await initFroala();
@@ -188,7 +189,7 @@
       const paramType = node.getAttribute('data-param-type');
       if (paramType === 'text') {
         node.setAttribute('contenteditable', true);
-        node.addEventListener('keyup', parameterChangeEvent)
+        node.addEventListener('input', parameterChangeEvent)
       }
 
       if (paramType === 'idcard') {

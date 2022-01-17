@@ -102,3 +102,4 @@ const editor = new FileTemplateEditor({
 })
 
 export default FileTemplateEditor;
+

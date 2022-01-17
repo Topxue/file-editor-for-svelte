@@ -23,10 +23,10 @@
 
   $: {
     if (target) {
-      const {top, left, height} = target.getBoundingClientRect();
+      const {top, left, width, height} = target.getBoundingClientRect();
 
       style = {
-        left: left + 'px',
+        left: left - 160 + (width / 2) + 'px',
         top: top + height + 'px'
       }
     }
