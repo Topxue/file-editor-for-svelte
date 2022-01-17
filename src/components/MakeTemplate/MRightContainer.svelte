@@ -104,7 +104,8 @@
             maxlength="30"
             placeholder="请输入参数名称"
             bind:value={data.name}
-            on:input={() => handleEditInputEvent('name')}
+            required
+            on:input={(event) => handleEditInputEvent('name', event)}
           >
         </div>
       </div>
@@ -403,7 +404,7 @@
       {#if optionSet}
         <div class="uk-margin-small-top">
           <label class="uk-form-label" for="">选项设置</label>
-          <div class="uk-form-controls uk-margin-small-top" id="pg-option-setting-wrapper">
+          <div class="uk-form-controls uk-margin-small-top">
             {#each data.options as item, index}
               <div class="uk-flex uk-flex-align-items uk-margin-small-top">
                 <input
@@ -422,8 +423,11 @@
               </div>
             {/each}
           </div>
-          <button class="uk-button uk-button-link uk-margin-small-top uk-flex" on:click={handleAddOptionItem}>
-            <span uk-icon="plus"></span><span>添加选项</span>
+          <button
+            class="uk-button uk-button-link uk-margin-small-top uk-flex uk-flex-align-items"
+            on:click|preventDefault={handleAddOptionItem}>
+            <i class="fa fa-plus add-option" aria-hidden="true"></i>
+            <span>添加选项</span>
           </button>
         </div>
       {/if}
@@ -607,6 +611,7 @@
   let fontSize = 'none';
   // 字体颜色
   let fontColor = '';
+  let freezeName = '';
 
   // 表格标题
   let tableTitle = '插入表格';
@@ -626,6 +631,7 @@
 
       data = res || {};
       paramType = res?.paramType;
+      freezeName = res?.name || '';
 
       if (JSON.stringify(res?.fontConfig) !== '{}') {
         fontConfig = res?.fontConfig;
@@ -651,9 +657,30 @@
   }
 
   // 参数编辑-input-event;
-  const handleEditInputEvent = (attrName) => {
+  const handleEditInputEvent = (attrName, event) => {
     if (['name', 'defaultValue'].includes(attrName)) {
       if (attrName === 'name') {
+        if (event) {
+          if (event.inputType !== 'deleteContentBackward') {
+            freezeName = data[attrName];
+          }
+        }
+
+        if (!data.name) {
+          UIkit?.notification({
+            message: '参数名称不能为空',
+            status: 'danger',
+            timeout: 2500,
+          })
+          setTimeout(() => {
+            data.name = freezeName;
+            updateParameterAttr('data-param-name', freezeName);
+            parametersStore.updateData();
+          }, 500)
+
+          return;
+        }
+
         updateParameterAttr('data-param-name', data[attrName]);
         parametersStore.updateData();
       }
@@ -663,6 +690,7 @@
         updateParameterAttr('data-shadow-value', data.defaultValue);
       }
     }
+
 
     // 控件大小-自定义
     if (['width', 'height'].includes(attrName)) {
@@ -900,7 +928,8 @@
       // 控件大小
       'size': () => {
         if (sizeChecked === 'auto') {
-          currentParameter.style.display = 'inline';
+          currentParameter.style.minWidth = 'auto';
+          currentParameter.style.display = 'inline-flex';
         } else if (sizeChecked === 'fixed') {
           size.width = 148;
           size.height = 17;

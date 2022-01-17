@@ -55,18 +55,6 @@ export const colorHex = (color) => {
 }
 
 /**
- * 将数据库实例 改为Promise
- * @param request
- * @returns {Promise<unknown>}
- */
-export const promisify = (request) => {
-  return new Promise((resolve, reject) => {
-    request.onsuccess = resolve;
-    request.onerror = reject;
-  })
-}
-
-/**
  * 参数插入富文本校验
  * @returns {boolean}
  */

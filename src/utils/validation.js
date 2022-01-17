@@ -3,6 +3,6 @@
  */
 export const controlSizeWidthValid = (value, form) => {
   return {
-    controlSizeWidthValid: value > 668,
+    controlSizeWidthValid: value === 668,
   }
 }
