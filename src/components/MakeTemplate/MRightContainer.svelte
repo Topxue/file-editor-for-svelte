@@ -523,7 +523,6 @@
 
   import initData from "@/utils/init-data";
   import {froalaStore, parametersStore} from "@/store/froala";
-  // import {controlSizeWidthValid} from '@/utils/validation';
   import {colorHex, debounce, randomId, insertParameterVerify} from '@/utils';
 
   import * as parameters from '@/parameters';
